@@ -1,0 +1,52 @@
+{
+ "model": "TwoMassLayered",
+ "method": "layered-lti",
+ "theorem": "TwoMassLayered.LayeredCert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "layers": [
+  {
+   "component": "a",
+   "states": [
+    "a.x",
+    "a.v"
+   ],
+   "reads": [
+    "b.x"
+   ],
+   "level": "345968334468675627118623071/149262184307476914906763520"
+  },
+  {
+   "component": "b",
+   "states": [
+    "b.x",
+    "b.v"
+   ],
+   "reads": [
+    "a.x"
+   ],
+   "level": "661976508394856883699/1086423201182179429088"
+  }
+ ],
+ "coupling": {
+  "a.x": {
+   "assumed": "651/472",
+   "guaranteed": "8315/6113"
+  },
+  "b.x": {
+   "assumed": "91917/163460",
+   "guaranteed": "5323/9695"
+  }
+ },
+ "bounds": {
+  "a.x": "8315/6113",
+  "b.x": "5323/9695"
+ },
+ "monolithic_bounds": {
+  "a.x": "4147/3116",
+  "b.x": "1255/1242"
+ }
+}

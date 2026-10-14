@@ -1,0 +1,116 @@
+{
+ "model": "ClosedLoopUncertain",
+ "ns": "ClosedLoopUncertain",
+ "method": "lti-polytopic",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "141442/47669",
+   "48943/227636"
+  ],
+  [
+   "48943/227636",
+   "972609/950278"
+  ]
+ ],
+ "level": "213056706280/83678352999",
+ "alpha": "87617/209308",
+ "gammas": [
+  "1017910/955047"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "1349/1445"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "14619/9197"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-3",
+   "-1"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "ClosedLoopUncertain.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "ClosedLoopUncertain.Cert.tube"
+ }
+}

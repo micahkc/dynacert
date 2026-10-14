@@ -1,0 +1,36 @@
+name = "dynacert"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Dynacert", "Certs"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false
+maxSynthPendingDepth = 3
+
+# Pinned to the exact Mathlib commit gnc_lean is verified against (its flake.lock).
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "5e932f97dd25535344f80f9dd8da3aab83df0fe6"
+
+[[require]]
+name = "gnc"
+git = "https://github.com/CogniPilot/gnc_lean"
+rev = "0c01537b94677d38c0547a72c1dc12a7e87db234"
+
+[[lean_lib]]
+name = "Dynacert"
+
+# rumoca's shared prelude for lean-dae exports. Kept identical to the template's output;
+# the pipeline refuses to run if rumoca emits a different prelude.
+[[lean_lib]]
+name = "Rumoca"
+
+# Generated per-model certificates: certs/Certs/<Model>/{Model,Spec,Cert}.lean
+[[lean_lib]]
+name = "Certs"
+srcDir = "certs"
+globs = ["Certs.+"]

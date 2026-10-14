@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dynacert"
+version = "0.1.0"
+description = "Untrusted search and Lean emission for machine-checked reachability certificates"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "sympy", "cvxpy", "matplotlib"]
+
+[project.optional-dependencies]
+worstcase = ["casadi"]   # direct collocation in `dynacert MODEL.mo falsify`
+
+[project.scripts]
+dynacert = "dynacert.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.pytest.ini_options]
+pythonpath = ["python"]
+testpaths = ["python/tests"]

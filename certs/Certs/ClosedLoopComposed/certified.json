@@ -1,0 +1,116 @@
+{
+ "model": "ClosedLoopComposed",
+ "ns": "ClosedLoopComposed",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "10385767/969456",
+   "355911/653956"
+  ],
+  [
+   "355911/653956",
+   "325619/315983"
+  ]
+ ],
+ "level": "109459545242/256389930969",
+ "alpha": "522689/494842",
+ "gammas": [
+  "221201/490521"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "17/84"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "1185/1816"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-11",
+   "-11/5"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "ClosedLoopComposed.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "plant.x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "plant.v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "ClosedLoopComposed.Cert.tube"
+ }
+}

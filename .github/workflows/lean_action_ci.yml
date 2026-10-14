@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Builds the library and every committed certificate under certs/ (default targets).
+      - uses: leanprover/lean-action@v1
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy scipy sympy cvxpy matplotlib pytest
+      - run: python -m pytest -q

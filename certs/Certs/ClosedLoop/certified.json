@@ -1,0 +1,116 @@
+{
+ "model": "ClosedLoop",
+ "ns": "ClosedLoop",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "2271542/766369",
+   "25445/103323"
+  ],
+  [
+   "25445/103323",
+   "240402/233201"
+  ]
+ ],
+ "level": "326105655065/157698298516",
+ "alpha": "209308/438085",
+ "gammas": [
+  "744389/753427"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "5649/6695"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "7281/5089"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-3",
+   "-1"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "ClosedLoop.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "ClosedLoop.Cert.tube"
+ }
+}
