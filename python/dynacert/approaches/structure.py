@@ -78,6 +78,13 @@ class Layered(Approach):
     def assess(self, prob) -> Assessment:
         if not prob.spec.certify:
             return Assessment.no("nothing to certify: annotate outputs with __Dynacert(certify)")
+        from .lmi import nonlinear_terms
+        try:
+            bad = nonlinear_terms(prob)
+        except (pipeline.CertError, ValueError) as e:
+            return Assessment.no(f"not applicable: {e}")
+        if bad:
+            return Assessment.no("not applicable: the dynamics are not linear: " + "; ".join(bad))
         try:
             pb, layers, signals, out_idx, found = self._problem(prob)
         except (pipeline.CertError, ValueError) as e:
