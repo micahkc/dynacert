@@ -40,7 +40,7 @@ stay symbolic). Two forms of the dynamics are used:
 | `so3` | `Ṙ = R·skew(ω)` (or `skew(ω)·R`), ω free of R: `∂Ṙ[i,j]/∂R[i,k]` independent of `i`, skew | `Lie.SO3.rotation_mem_SO3` | proved (right-invariant) |
 | `se23` | `ṗ = v`, `v̇ = R a + g`, with a and g free of R, a ≠ 0 | `Lie.spacecraft_of_components` → `ofScalars_solution` | proved, link generated |
 | gravity class | g constant / exogenous / isotropic-linear / inverse-square (`-μp/‖p‖³`) / other | `group_affine_iff`, `affine_defect` (gnc) | constant and isotropic-linear are group-affine |
-| `log-error` | a feedback-driven SE₂(3) block paired with an open-loop one in the same field | `Lie.log_tube_of_residuals` + residual lemmas | see below |
+| `log-error` | a feedback-driven SE₂(3) block paired with an open-loop one in the same field | `Lie.log_tube_of_residuals` + residual lemmas; `Lie.pd_spacecraft_components` | certified for body-frame PD + coasting reference (`lie`); other laws open |
 | `layers` | strongly connected components of the state-dependency graph; Modelica components coupled inside one component | `Compose.assume_guarantee` | proved, layered LTI certificate generated |
 | `linear` | `f` linear in states and inputs | `Linear.Channels`, `Linear.Polytopic` | proved |
 | `error-coordinates` | certified outputs linear in states and references | linear link | proved |
@@ -81,11 +81,42 @@ The generated `LieLink.lean` takes `a`, `ω` and `g` from rumoca's own Lean equa
 kinematic identity closes by `exact`. It proves `SpacecraftSolution` for every block, with
 `R ∈ SO(3)` for all time.
 
-**Not yet done.** The control residual depends on the control law: the model's `a − ā` and
-`ω − ω̄` have to be written as `K ξ +` (bounded remainder) on the certified set. A body-frame
-error such as `R̄ᵀ(p − p̄)` equals `J_l(ξ_R) ξ_p`, not `ξ_p`. Until that decomposition lemma,
-the vertex-LMI search and the radius fixed point exist, a `log-error` finding is report-only:
-the link is proved, but there is no tube certificate yet.
+### First complete certificate: PD spacecraft tracking a circular orbit
+
+`dynacert examples/SpacecraftTracking.mo certify` (approach `lie`) proves that position,
+velocity and attitude errors stay ≤ 0.00499 for all time, under per-axis disturbances
+`|dᵢ| ≤ 0.005`. The theorem is `SpacecraftTracking.LieCert.certified`, and it uses only the
+standard axioms. A simulation with bang-bang and constant disturbances over 20 s peaks at
+0.0028, so the bound is about 1.75× conservative.
+
+The proof composes these results, each proved once:
+
+| Step | Lean |
+|---|---|
+| A circular reference orbit keeps its radius (energy + angular momentum, first exit at `r = 0`) | `Lie.circular_radius_ge` (`Lie/Kepler.lean`) |
+| Body-frame errors in log coordinates: `R̄ᵀΔp = J_l(ξ_R)ξ_p`, `½vee(R̄ᵀR − RᵀR̄) = (sin θ/θ)ξ_R` | `groupExp`, `Lie.attErr_rotationExp` |
+| Exact decomposition `field = Aξ + (0, d, 0) + r(ξ) + gravity` | `Lie.pd_field` (`Lie/PDControl.lean`) |
+| Sector bound `‖r‖ ≤ pdGain(kp, kd, kR, D, δ)·‖ξ‖` on `‖ξ‖ ≤ D ≤ 2`, including θ = 0 | `Lie.pdResidual_le` (explicit bounds on gnc's `α(t) ≤ t/4`, `β(t) ≤ t²/8`) |
+| Gravity sector | `Lie.gravity_residual_inverse_square` |
+| Tube and decay bound from an `LTICert` for the 9-state linear part plus coercivity and operator-norm witnesses | `Lie.pd_spacecraft_tube` (`Lie/PDTube.lean`) |
+| The same theorem in the shape rumoca emits | `Lie.pd_spacecraft_components` |
+
+`emit_lie.py` checks the model's Lean equations against this pattern, reads the gains, μ and
+the circular start from the model, and searches for the data. It works in exact rationals: a
+9×9 `P`, the decay rate α, `γ`, the bounds `m ≤ λ(P)` and `‖P‖ ≤ pn`, the region radius `D`,
+and the levels `ρ` and `c`. It then emits `LieCert.lean`, which discharges every hypothesis
+from the model's equations.
+
+The method is limited to the controller and reference it was proved for. Still open:
+
+- other control laws (each needs a decomposition lemma like `pd_field`);
+- moving references, i.e. a vertex polytope over the reference's `ā` and `ω̄`, which
+  `log_tube_of_residuals` already supports;
+- constant gravity with an underactuated thrust direction (the quadrotor).
+
+The sector bound grows with the gains times `D`, so the certificate needs the gravity
+gradient to be small relative to the control bandwidth. The example uses μ = 0.01 at r = 1
+(orbital rate 0.1) against PD poles at −2.
 
 ## The layered route
 

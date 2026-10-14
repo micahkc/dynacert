@@ -17,3 +17,6 @@ import Dynacert.Prob.Scenario
 import Dynacert.Compose.AssumeGuarantee
 import Dynacert.Lie.Supply
 import Dynacert.Lie.Link
+import Dynacert.Lie.Kepler
+import Dynacert.Lie.PDControl
+import Dynacert.Lie.PDTube

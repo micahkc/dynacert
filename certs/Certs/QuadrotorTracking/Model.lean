@@ -119,7 +119,7 @@ def Equations (t : ℝ) (p : Params) (u : Inputs) (x dx : States) (y : Algebraic
   ∧ y.«ref.a» = ![0, 0, u.T_ref / p.m]
   ∧ y.«ref.w» = u.w_ref
   ∧ y.«quad.a» = ![0, 0, x.«motor.f» / p.m] + u.d
-  ∧ y.«quad.w» = u.w_ref + ![p.kx * (p.kp * y.ep 1 + p.kd * y.ev 1), -(p.kx * (p.kp * y.ep 0 + p.kd * y.ev 0)), 0] - p.kR • y.eR
+  ∧ y.«quad.w» = u.w_ref + ![p.kx * (p.kp * y.ep 1 + p.kd * y.ev 1), -(p.kx * (p.kp * y.ep 0 + p.kd * y.ev 0)), 0] - (p.kR : ℝ) • y.eR
 
 /-- `x`, `y` is a solution of `QuadrotorTracking` under input `u`: every state
 component has derivative `dx t` at every `t`, and the equations hold. -/

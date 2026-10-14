@@ -27,15 +27,15 @@ structure Params where
   kR : ℝ
   «sc.mu» : ℝ
   «sc.p0» : Fin 3 → ℝ
+  /-- circular: |v0|² = mu/|p0| -/
   «sc.v0» : Fin 3 → ℝ
   «ref.mu» : ℝ
   «ref.p0» : Fin 3 → ℝ
+  /-- circular: |v0|² = mu/|p0| -/
   «ref.v0» : Fin 3 → ℝ
 
 /-- Inputs. -/
 structure Inputs where
-  a_ref : Fin 3 → ℝ
-  w_ref : Fin 3 → ℝ
   d : Fin 3 → ℝ
 
 /-- Differentiated variables (also used for their derivatives). -/
@@ -57,34 +57,41 @@ structure Algebraics where
   «ref.a» : Fin 3 → ℝ
   /-- body rates -/
   «ref.w» : Fin 3 → ℝ
+  /-- attitude error R_refᵀ R -/
   Rt : Matrix (Fin 3) (Fin 3) ℝ
+  /-- position error, reference body frame -/
   ep : Fin 3 → ℝ
+  /-- velocity error, reference body frame -/
   ev : Fin 3 → ℝ
+  /-- attitude error vector -/
   eR : Fin 3 → ℝ
+  pos_err : ℝ
+  vel_err : ℝ
+  att_err : ℝ
 
 /-- Modelica names of the parameters and constants, in declaration order. -/
 def paramNames : List String := ["kp", "kd", "kR", "sc.mu", "sc.p0", "sc.v0", "ref.mu", "ref.p0", "ref.v0"]
 
 /-- Modelica names of the inputs, in declaration order. -/
-def inputNames : List String := ["a_ref", "w_ref", "d"]
+def inputNames : List String := ["d"]
 
 /-- Modelica names of the states, in declaration order. -/
 def stateNames : List String := ["sc.p", "sc.v", "sc.R", "ref.p", "ref.v", "ref.R"]
 
 /-- Modelica names of the algebraic variables and outputs, in declaration order. -/
-def algebraicNames : List String := ["sc.a", "sc.w", "ref.a", "ref.w", "Rt", "ep", "ev", "eR"]
+def algebraicNames : List String := ["sc.a", "sc.w", "ref.a", "ref.w", "Rt", "ep", "ev", "eR", "pos_err", "vel_err", "att_err"]
 
 /-- The parameter bindings of the model. -/
 def Params.Bound (p : Params) : Prop :=
-  p.kp = 0.04
-  ∧ p.kd = 0.4
-  ∧ p.kR = 0.5
-  ∧ p.«sc.mu» = 1.0
+  p.kp = 4.0
+  ∧ p.kd = 4.0
+  ∧ p.kR = 1.0
+  ∧ p.«sc.mu» = 0.01
   ∧ p.«sc.p0» = ![1, 0, 0]
-  ∧ p.«sc.v0» = ![0, 1, 0]
-  ∧ p.«ref.mu» = 1.0
+  ∧ p.«sc.v0» = ![0, 0.1, 0]
+  ∧ p.«ref.mu» = 0.01
   ∧ p.«ref.p0» = ![1, 0, 0]
-  ∧ p.«ref.v0» = ![0, 1, 0]
+  ∧ p.«ref.v0» = ![0, 0.1, 0]
 
 /-- Initial conditions: the `fixed = true` start values of the states. -/
 def Initial (p : Params) (x : States) : Prop :=
@@ -97,20 +104,23 @@ def Initial (p : Params) (x : States) : Prop :=
 
 /-- The continuous equations of `SpacecraftTracking` at time `t`. -/
 def Equations (t : ℝ) (p : Params) (u : Inputs) (x dx : States) (y : Algebraics) : Prop :=
-  dx.«sc.p» = x.«sc.v»
-  ∧ dx.«sc.v» = x.«sc.R» *ᵥ y.«sc.a» - ((x.«sc.p» ⬝ᵥ x.«sc.p») ^ (1.5 : ℝ))⁻¹ • p.«sc.mu» • x.«sc.p»
+  y.pos_err = Real.sqrt ((x.«sc.p» - x.«ref.p») ⬝ᵥ (x.«sc.p» - x.«ref.p»))
+  ∧ y.vel_err = Real.sqrt ((x.«sc.v» - x.«ref.v») ⬝ᵥ (x.«sc.v» - x.«ref.v»))
+  ∧ y.att_err = Real.sqrt (y.eR ⬝ᵥ y.eR)
+  ∧ dx.«sc.p» = x.«sc.v»
+  ∧ dx.«sc.v» = x.«sc.R» *ᵥ y.«sc.a» - ((x.«sc.p» ⬝ᵥ x.«sc.p») ^ (1.5 : ℝ) : ℝ)⁻¹ • (p.«sc.mu» : ℝ) • x.«sc.p»
   ∧ dx.«sc.R» = x.«sc.R» * Rumoca.skew y.«sc.w»
   ∧ dx.«ref.p» = x.«ref.v»
-  ∧ dx.«ref.v» = x.«ref.R» *ᵥ y.«ref.a» - ((x.«ref.p» ⬝ᵥ x.«ref.p») ^ (1.5 : ℝ))⁻¹ • p.«ref.mu» • x.«ref.p»
+  ∧ dx.«ref.v» = x.«ref.R» *ᵥ y.«ref.a» - ((x.«ref.p» ⬝ᵥ x.«ref.p») ^ (1.5 : ℝ) : ℝ)⁻¹ • (p.«ref.mu» : ℝ) • x.«ref.p»
   ∧ dx.«ref.R» = x.«ref.R» * Rumoca.skew y.«ref.w»
   ∧ y.Rt = (x.«ref.R»)ᵀ * x.«sc.R»
   ∧ y.ep = (x.«ref.R»)ᵀ *ᵥ (x.«sc.p» - x.«ref.p»)
   ∧ y.ev = (x.«ref.R»)ᵀ *ᵥ (x.«sc.v» - x.«ref.v»)
   ∧ y.eR = ![0.5 * (y.Rt 2 1 - y.Rt 1 2), 0.5 * (y.Rt 0 2 - y.Rt 2 0), 0.5 * (y.Rt 1 0 - y.Rt 0 1)]
-  ∧ y.«ref.a» = u.a_ref
-  ∧ y.«ref.w» = u.w_ref
-  ∧ y.«sc.a» = u.a_ref - p.kp • y.ep - p.kd • y.ev + u.d
-  ∧ y.«sc.w» = u.w_ref - p.kR • y.eR
+  ∧ y.«ref.a» = ![0, 0, 0]
+  ∧ y.«ref.w» = ![0, 0, 0]
+  ∧ y.«sc.a» = -((p.kp : ℝ) • y.ep) - (p.kd : ℝ) • y.ev + u.d
+  ∧ y.«sc.w» = -((p.kR : ℝ) • y.eR)
 
 /-- `x`, `y` is a solution of `SpacecraftTracking` under input `u`: every state
 component has derivative `dx t` at every `t`, and the equations hold. -/

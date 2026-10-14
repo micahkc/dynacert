@@ -29,6 +29,7 @@ def discover(prob):
 class Structure(Approach):
     name = "structure"
     kind = ANALYSIS
+    layer = "analyze"
     summary = "find Lie-group, gravity, layer and linear structure (and link SE₂(3) in Lean)"
 
     def add_arguments(self, parser):
@@ -60,6 +61,11 @@ class Structure(Approach):
 class Layered(Approach):
     name = "layered"
     kind = CERTIFICATE
+    layer = "certify"
+    classes = ("layered",)
+    claims = ("peak",)
+    cert_file = "LayeredCert.lean"
+    sidecar = "layered.json"
     summary = "per-component LTI certificates composed by assume–guarantee (Lean-checked)"
 
     def _problem(self, prob):
@@ -97,4 +103,4 @@ class Layered(Approach):
         lines.append(f"  files: {res['dir']}")
         return self.outcome(True, "certified", "\n".join(lines),
                             {"theorem": side["theorem"], "bounds": side["bounds"],
-                             "dir": res["dir"]}, [res["dir"]])
+                             "axioms": side["axioms"], "dir": res["dir"]}, [res["dir"]])

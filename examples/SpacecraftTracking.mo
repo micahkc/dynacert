@@ -1,12 +1,15 @@
-// A spacecraft tracking a reference orbit in inverse-square gravity. Same structure as
-// QuadrotorTracking (two SE₂(3) blocks, body-frame controller), but the gravity is
-// -μ p/‖p‖³: `structure` classifies it as inverse-square, not group-affine, and pairs it with
-// the gravity residual lemma `Lie.gravity_residual_inverse_square`.
+// A spacecraft tracking a coasting reference on a circular orbit, in inverse-square gravity.
+//
+// Vehicle and reference are the same rigid body (SE₂(3) kinematics). The reference coasts
+// (no thrust, fixed attitude) on a circular orbit; the vehicle thrusts with a body-frame PD
+// law on the group error Y⁻¹X and is pushed by a bounded disturbance. `dynacert` finds the
+// SE₂(3) structure and the inverse-square gravity, and certifies the position, velocity and
+// attitude errors through the log-error tube (`Dynacert.Lie.pd_spacecraft_tube`).
 
 model OrbitalBody "ṗ = v, v̇ = R a - μ p/‖p‖³, Ṙ = R·skew(ω)"
-  parameter Real mu = 1.0;
+  parameter Real mu = 0.01;
   parameter Real p0[3] = {1, 0, 0};
-  parameter Real v0[3] = {0, 1, 0};
+  parameter Real v0[3] = {0, 0.1, 0} "circular: |v0|² = mu/|p0|";
   input Real a[3] "thrust acceleration (body frame)";
   input Real w[3] "body rates";
   Real p[3](start = p0, each fixed = true);
@@ -19,25 +22,29 @@ equation
 end OrbitalBody;
 
 model SpacecraftTracking
-  parameter Real kp = 0.04;
-  parameter Real kd = 0.4;
-  parameter Real kR = 0.5;
-  input Real a_ref[3];
-  input Real w_ref[3];
-  input Real d[3] annotation(__Dynacert(disturbance(bound = 0.001)));
+  parameter Real kp = 4.0;
+  parameter Real kd = 4.0;
+  parameter Real kR = 1.0;
+  input Real d[3] annotation(__Dynacert(disturbance(bound = 0.005)));
   OrbitalBody sc;
   OrbitalBody ref;
-  Real Rt[3,3];
-  Real ep[3];
-  Real ev[3];
-  Real eR[3];
+  Real Rt[3,3] "attitude error R_refᵀ R";
+  Real ep[3] "position error, reference body frame";
+  Real ev[3] "velocity error, reference body frame";
+  Real eR[3] "attitude error vector";
+  Real pos_err annotation(__Dynacert(certify));
+  Real vel_err annotation(__Dynacert(certify));
+  Real att_err annotation(__Dynacert(certify));
 equation
   Rt = transpose(ref.R)*sc.R;
   ep = transpose(ref.R)*(sc.p - ref.p);
   ev = transpose(ref.R)*(sc.v - ref.v);
   eR = {0.5*(Rt[3,2] - Rt[2,3]), 0.5*(Rt[1,3] - Rt[3,1]), 0.5*(Rt[2,1] - Rt[1,2])};
-  ref.a = a_ref;
-  ref.w = w_ref;
-  sc.a = a_ref - kp*ep - kd*ev + d;
-  sc.w = w_ref - kR*eR;
+  ref.a = {0, 0, 0};
+  ref.w = {0, 0, 0};
+  sc.a = -kp*ep - kd*ev + d;
+  sc.w = -kR*eR;
+  pos_err = sqrt((sc.p - ref.p)*(sc.p - ref.p));
+  vel_err = sqrt((sc.v - ref.v)*(sc.v - ref.v));
+  att_err = sqrt(eR*eR);
 end SpacecraftTracking;

@@ -1,0 +1,38 @@
+{
+ "model": "SpacecraftTracking",
+ "certificates": [
+  {
+   "method": "lie",
+   "theorem": "SpacecraftTracking.LieCert.certified",
+   "file": "LieCert.lean",
+   "sidecar": "lie.json",
+   "bounds": {
+    "pos_err": "499/100000",
+    "vel_err": "499/100000",
+    "att_err": "499/100000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "708d89f701d20d217ca959ebe589ddfdf45c4cd708b80c9909852068e5e64322",
+   "time": "2026-10-14T14:28:16"
+  }
+ ],
+ "source_hash": "708d89f701d20d217ca959ebe589ddfdf45c4cd708b80c9909852068e5e64322",
+ "kept": {
+  "pos_err": {
+   "bound": "499/100000",
+   "method": "lie"
+  },
+  "vel_err": {
+   "bound": "499/100000",
+   "method": "lie"
+  },
+  "att_err": {
+   "bound": "499/100000",
+   "method": "lie"
+  }
+ }
+}

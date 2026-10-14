@@ -227,7 +227,7 @@ def emit(prob, structure) -> tuple[str, list[str]]:
                 f"  simp only [{', '.join(bh)}]", ""]
         elif veh["gravity"] == "inverse-square":
             for L in (X, Y):
-                mm = re.search(r"• (p\.\S+) • \(x t\)\.(\S+)\)$", L.g)
+                mm = re.search(r"• \(?(p\.[^\s)]+)(?: : ℝ\))? • \(x t\)\.(\S+)\)$", L.g)
                 if not mm:
                     raise LinkError(f"cannot read μ from `{L.g}`")
                 mu, pf = mm.group(1), mm.group(2)
@@ -237,8 +237,8 @@ def emit(prob, structure) -> tuple[str, list[str]]:
                     f"theorem gravity_field_{L.name} {{p : Params}} {{x : ℝ → States}} (t : ℝ) :",
                     f"    (fun t => {L.g}) t = GNC.Gravity.field3 {mu} ((x t).{pf}) :=",
                     "  rumoca_inverse_square _ _", ""]
-            mx = re.search(r"• (p\.\S+) •", X.g).group(1)
-            my = re.search(r"• (p\.\S+) •", Y.g).group(1)
+            mx = re.search(r"• \(?(p\.[^\s)]+)(?: : ℝ\))? •", X.g).group(1)
+            my = re.search(r"• \(?(p\.[^\s)]+)(?: : ℝ\))? •", Y.g).group(1)
             names.append(f"mu_eq_{X.name}")
             out += [
                 f"/-- Vehicle and reference orbit the same body: `{mx} = {my}`. -/",

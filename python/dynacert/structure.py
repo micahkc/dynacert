@@ -216,7 +216,17 @@ class System:
 
 def param_values(model, keep=()) -> dict:
     """Scalar parameter symbol -> bound value, with array parameters expanded elementwise."""
-    return model.param_values(keep)
+    vals = {}
+    for v in model.params:
+        if v.binding is None or v.name in keep:
+            continue
+        b = v.binding
+        if isinstance(v.symbol, sp.MatrixBase):
+            bs = list(b) if isinstance(b, sp.MatrixBase) else [b] * len(v.symbol)
+            vals.update(zip(list(v.symbol), map(sp.sympify, bs)))
+        else:
+            vals[v.symbol] = sp.sympify(b)
+    return vals
 
 
 def system(model, spec=None) -> System:
@@ -509,8 +519,13 @@ def log_errors(se23s: list[dict], sys_: System) -> list[Fact]:
             continue
         res, lean, missing = [], ["Lie.log_tube_of_residuals"], []
         res.append("control (a − ā, ω − ω̄ through J⁻¹(ξ))")
-        missing.append("controller decomposition lemma (hdecomp/hres for this control law)")
         kind = veh["gravity"]
+        coasting = all(_zero(sp.sympify(e).subs(sys_.alg)) for e in ref["a"] + ref["omega"])
+        if kind == "inverse-square" and coasting:
+            lean.append("Lie.pd_spacecraft_components (body-frame PD law; `lie` approach)")
+        else:
+            missing.append("controller decomposition lemma for this control law/reference "
+                           "(proved: body-frame PD with a coasting reference)")
         if kind == "constant":
             res.append("gravity: identically zero")
             lean.append("Lie.gravity_residual_const")
@@ -526,7 +541,7 @@ def log_errors(se23s: list[dict], sys_: System) -> list[Fact]:
         out.append(Fact(
             "log-error", f"vehicle ({veh['p']}, {veh['v']}, {veh['R']}) vs reference "
             f"({ref['p']}, {ref['v']}, {ref['R']}): ξ = log(Y⁻¹X); residuals: " + "; ".join(res),
-            {"vehicle": veh, "reference": ref, "residuals": res}, lean, False,
+            {"vehicle": veh, "reference": ref, "residuals": res}, lean, not missing,
             "; ".join(missing)))
     return out
 
