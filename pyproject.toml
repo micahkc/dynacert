@@ -7,6 +7,7 @@ name = "dynacert"
 version = "0.1.0"
 description = "Untrusted search and Lean emission for machine-checked reachability certificates"
 requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
 dependencies = ["numpy", "scipy", "sympy", "cvxpy", "matplotlib"]
 
 [project.optional-dependencies]

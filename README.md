@@ -121,6 +121,7 @@ lake exe cache get                   # prebuilt Mathlib (Lean v4.29.1, Mathlib p
 lake build                           # library + every certificate under certs/
 pip install -e .                     # numpy, scipy, sympy, cvxpy, matplotlib
 pip install -e '.[worstcase]'        # optional: CasADi + IPOPT for falsify's collocation
+python -m pytest                     # Python tests (run locally; there is no hosted CI)
 ```
 
 ### Command line
@@ -302,3 +303,7 @@ accepted.
 - Claims about algebraic variables hold on `[0, T)`, where the model's equations are asserted.
   Claims about states hold on `[0, T]`.
 - Sound but not complete: if no certificate is found, nothing is claimed.
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
