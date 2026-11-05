@@ -24,10 +24,13 @@ rev = "0c01537b94677d38c0547a72c1dc12a7e87db234"
 [[lean_lib]]
 name = "Dynacert"
 
-# rumoca's shared prelude for lean-dae exports. Kept identical to the template's output;
-# the pipeline refuses to run if rumoca emits a different prelude.
+# rumoca's shared modules for lean-dae exports: the prelude and one module per Modelica function
+# (Rumoca/Fn/<Modelica/path>.lean). Kept identical to the template's output: the pipeline refuses
+# to run if rumoca emits a different prelude or a different text for a function it already has,
+# and adds function modules it hasn't seen.
 [[lean_lib]]
 name = "Rumoca"
+globs = ["Rumoca.+"]
 
 # Generated per-model certificates: certs/Certs/<Model>/{Model,Spec,Cert}.lean
 [[lean_lib]]

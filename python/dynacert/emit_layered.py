@@ -39,10 +39,6 @@ class Layer:
     cert: object = None
 
 
-def _component(name: str) -> str:
-    return name.split(".", 1)[0] if "." in name else ""
-
-
 def layered_problem(prob):
     m, sp_ = prob.model, prob.spec
     pb = pipeline.linear_problem(m, sp_, prob.lean_src)
@@ -55,7 +51,7 @@ def layered_problem(prob):
     names = [c.name for c in pb.coords]
     comps: dict[str, list[int]] = {}
     for i, n in enumerate(names):
-        comps.setdefault(_component(n), []).append(i)
+        comps.setdefault(m.component_of(n), []).append(i)
     if len(comps) < 2:
         raise pipeline.CertError("layered: the model has a single component")
     n = len(names)
@@ -99,14 +95,22 @@ def search(pb, layers, signals, margin=Fraction(21, 20), iters=60):
     return None
 
 
+def _cv(L) -> str:
+    """Layers of three or more states leave `![…] 2` after `Fin.sum_univ_succ`, which `norm_num`
+    does not evaluate: evaluate the vectors on `Fin.succ` indices first (not needed, and not
+    emitted, for smaller layers)."""
+    return ", Matrix.cons_val_succ, Matrix.cons_val_zero" if len(L.idx) >= 3 else ""
+
+
 def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
     ns = pb.ns
     K = len(signals)
-    flds = pb.states
+    # per coordinate (= state; array elements are `x 0`, ...); hypotheses by conjunct
+    flds = [c.terms[0].fld for c in pb.coords]
     eh = [f"e{i}" for i in range(pb.n_eqs)]
     pnames, peqs = E._param_hyps(pb)
     out = [f"import {pb.module}.Spec", "import Dynacert.Linear.Channels",
-           "import Dynacert.Compose.AssumeGuarantee", ""]
+           "import Dynacert.Compose.AssumeGuarantee", *E.scalar_import(pb), ""]
     out += lean_mod.header(f"Layered certificate for `{pb.model_name}`",
                            "dynacert (layered LTI, assume–guarantee)")
     out += E.LINTERS + ["set_option maxRecDepth 10000", "", f"namespace {ns}.LayeredCert", "",
@@ -117,8 +121,12 @@ def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
         lits.append(f"lit{i}")
     out.append("")
     rewrite = ", ".join(peqs + lits)
-    ch = [f"hc{i}" for i in range(len(flds))]
-    dh = [f"hd{i}" for i in range(len(flds))]
+    erewrite = E.eq_rewrite(pb, rewrite)
+    hc, hd = E.state_hyps(pb, "hc"), E.state_hyps(pb, "hd")
+    ch = [hc[f] for f in flds]
+    dh = [hd[f] for f in flds]
+    chb = [f"hc{i}" for i in range(len(pb.states))]
+    dhb = [f"hd{i}" for i in range(len(pb.states))]
     sig_terms = [f"|s.{flds[j]}|" for j in signals]
     out += [
         "/-! ### Coupling signals: the states each layer reads from the others -/", "",
@@ -158,14 +166,15 @@ def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
         ]
         if pnames:
             out.append(f"  obtain {E._conj(pnames)} := hp")
-        out += [f"  obtain ⟨dx, {', '.join(ch)}, hder⟩ := h",
+        out += [f"  obtain ⟨dx, {', '.join(chb)}, hder⟩ := h",
                 "  refine ⟨?_, fun t ht => ?_⟩",
                 "  · refine continuousOn_pi.mpr fun i => ?_", "    fin_cases i"]
         for i in L.idx:
             out.append(f"    · exact {ch[i]}")
-        out.append(f"  · obtain ⟨{', '.join(dh)}, {E._conj(eh)}⟩ := hder t ht")
-        if rewrite:
-            out.append(f"    try simp only [{rewrite}] at {' '.join(eh)}")
+        out.append(f"  · obtain ⟨{', '.join(dhb)}, {E._conj(E.eq_pattern(pb, eh))}⟩ := hder t ht")
+        out += E.eq_scalars(pb, "    ")
+        if erewrite:
+            out.append(f"    try simp only [{erewrite}] at {' '.join(eh)}")
         out += ["    rw [hasDerivWithinAt_pi]", "    intro i", "    fin_cases i"]
         zt = [f"(x t).{flds[i]}" for i in L.idx]
         wt = [f"(u t).{pb.dists[k]}" for k in L.dists] + [f"(x t).{flds[j]}" for j in L.coupling]
@@ -265,7 +274,7 @@ def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
     for s, j in enumerate(signals):
         li, k = owner_box[j]
         out += [f"  · have hb := box{li}_{k}.abs_le (guar{li} hp h hu h0 hτ.2 hA t ht)",
-                f"    simp only [vec{li}, dotProduct, Fin.sum_univ_succ, Fin.sum_univ_zero] at hb",
+                f"    simp only [vec{li}, dotProduct, Fin.sum_univ_succ, Fin.sum_univ_zero{_cv(layers[li])}] at hb",
                 "    simp only [sig, Csig]",
                 "    norm_num at hb ⊢",
                 "    linarith"]
@@ -276,7 +285,7 @@ def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
         "    {T : ℝ} (hp : p.Bound) (h : IsSolutionOn p u x y T) (hu : Spec.Admissible u T)",
         "    (h0 : Initial p (x 0)) : ∀ i, ∀ t ∈ Icc 0 T, sig (x t) i ≤ (Csig i : ℝ) := by",
         "  have hcont : ∀ i, ContinuousOn (fun t => sig (x t) i) (Icc 0 T) := by",
-        f"    obtain ⟨dx, {', '.join(ch)}, -⟩ := h",
+        f"    obtain ⟨dx, {', '.join(chb)}, -⟩ := h",
         "    intro i", "    fin_cases i",
     ]
     for j in signals:
@@ -309,7 +318,9 @@ def emit_cert(pb, layers, signals, out_idx, b, c) -> str:
         pre = "  · " if len(ks) > 1 else "  "
         ind = "    " if len(ks) > 1 else "  "
         out += [f"{pre}have hb := box{li}_{bk}.abs_le (hV{li} t ht)",
-                f"{ind}simp only [vec{li}, dotProduct, Fin.sum_univ_succ, Fin.sum_univ_zero] at hb",
+                f"{ind}simp only [vec{li}, dotProduct, Fin.sum_univ_succ, Fin.sum_univ_zero{_cv(layers[li])}] at hb",
+                # the bound vector `b k` for k ≥ 2 needs the `Matrix.cons_val` simproc
+                *([f"{ind}try simp only [Matrix.cons_val]"] if len(ks) >= 3 else []),
                 f"{ind}norm_num at hb ⊢",
                 f"{ind}linarith"]
     out += ["", f"end {ns}.LayeredCert", ""]

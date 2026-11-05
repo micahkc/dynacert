@@ -12,12 +12,13 @@ from fractions import Fraction
 from pathlib import Path
 
 from .. import montecarlo
-from . import VALIDATION, Approach, Assessment, register
+from . import VALIDATE, VALIDATION, Approach, Assessment, register
 
 
 def scenario_inputs(prob) -> list[str]:
-    """What a scenario varies: disturbances, uncertain parameters, free references."""
-    s = prob.spec
+    """What a scenario varies: disturbances, uncertain parameters, free references (array
+    variables per component)."""
+    s = montecarlo.scalar_target(prob).spec
     return ([f"disturbance {d.name}" for d in s.disturbances]
             + [f"parameter {u.name}" for u in s.uncertain]
             + [f"reference {r.name}" for r in s.references if not r.derivative])
@@ -27,9 +28,6 @@ def simulation_check(prob, backend: str = "rumoca") -> Assessment | None:
     """Shared preconditions of the simulation approaches; None if they hold."""
     if not prob.spec.certify:
         return Assessment.no("no outputs to observe: annotate them with __Dynacert(certify)")
-    arrays = [v.name for v in prob.model.inputs if not v.scalar]
-    if arrays:
-        return Assessment.no(f"array inputs are not supported by the harness: {arrays}")
     if not scenario_inputs(prob):
         return Assessment.no("nothing to sample: no disturbances, uncertain parameters, or free "
                              "references in the spec")
@@ -42,6 +40,19 @@ def certificate_note(prob) -> tuple[str, dict]:
     cert = prob.certificate()
     if cert is not None:
         return f"compares against certificate {cert.theorem}", dict(cert.bounds)
+    # no current lmi certificate: the tightest current bounds of the other methods (index)
+    try:
+        from .. import certindex
+
+        best = (certindex.kept(certindex.load(prob.cert_dir, prob.model.ns)["certificates"],
+                               prob.source_hash) if prob.cert_dir.exists() else {})
+    except (OSError, ValueError, KeyError):
+        best = {}
+    if best:
+        meths = sorted({b["method"] for b in best.values()})
+        return (f"compares against the current {', '.join(meths)} certificate"
+                f"{'s' * (len(meths) > 1)} (certificates.json)",
+                {o: Fraction(b["bound"]) for o, b in best.items()})
     if (prob.cert_dir / "certified.json").exists():
         return "certificate in certs/ is stale (source differs): no bounds to compare", {}
     return "no certificate: reports achieved peaks and probabilistic bounds only", {}
@@ -52,6 +63,10 @@ class MonteCarloApproach(Approach):
     name = "montecarlo"
     kind = VALIDATION
     summary = "i.i.d. scenario sampling: agreement with the certificate, tightness, ε-quantiles"
+    layer = VALIDATE
+    classes = ("lti", "lpv", "layered", "lie-se23", "nonlinear")
+    claims = ("peak",)
+    cost = 10
 
     def add_arguments(self, p):
         p.add_argument("--n", type=int, help="number of scenarios (default: from --eps, --beta)")
@@ -67,6 +82,10 @@ class MonteCarloApproach(Approach):
                             "else the current directory); figures: --plot")
 
     def assess(self, prob) -> Assessment:
+        try:
+            prob = montecarlo.scalar_target(prob)   # array variables: per component
+        except ValueError as e:
+            return Assessment.no(str(e))
         bad = simulation_check(prob)
         if bad:
             return bad
@@ -74,6 +93,7 @@ class MonteCarloApproach(Approach):
         return Assessment.yes("samples " + ", ".join(scenario_inputs(prob)), note)
 
     def run(self, prob, opts, verbose=print):
+        prob = montecarlo.scalar_target(prob)   # array variables: per component
         note, bounds = certificate_note(prob)
         verbose(note)
         beta = Fraction(opts.beta)

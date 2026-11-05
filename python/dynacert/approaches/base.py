@@ -8,8 +8,21 @@ An approach has two steps:
 * `run(prob, opts)`: do it and return an `Outcome`. Certificate approaches end with the Lean
   kernel's check; validation approaches (simulation, search) are untrusted and say so.
 
-To add an approach, subclass `Approach` in a new module under `dynacert/approaches/`, decorate it
-with `@register`, and import the module in `approaches/__init__.py`.
+To add an approach, subclass `Approach` in a new module under `dynacert/approaches/` and decorate
+it with `@register`; every module in the package is imported automatically.
+
+Each approach belongs to one layer of docs/architecture.md, which decides the CLI verb it runs
+under:
+
+* `layer`: "analyze" (L2, shown by `dynacert MODEL.mo`), "certify" (L3, `certify`), "validate"
+  (L4, `validate`) or "view" (L5, `view`). Left empty, it follows `kind`: certificate → certify,
+  validation → validate, anything else → analyze.
+* `classes`: model classes a certify method accepts ("lti", "lpv", "layered", "lie-se23",
+  "nonlinear"); informational, empty = unrestricted / decided by `assess`.
+* `claims`: claim shapes it proves or uses ("peak", "tube", ...).
+* `cost`: portfolio order under `certify` with no method named (lower runs first).
+* `cert_file` / `sidecar`: the Lean file and JSON sidecar a certify method writes under
+  `certs/Certs/<Model>/` (empty: derived from the theorem name / not known).
 """
 
 from __future__ import annotations
@@ -19,6 +32,14 @@ from dataclasses import dataclass, field
 
 CERTIFICATE = "certificate"   # result is a theorem checked by the Lean kernel
 VALIDATION = "validation"     # result is evidence from simulation or search (untrusted)
+ANALYSIS = "analysis"         # result is a description of the model (untrusted, decides routing)
+
+# layers (docs/architecture.md §1): L2 analyze, L3 certify, L4 validate, L5 view
+ANALYZE, CERTIFY, VALIDATE, VIEW = "analyze", "certify", "validate", "view"
+LAYERS = (ANALYZE, CERTIFY, VALIDATE, VIEW)
+LAYER_TITLES = {ANALYZE: "L2 analyze (structure)", CERTIFY: "L3 certify (Lean-checked methods)",
+                VALIDATE: "L4 validate (evidence, untrusted)", VIEW: "L5 view (products)"}
+KIND_LAYER = {CERTIFICATE: CERTIFY, VALIDATION: VALIDATE, ANALYSIS: ANALYZE}
 
 
 @dataclass
@@ -52,6 +73,12 @@ class Approach:
     name: str = ""
     kind: str = VALIDATION
     summary: str = ""
+    layer: str = ""                  # "" = from `kind` (set by `register`)
+    classes: tuple = ()              # model classes accepted (certify methods)
+    claims: tuple = ()               # claim shapes proved / used
+    cost: int = 100                  # portfolio order (lower first)
+    cert_file: str = ""              # Lean file written under certs/Certs/<Model>/
+    sidecar: str = ""                # JSON sidecar written next to it
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         """Approach-specific command-line options."""

@@ -10,10 +10,23 @@ Annotation vocabulary (component level):
     Real e          annotation(__Dynacert(certify));
     parameter Real c = 0.2 annotation(__Dynacert(uncertain(min = 0.1, max = 0.3)));
     input Real x_ref annotation(__Dynacert(reference(derivative = "v_ref")));
+    Real x(start = 0, fixed = true) annotation(__Dynacert(initialSet(min = -0.2, max = 0.2)));
+
+`initialSet(min, max)` on a state replaces its start value by the interval `[min, max]` in the
+claim (`Spec.InitialSet`). (`initial` itself is a Modelica keyword and cannot name an
+annotation modifier; the spelling `initial` is accepted where a parser lets it through.)
+
+Array variables (`input Real d[3]`, `Real e[3]`, `parameter Real K[2, 3]`) are annotated as a
+whole and read per component (`scalarize`, used by the linear methods and the Monte Carlo
+harness): `disturbance(bound = b)` is `|d[i]| ≤ b` for every `i` (as if each component were
+declared as a scalar input); `disturbance(bound = b, norm = "2")` is the Euclidean ball
+`‖d‖ ≤ b` instead; `certify` certifies every component (outputs `e[1]`, `e[2]`, ...);
+`uncertain(min, max)`, `reference(...)` and `initialSet(min, max)` apply to each component.
+A number may also be given per component as an array, e.g. `bound = {0.1, 0.2, 0.1}`.
 
 Model level:
 
-    annotation(__Dynacert(method = "lti", initial(...)));
+    annotation(__Dynacert(method = "lti", horizon = 10));
 """
 
 from __future__ import annotations
@@ -33,6 +46,20 @@ def _ann(attrs: dict | None) -> dict:
     return {}
 
 
+def _numv(x):
+    """A number, or a list of numbers (one per component of an array variable)."""
+    if isinstance(x, (list, tuple)):
+        return [_numv(v) for v in x]
+    return _num(x)
+
+
+def _pairs(lo, hi):
+    """Componentwise (lo, hi) pairs of numbers or per-component lists (scalars broadcast)."""
+    los, his = ([x] if not isinstance(x, list) else x for x in (lo, hi))
+    n = max(len(los), len(his))
+    return zip(los * n if len(los) == 1 else los, his * n if len(his) == 1 else his)
+
+
 def _num(x) -> Fraction:
     if isinstance(x, bool):
         raise ValueError("expected a number")
@@ -47,6 +74,8 @@ def _num(x) -> Fraction:
 class Disturbance:
     name: str
     bound: Fraction  # componentwise peak bound |d(t)| ≤ bound
+    norm: str | None = None   # "2": `‖d(t)‖ ≤ bound` for an array input (Euclidean ball)
+    group: str | None = None  # per-component entry of this array input (set by `scalarize`)
 
 
 @dataclass
@@ -64,6 +93,13 @@ class Reference:
 
 
 @dataclass
+class InitialBox:
+    name: str
+    lo: Fraction
+    hi: Fraction
+
+
+@dataclass
 class Spec:
     disturbances: list[Disturbance] = field(default_factory=list)
     certify: list[str] = field(default_factory=list)
@@ -71,6 +107,7 @@ class Spec:
     references: list[Reference] = field(default_factory=list)
     method: str | None = None
     horizon: Fraction | None = None
+    initial: list[InitialBox] = field(default_factory=list)  # states started in a box
 
     @property
     def disturbance_names(self) -> list[str]:
@@ -84,21 +121,42 @@ def from_model(model) -> Spec:
         a = _ann(v.annotations)
         if not a:
             continue
+        if v.role != "input":
+            # `disturbance` / `reference` describe a component's free input; once an enclosing
+            # model binds it (e.g. a wrapper fixing the reference) it is no longer an input of
+            # the claim, so the annotation does not apply
+            a = {k: val for k, val in a.items() if k not in ("disturbance", "reference")}
         if "disturbance" in a:
             d = a["disturbance"]
             if not isinstance(d, dict) or "bound" not in d:
                 raise ValueError(f"{v.name}: disturbance(bound = ...) is required")
-            spec.disturbances.append(Disturbance(v.name, _num(d["bound"])))
+            norm = d.get("norm")
+            norm = None if norm is None else str(norm).strip().strip('"')
+            if norm not in (None, "2", "inf"):
+                raise ValueError(f'{v.name}: disturbance norm must be "2" (Euclidean ball) or '
+                                 f'"inf" (per component, the default), not {norm!r}')
+            spec.disturbances.append(Disturbance(v.name, _numv(d["bound"]),
+                                                 "2" if norm == "2" else None))
         if "certify" in a:
             spec.certify.append(v.name)
         if "uncertain" in a:
             u = a["uncertain"]
-            spec.uncertain.append(Uncertain(v.name, _num(u["min"]), _num(u["max"])))
+            spec.uncertain.append(Uncertain(v.name, _numv(u["min"]), _numv(u["max"])))
+        ini = a.get("initialSet", a.get("initial"))
+        if ini is not None:
+            if not isinstance(ini, dict) or "min" not in ini or "max" not in ini:
+                raise ValueError(f"{v.name}: initialSet(min = ..., max = ...) is required")
+            if v.role != "state":
+                raise ValueError(f"{v.name}: initialSet applies to states only")
+            lo, hi = _numv(ini["min"]), _numv(ini["max"])
+            if any(l_ > h_ for l_, h_ in _pairs(lo, hi)):
+                raise ValueError(f"{v.name}: initialSet min > max")
+            spec.initial.append(InitialBox(v.name, lo, hi))
         if "reference" in a:
             r = a["reference"]
             der = r.get("derivative") if isinstance(r, dict) else None
             st = r.get("start") if isinstance(r, dict) else None
-            spec.references.append(Reference(v.name, der, None if st is None else _num(st)))
+            spec.references.append(Reference(v.name, der, None if st is None else _numv(st)))
     m = _ann(model.annotations)
     spec.method = m.get("method")
     if "horizon" in m:

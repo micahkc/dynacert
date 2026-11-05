@@ -14,15 +14,26 @@ import sympy as sp
 
 from .. import analysis as an
 from .. import pipeline
-from . import CERTIFICATE, Approach, Assessment, register
+from . import CERTIFICATE, CERTIFY, Approach, Assessment, register
 
 
 def nonlinear_terms(prob) -> list[str]:
     """`der(x)` right-hand sides that are not affine in states and inputs (uncertain
     parameters are left symbolic, so products with them are allowed)."""
-    m, thetas = prob.model, {m_.symbol for m_ in prob.model.params
-                             if m_.name in {u.name for u in prob.spec.uncertain}}
+    from .. import scalarize
+
+    try:  # array variables: one scalar per element (scalarize.py)
+        m, spec = scalarize.view(prob.model, prob.spec)
+    except scalarize.ScalarizeError as e:
+        raise pipeline.CertError(str(e)) from e
+    thetas = {m_.symbol for m_ in m.params if m_.name in {u.name for u in spec.uncertain}}
     vals = {k: v for k, v in m.param_values().items() if k not in thetas}
+    if isinstance(m, scalarize.ScalarModel):
+        # array models can be large (a full vehicle stack): report nonlinear equations before
+        # eliminating anything, which can take sympy very long on transcendental terms
+        bad = nonlinear_equations(m, vals)
+        if bad:
+            return bad
     res = an.substitute_params(m.equations_flat(), vals)
     ex = an.eliminate(res, [m.der[v.name] for v in m.states], [v.symbol for v in m.algebraics])
     xs = {v.symbol for v in m.states} | {v.symbol for v in m.inputs}
@@ -35,25 +46,71 @@ def nonlinear_terms(prob) -> list[str]:
     return bad
 
 
+def nonlinear_equations(m, vals, limit: int = 8) -> list[str]:
+    """Equations that are not affine in the model's variables (states, derivatives,
+    algebraics, inputs), with the variables in their nonlinear terms; at most `limit`."""
+    vs = ({v.symbol for v in m.states} | set(m.der.values())
+          | {v.symbol for v in m.algebraics} | {v.symbol for v in m.inputs})
+    dname = {d: f"der({n})" for n, d in m.der.items()}
+    bad = []
+    for k, eq in enumerate(m.equations):
+        r = sp.sympify(eq.lhs - eq.rhs).xreplace({s: sp.sympify(v) for s, v in vals.items()})
+        nl = set()
+        for term in sp.Add.make_args(sp.expand(r) if sp.count_ops(r) < 2000 else r):
+            fs = term.free_symbols & vs
+            if not fs:
+                continue
+            deg = sp.Poly(term, *fs).total_degree() if term.is_polynomial(*fs) else None
+            if deg is None or deg > 1:
+                nl |= fs
+        if nl:
+            ds = sorted((dname[s_] for s_ in sp.sympify(eq.lhs).free_symbols if s_ in dname))
+            lhs = ds[0] if ds else (eq.lhs.name if isinstance(eq.lhs, sp.Symbol)
+                                     else f"equation {k + 1}")
+            bad.append(f"{lhs} is nonlinear in "
+                       + ", ".join(sorted(str(s_) for s_ in nl)[:6])
+                       + (" ..." if len(nl) > 6 else ""))
+            if len(bad) >= limit:
+                bad.append("...")
+                break
+    return bad
+
+
 @register
 class LMI(Approach):
     name = "lmi"
     kind = CERTIFICATE
     summary = "LTI / polytopic LMI certificate of peak output bounds (Lean-checked)"
+    layer = CERTIFY
+    classes = ("lti", "lpv")
+    claims = ("peak", "tube")
+    cost = 10
+    cert_file = "Cert.lean"
+    sidecar = "certified.json"
 
     def add_arguments(self, parser):
         parser.add_argument("--no-plots", action="store_true", help="skip certificate.png")
 
     def _search(self, prob):
         if "lmi" not in prob.cache:
-            pb = pipeline.linear_problem(prob.model, prob.spec, prob.lean_src)
-            prob.cache["lmi"] = (pb, pipeline.lti_search(pb))
+            from .. import timing
+
+            with timing.phase("linear problem"):
+                pb = pipeline.linear_problem(prob.model, prob.spec, prob.lean_src)
+            with timing.phase("LMI search"):
+                prob.cache["lmi"] = (pb, pipeline.lti_search(pb))
         return prob.cache["lmi"]
 
     def assess(self, prob) -> Assessment:
         if not prob.spec.certify:
             return Assessment.no("nothing to certify: annotate outputs with __Dynacert(certify)")
-        bad = nonlinear_terms(prob)
+        if prob.lean_src is None:
+            return Assessment.no("rumoca's Lean export failed, so nothing can be certified: "
+                                 + str(prob.cache.get("lean_error", "")))
+        try:
+            bad = nonlinear_terms(prob)
+        except (pipeline.CertError, ValueError) as e:
+            return Assessment.no(str(e))
         if bad:
             return Assessment.no("the dynamics are not linear: " + "; ".join(bad))
         try:

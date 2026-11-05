@@ -29,6 +29,11 @@ class Lie(Approach):
     summary = "SE₂(3) log-error tube for PD tracking of a circular orbit (Lean-checked)"
 
     def assess(self, prob) -> Assessment:
+        from ..scalarize import NORM2
+
+        for d in prob.spec.disturbances:   # the Lie tube reads bounds per component
+            if d.norm == "2" and not prob.model.var(d.name).scalar:
+                return Assessment.no(NORM2.format(name=d.name))
         try:
             s = discover(prob)
             pat = emit_lie.recognize(prob, s)

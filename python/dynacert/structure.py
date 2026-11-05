@@ -103,10 +103,6 @@ class Block:
     der_open: sp.Matrix = None   # right-hand sides as written: algebraics kept as signals
 
 
-def _component(name: str) -> str:
-    return name.split(".", 1)[0] if "." in name else ""
-
-
 def _flat(x) -> list:
     return list(x) if isinstance(x, sp.MatrixBase) else [x]
 
@@ -141,15 +137,24 @@ def explicit(residuals, unknowns) -> dict:
             if len(us) != 1:
                 continue
             (u,) = us
-            a = sp.diff(r, u)
-            if u in a.free_symbols or a == 0:
-                continue
-            val = sp.together(-r.subs(u, 0) / a)
-            sol = {k_: v.subs(u, val) for k_, v in sol.items()}
+            # fast path for rumoca's explicit equations (`u - expr`, `c*u - expr`): no
+            # derivative or `together` of a possibly large `expr` (calls kept opaque by
+            # `model.opaque_calls` carry big arguments)
+            rest, dep = r.as_independent(u, as_Add=True)
+            c = dep / u if dep.is_Mul or dep == u else None
+            if c is not None and c.is_number and c != 0:
+                val = -rest / c
+            else:
+                a = sp.diff(r, u)
+                if u in a.free_symbols or a == 0:
+                    continue
+                val = sp.together(-r.subs(u, 0) / a)
+            sol = {k_: v.xreplace({u: val}) for k_, v in sol.items()}
             sol[u] = val
             U.discard(u)
-            res = [rr.subs(u, val) for i, rr in enumerate(res) if i != k]
-            res = [rr for rr in res if sp.simplify(rr) != 0 or rr.free_symbols & U]
+            res = [rr.xreplace({u: val}) for i, rr in enumerate(res) if i != k]
+            # cheap test first: simplify only residuals with no unknowns left
+            res = [rr for rr in res if rr.free_symbols & U or sp.simplify(rr) != 0]
             progress = True
             break
     if U:
@@ -169,7 +174,7 @@ _MAT = re.compile(r"^(?P<base>.*?)[_\[]?(?P<i>[1-3])[,_]?(?P<j>[1-3])\]?$")
 _VEC = re.compile(r"^(?P<base>.*?)[_\[]?(?P<c>[xyz1-3])\]?$")
 
 
-def _group_scalars(scalars: list) -> list[Block]:
+def _group_scalars(scalars: list, component) -> list[Block]:
     """Recognize groups of scalar states named like `R11 … R33` / `R_1_1` and `p_x, p_y, p_z`
     / `p1 … p3` as matrices and vectors (array states need no grouping)."""
     blocks, taken = [], set()
@@ -184,7 +189,7 @@ def _group_scalars(scalars: list) -> list[Block]:
             S = sp.Matrix(3, 3, lambda i, j: cells[(i, j)][0])
             D = sp.Matrix(3, 3, lambda i, j: cells[(i, j)][1])
             O = sp.Matrix(3, 3, lambda i, j: cells[(i, j)][3])
-            blocks.append(Block(base or "R", (3, 3), S, D, _component(cells[(0, 0)][2]), O))
+            blocks.append(Block(base or "R", (3, 3), S, D, component(cells[(0, 0)][2]), O))
             taken |= {c[2] for c in cells.values()}
     by = {}
     for name, sym, rhs, ro in scalars:
@@ -199,7 +204,7 @@ def _group_scalars(scalars: list) -> list[Block]:
         if len(cells) == 3 and base:
             blocks.append(Block(base, (3,), sp.Matrix([cells[i][0] for i in range(3)]),
                                 sp.Matrix([cells[i][1] for i in range(3)]),
-                                _component(cells[0][2]),
+                                component(cells[0][2]),
                                 sp.Matrix([cells[i][3] for i in range(3)])))
     return blocks
 
@@ -216,17 +221,7 @@ class System:
 
 def param_values(model, keep=()) -> dict:
     """Scalar parameter symbol -> bound value, with array parameters expanded elementwise."""
-    vals = {}
-    for v in model.params:
-        if v.binding is None or v.name in keep:
-            continue
-        b = v.binding
-        if isinstance(v.symbol, sp.MatrixBase):
-            bs = list(b) if isinstance(b, sp.MatrixBase) else [b] * len(v.symbol)
-            vals.update(zip(list(v.symbol), map(sp.sympify, bs)))
-        else:
-            vals[v.symbol] = sp.sympify(b)
-    return vals
+    return model.param_values(keep)
 
 
 def system(model, spec=None) -> System:
@@ -258,12 +253,12 @@ def system(model, spec=None) -> System:
         if v.scalar:
             scalars.append((v.name, v.symbol, rhs[0], ro[0]))
             blocks.append(Block(v.name, (), sp.Matrix([v.symbol]), sp.Matrix([rhs[0]]),
-                                _component(v.name), sp.Matrix([ro[0]])))
+                                v.component, sp.Matrix([ro[0]])))
         else:
             shape = tuple(v.shape)
             mk = (lambda xs: sp.Matrix(*v.symbol.shape, xs)) if len(shape) == 2 else sp.Matrix
-            blocks.append(Block(v.name, shape, v.symbol, mk(rhs), _component(v.name), mk(ro)))
-    blocks += _group_scalars(scalars)
+            blocks.append(Block(v.name, shape, v.symbol, mk(rhs), v.component, mk(ro)))
+    blocks += _group_scalars(scalars, model.component_of)
     states = set(der)
     inputs = {s for v in model.inputs for s in _flat(v.symbol)}
     return System(der, {a: sol[a] for a in algs}, blocks, states, inputs, thetas)
@@ -551,12 +546,14 @@ def error_coordinates(model, spec, sys_: System) -> Fact | None:
     change `pipeline.linear_problem` proves)."""
     if not spec or not spec.certify or not spec.references:
         return None
-    refs = {model.var(r.name).symbol for r in spec.references}
+    refs = {s for r in spec.references for s in _flat(model.var(r.name).symbol)}
     forms = []
     for name in spec.certify:
         v = model.var(name)
+        if not v.scalar:
+            return None
         e = v.symbol if v.role == "state" else sys_.alg.get(v.symbol)
-        if e is None or not v.scalar:
+        if e is None:
             return None
         e = sp.expand(e)
         if e.free_symbols - sys_.states - refs:

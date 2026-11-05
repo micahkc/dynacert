@@ -15,6 +15,7 @@
 | `phase(mc, a, b)` | trajectories in the (a, b) plane with the certified ellipse |
 | `worstcase(found, ...)` | each search method's worst trajectory, the disturbance, the switching function |
 | `tightness(rows)` | achieved lower bounds against the certified upper bound, per output |
+| `tube(tb, runs)`, `tube_phase`, `tube_margin` | the proved tube along a reference; with an `initialSet` funnel (`Cert.funnel`), the shrinking funnel and runs from the initial-box corners |
 
 Certified quantities are drawn in ink (dashed); sampled and searched quantities in series
 colors. Every figure function returns a matplotlib Figure and takes `figsize`.
@@ -24,6 +25,7 @@ from __future__ import annotations
 
 import contextlib
 from dataclasses import dataclass
+from fractions import Fraction
 from pathlib import Path
 
 import numpy as np
@@ -395,12 +397,28 @@ def tightness(rows: dict, model: str = "", figsize=None, title: str | None = "de
 
 # --- error-frame tubes -------------------------------------------------------------------------
 
-def tube(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = "default"):
+def _funnel_runs(tb, funnel_runs):
+    """Runs from the initial-box corners: given, or simulated on the certified frame dynamics."""
+    if getattr(tb, "funnel", None) is None:
+        return []
+    if funnel_runs is None:
+        try:
+            return tb.funnel_runs()
+        except Exception:  # illustration only
+            return []
+    return list(funnel_runs)
+
+
+def tube(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = "default",
+         funnel_runs=None):
     """Each physical state over time: the reference centre, the proved tube around it, simulated
     runs on that reference, and the adjoint worst cases. Frames that do not determine every state
-    are drawn in error coordinates."""
+    are drawn in error coordinates. With a funnel (`initialSet`), the shrinking funnel
+    `zᵀPz ≤ ρ(t)` is drawn inside the tube, with runs from the initial-box corners
+    (`funnel_runs`, default `tb.funnel_runs()`)."""
     p = palette()
     fr = tb.frame
+    fun = getattr(tb, "funnel", None)
     if fr.reconstructs:
         names, centre = fr.states, tb.center()
         hw = tb.halfwidths()
@@ -411,15 +429,30 @@ def tube(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = 
         Pi = np.linalg.inv(fr.P)
         hw = {n: float(np.sqrt(fr.level * Pi[i, i])) for i, n in enumerate(names)}
         val = lambda r, s: fr.error(r.states, r.inputs)[:, names.index(s)]  # noqa: E731
+    fruns = _funnel_runs(tb, funnel_runs)
+    sc = np.sqrt(tb.level_at() / fr.level) if fun is not None else None
     fig, axes = _subplots(len(names), ncols=1, figsize=figsize, w=8.6, h=2.6)
     for k, (ax, s) in enumerate(zip(axes, names)):
         c = p.series[0]
-        ax.fill_between(tb.t, centre[s] - hw[s], centre[s] + hw[s], color=c, alpha=0.16, lw=0,
-                        label=f"proved tube (±{hw[s]:.3g})")
-        ax.plot(tb.t, centre[s] + hw[s], color=c, lw=0.8)
-        ax.plot(tb.t, centre[s] - hw[s], color=c, lw=0.8)
+        if fun is None:
+            ax.fill_between(tb.t, centre[s] - hw[s], centre[s] + hw[s], color=c, alpha=0.16,
+                            lw=0, label=f"proved tube (±{hw[s]:.3g})")
+            ax.plot(tb.t, centre[s] + hw[s], color=c, lw=0.8)
+            ax.plot(tb.t, centre[s] - hw[s], color=c, lw=0.8)
+        else:
+            fw = hw[s] * sc
+            ax.plot(tb.t, centre[s] + hw[s], color=c, lw=0.8, ls=":",
+                    label=f"proved tube (±{hw[s]:.3g})")
+            ax.plot(tb.t, centre[s] - hw[s], color=c, lw=0.8, ls=":")
+            ax.fill_between(tb.t, centre[s] - fw, centre[s] + fw, color=c, alpha=0.18, lw=0,
+                            label=f"proved funnel (±{fw[0]:.3g} → ±{hw[s] * np.sqrt(min(fun.rate, fr.level) / fr.level):.3g})")
+            ax.plot(tb.t, centre[s] + fw, color=c, lw=0.9)
+            ax.plot(tb.t, centre[s] - fw, color=c, lw=0.9)
         for r in runs:
             ax.plot(r.t, val(r, s), color=p.muted, lw=0.5, alpha=0.5)
+        for j, r in enumerate(fruns):
+            ax.plot(r.t, val(r, s), color=p.series[2], lw=0.9, alpha=0.85,
+                    label="from initial-box corners (worst-push w)" if j == 0 else None)
         for j, (o, w) in enumerate(worst):
             ax.plot(w.t, val(w, s), color=p.series[(j + 1) % len(p.series)], lw=p.lw,
                     label=f"worst |{o}|")
@@ -427,23 +460,42 @@ def tube(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = 
         ax.set_ylabel(s)
         ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0))
     axes[-1].set_xlabel("t")
-    return _finish(fig, f"{model}: proved tube along the reference ({len(runs)} runs)"
+    what = "proved funnel" if fun is not None else "proved tube"
+    return _finish(fig, f"{model}: {what} along the reference ({len(runs)} runs)"
                    if title == "default" else title)
 
 
 def tube_phase(tb, runs, worst=(), a: str | None = None, b: str | None = None,
-               sections: int = 12, figsize=None, model: str = "", title: str | None = "default"):
+               sections: int = 12, figsize=None, model: str = "", title: str | None = "default",
+               funnel_runs=None):
     """The tube in a physical state plane: the reference path, the proved set at `sections`
-    times along it, simulated runs, and the worst cases."""
+    times along it, simulated runs, and the worst cases. With a funnel, the sections shrink
+    with `ρ(t)`, the initial box is drawn, and runs start from its corners."""
     p = palette()
     fr = tb.frame
+    fun = getattr(tb, "funnel", None)
     a, b = a or fr.states[0], b or fr.states[1]
     fig, ax = _plt().subplots(figsize=figsize or (7.4, 5.0))
     idx = np.linspace(0, len(tb.t) - 1, sections).round().astype(int)
     for n, i in enumerate(idx):
         xa, xb = tb.section(int(i), a, b)
         ax.plot(xa, xb, color=p.series[0], lw=0.9, alpha=0.35 + 0.65 * n / max(1, len(idx) - 1),
-                label="proved set at sampled times" if n == len(idx) - 1 else None)
+                label=("proved funnel set at sampled times" if fun is not None else
+                       "proved set at sampled times") if n == len(idx) - 1 else None)
+    if fun is not None:
+        xa, xb = tb.section(0, a, b, funnel=False)
+        ax.plot(xa, xb, color=p.series[0], lw=0.8, ls=":", label="proved tube (every t; drawn at t = 0)")
+        box = {d["name"]: (float(Fraction(d["min"])), float(Fraction(d["max"])))
+               for d in fun.initial}
+        cen = tb.center()
+        if a in box or b in box:
+            lo_a, hi_a = box.get(a, (cen[a][0], cen[a][0]))
+            lo_b, hi_b = box.get(b, (cen[b][0], cen[b][0]))
+            ax.plot([lo_a, hi_a, hi_a, lo_a, lo_a], [lo_b, lo_b, hi_b, hi_b, lo_b],
+                    color=p.series[3], lw=1.2, label="initial set")
+        for j, r in enumerate(_funnel_runs(tb, funnel_runs)):
+            ax.plot(r.states[a], r.states[b], color=p.series[2], lw=0.9, alpha=0.85,
+                    label="from initial-box corners" if j == 0 else None)
     for r in runs:
         ax.plot(r.states[a], r.states[b], color=p.muted, lw=0.5, alpha=0.5)
     for j, (o, w) in enumerate(worst):
@@ -455,13 +507,24 @@ def tube_phase(tb, runs, worst=(), a: str | None = None, b: str | None = None,
     ax.set_xlabel(a)
     ax.set_ylabel(b)
     ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    return _finish(fig, f"{model}: proved tube in ({a}, {b})" if title == "default" else title)
+    what = "proved funnel" if fun is not None else "proved tube"
+    return _finish(fig, f"{model}: {what} in ({a}, {b})" if title == "default" else title)
 
 
-def tube_margin(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = "default"):
-    """How full each run keeps the proved set: `zᵀPz / level` over time (the tube is ≤ 1)."""
+def tube_margin(tb, runs, worst=(), figsize=None, model: str = "", title: str | None = "default",
+                funnel_runs=None):
+    """How full each run keeps the proved set: `zᵀPz / level` over time (the tube is ≤ 1).
+    With a funnel, the proved bound `ρ(t)/level` is drawn too, with runs from the initial-box
+    corners."""
     p = palette()
+    fun = getattr(tb, "funnel", None)
     fig, ax = _plt().subplots(figsize=figsize or (8.0, 3.4))
+    if fun is not None:
+        ax.plot(tb.t, tb.level_at() / tb.frame.level, color=p.series[0], lw=1.4,
+                label=f"proved funnel ρ(t)/level ({fun.theorem or 'Cert.funnel'})")
+        for j, r in enumerate(_funnel_runs(tb, funnel_runs)):
+            ax.plot(r.t, tb.margin(r), color=p.series[2], lw=0.9, alpha=0.85,
+                    label="from initial-box corners" if j == 0 else None)
     for r in runs:
         ax.plot(r.t, tb.margin(r), color=p.muted, lw=0.5, alpha=0.6)
     for j, (o, w) in enumerate(worst):

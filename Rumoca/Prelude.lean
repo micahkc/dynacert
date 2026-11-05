@@ -16,6 +16,29 @@ noncomputable def sign (x : ℝ) : ℝ := if 0 < x then 1 else if x < 0 then -1 
 noncomputable def at1 {n : ℕ} (v : Fin n → ℝ) (k : ℕ) : ℝ :=
   if h : 1 ≤ k ∧ k ≤ n then v ⟨k - 1, by omega⟩ else 0
 
+/-- Modelica 1-based subscript `M[r, c]` for non-literal `r`, `c`; `0` outside the
+matrix (never reached by a checked model). -/
+noncomputable def at2 {m n : ℕ} (M : Matrix (Fin m) (Fin n) ℝ) (r c : ℕ) : ℝ :=
+  if h : 1 ≤ r ∧ r ≤ m ∧ 1 ≤ c ∧ c ≤ n then M ⟨r - 1, by omega⟩ ⟨c - 1, by omega⟩ else 0
+
+/-- Modelica slice `v[a:s:b]` with `k` elements, written `slice v (a - 1) s k`:
+element `i` (0-based) is `v[a + s*i]`. The bound is discharged by `decide` for the
+literal ranges the compiler emits. -/
+def slice {n : ℕ} (v : Fin n → ℝ) (off step k : ℕ)
+    (h : off + step * (k - 1) < n := by decide) : Fin k → ℝ :=
+  fun i => v ⟨off + step * i,
+    Nat.lt_of_le_of_lt (Nat.add_le_add_left (Nat.mul_le_mul_left step (by omega)) off) h⟩
+
+/-- Modelica `v[k] := a` in a function body (1-based `k`): `v` with element `k`
+replaced; unchanged outside `1..n`. -/
+def upd1 {n : ℕ} (v : Fin n → ℝ) (k : ℕ) (a : ℝ) : Fin n → ℝ :=
+  fun i => if (i : ℕ) + 1 = k then a else v i
+
+/-- Modelica `M[r, c] := a` in a function body (1-based `r`, `c`). -/
+def upd2 {m n : ℕ} (M : Matrix (Fin m) (Fin n) ℝ) (r c : ℕ) (a : ℝ) :
+    Matrix (Fin m) (Fin n) ℝ :=
+  Matrix.of fun i j => if (i : ℕ) + 1 = r ∧ (j : ℕ) + 1 = c then a else M i j
+
 /-- Modelica `skew(v)`: the cross-product matrix of a 3-vector. -/
 def skew (v : Fin 3 → ℝ) : Matrix (Fin 3) (Fin 3) ℝ :=
   !![0, -v 2, v 1; v 2, 0, -v 0; -v 1, v 0, 0]

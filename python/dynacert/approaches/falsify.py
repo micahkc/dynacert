@@ -20,8 +20,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from .. import collocation, montecarlo, worstcase
-from . import VALIDATION, Approach, Assessment, register
+from .. import collocation, montecarlo, timing, worstcase
+from . import VALIDATE, VALIDATION, Approach, Assessment, register
 from .monte_carlo import certificate_note, scenario_inputs, simulation_check
 
 
@@ -38,6 +38,10 @@ def _linear(prob) -> bool:
 class Falsify(Approach):
     name = "falsify"
     kind = VALIDATION
+    layer = VALIDATE
+    classes = ("lti", "lpv", "layered", "lie-se23", "nonlinear")
+    claims = ("peak",)
+    cost = 20
     summary = ("worst-case search (adjoint + switching times, CasADi collocation, cross-entropy): "
                "lower bounds, counterexamples")
 
@@ -68,6 +72,10 @@ class Falsify(Approach):
         p.add_argument("--seed", type=int, default=0)
 
     def assess(self, prob) -> Assessment:
+        try:
+            prob = montecarlo.scalar_target(prob)   # array variables: per component
+        except ValueError as e:
+            return Assessment.no(str(e))
         bad = simulation_check(prob)
         if bad:
             return bad
@@ -84,6 +92,7 @@ class Falsify(Approach):
                               adjoint=why is None, collocation=col is None and why is None)
 
     def run(self, prob, opts, verbose=print):
+        prob = montecarlo.scalar_target(prob)   # array variables: per component
         note, bounds = certificate_note(prob)
         verbose(note)
         outputs = opts.output or list(prob.spec.certify)
@@ -109,13 +118,22 @@ class Falsify(Approach):
             0 if use_col or (linear and not prob.spec.uncertain) else 4)
         nstarts = opts.starts if opts.starts is not None else (0 if linear else 5)
         sim = montecarlo.backend(prob, space, opts.backend)
-        col = (collocation.Collocation(prob.model, prob.spec, space, prob.source, prob.model_name)
-               if use_col else None)
+        col = None
+        if use_col:
+            try:
+                col = collocation.Collocation(prob.model, prob.spec, space, prob.source,
+                                              prob.model_name)
+            except Exception as e:  # noqa: BLE001 - e.g. switching models: no CasADi export
+                if opts.method == "collocation":
+                    raise ValueError(f"collocation unavailable: {e}") from e
+                verbose(f"collocation skipped: {' '.join(str(e).split())[:160]}")
+                use_col = False
         mc = None
         if (use_ce or (use_adj and nstarts)) and opts.seed_runs:
             verbose(f"Monte Carlo: {opts.seed_runs} runs to seed the search")
-            mc = montecarlo.run(prob, opts.seed_runs, T=opts.T, backend_name=opts.backend,
-                                seed=opts.seed, dist=dist, bounds=bounds)
+            with timing.phase("montecarlo seed"):
+                mc = montecarlo.run(prob, opts.seed_runs, T=opts.T, backend_name=opts.backend,
+                                    seed=opts.seed, dist=dist, bounds=bounds)
 
         lines, data, ok, everything = [], {}, True, {}
         for o in outputs:
@@ -135,7 +153,8 @@ class Falsify(Approach):
                     idx = np.argsort(mc.peaks[o])[::-1][:nstarts]
                     ok_idx = mc._ok()
                     starts = [mc.scenarios[ok_idx[int(i)]] for i in idx]
-                r = adj.search(o, starts=starts, verbose=verbose)
+                with timing.phase(f"adjoint:{o}"):
+                    r = adj.search(o, starts=starts, verbose=verbose)
                 for stage, _, scn in r.candidates:
                     if stage in ("scan", "switch", "multistart"):
                         add(f"adjoint/{stage}", scn)
@@ -161,7 +180,8 @@ class Falsify(Approach):
                         cands = [(t, s) for t in np.linspace(opts.T / 4, opts.T, 4)
                                  for s in (1.0, -1.0)]
                     for tstar, sign in cands:
-                        c = col.solve(o, tstar, sign, s0, run0)
+                        with timing.phase(f"collocation:{o}"):
+                            c = col.solve(o, tstar, sign, s0, run0)
                         tag = "" if c.status == "solved" else f", {c.status}"
                         add(f"collocation t*={tstar:.4g}{'+' if sign > 0 else '-'}{tag}",
                             c.scenario)
@@ -169,9 +189,10 @@ class Falsify(Approach):
                 top = max(found, key=lambda t: t[0])[2] if found else None
                 iters = opts.iters if use_ce and not found else polish
                 verbose(f"cross-entropy |{o}| ({iters} iterations)")
-                f = montecarlo.falsify(prob, o, iters=iters, pop=opts.pop, T=opts.T,
-                                       seed=opts.seed, backend_name=opts.backend, dist=dist,
-                                       init=top if top is not None else mc, bounds=bounds)
+                with timing.phase(f"cross-entropy:{o}"):
+                    f = montecarlo.falsify(prob, o, iters=iters, pop=opts.pop, T=opts.T,
+                                           seed=opts.seed, backend_name=opts.backend, dist=dist,
+                                           init=top if top is not None else mc, bounds=bounds)
                 found.append((f.value, "cross-entropy", f.scenario))
             everything[o] = found
             v, how, scn = max(found, key=lambda t: t[0])

@@ -54,9 +54,114 @@ def substitute_params(equations, param_values: dict):
     return res
 
 
+def _solve_linear(residuals, unknowns):
+    """The unique solution when every residual is affine in the unknowns (the usual case:
+    derivatives and algebraics enter linearly, with state- and input-dependent coefficients);
+    None otherwise."""
+    U = set(unknowns)
+    rows, rhs = [], []
+    for r in residuals:
+        r = sp.expand(r)
+        coeffs = [sp.diff(r, u) for u in unknowns]
+        if any(c.free_symbols & U for c in coeffs):
+            return None
+        rest = sp.expand(r - sum(c * u for c, u in zip(coeffs, unknowns)))
+        if rest.free_symbols & U:
+            return None
+        rows.append(coeffs)
+        rhs.append(-rest)
+    M = sp.Matrix(rows)
+    if M.shape[0] < len(unknowns) or M.rank() < len(unknowns):
+        return None
+    sol = sp.linsolve((M, sp.Matrix(rhs)), unknowns)
+    if not sol:
+        return None
+    (vals,) = sol
+    if any(v.free_symbols & U for v in vals):
+        return None
+    return [dict(zip(unknowns, vals))]
+
+
+@dataclass
+class Mode:
+    """One branch combination of a switching model (`if`-expressions): the condition under which
+    it is active (in states, inputs and parameters only) and its explicit dynamics."""
+    choice: tuple            # branch index per Piecewise, in `piecewise_atoms` order
+    condition: object        # sympy boolean (True for an unconditional branch)
+    explicit: Explicit
+    residuals: list          # residuals with every Piecewise replaced by the chosen branch
+
+
+MAX_MODES = 64
+
+
+def piecewise_atoms(residuals) -> list:
+    """The Piecewise subexpressions of the residuals, outermost first, deterministic order."""
+    found = []
+    for r in residuals:
+        for pw in sp.preorder_traversal(sp.sympify(r)):
+            if isinstance(pw, sp.Piecewise) and pw not in found:
+                found.append(pw)
+    return found
+
+
+def _branch_condition(pw, k):
+    """Condition of branch k of a Piecewise: its own condition and every earlier one false."""
+    conds = [c for _, c in pw.args]
+    cond = sp.And(*[sp.Not(c) for c in conds[:k]], conds[k])
+    return sp.simplify_logic(cond) if cond.free_symbols else cond
+
+
+def modes(residuals, der_syms, alg_syms) -> list[Mode]:
+    """Expand a switching model into its modes. Each mode replaces every Piecewise by one branch
+    and is solved as a smooth system; its condition is rewritten in states and inputs by
+    substituting that mode's algebraic solution. Modes whose condition is identically false are
+    dropped. A model without Piecewise has one mode with condition True."""
+    import itertools
+
+    atoms = piecewise_atoms(residuals)
+    if not atoms:
+        return [Mode((), sp.true, _eliminate_smooth(residuals, der_syms, alg_syms), residuals)]
+    combos = list(itertools.product(*[range(len(pw.args)) for pw in atoms]))
+    if len(combos) > MAX_MODES:
+        raise ValueError(f"{len(combos)} switching modes (more than {MAX_MODES})")
+    out = []
+    for choice in combos:
+        rep = {pw: pw.args[k][0] for pw, k in zip(atoms, choice)}
+        res = [sp.sympify(r).xreplace(rep) for r in residuals]
+        if piecewise_atoms(res):               # nested conditionals inside a chosen branch
+            raise ValueError("nested if-expressions are not supported")
+        ex = _eliminate_smooth(res, der_syms, alg_syms)
+        sub = {**ex.alg, **{d: ex.der[d] for d in der_syms}}
+        cond = sp.And(*[_branch_condition(pw, k) for pw, k in zip(atoms, choice)])
+        cond = cond.xreplace(sub) if cond not in (sp.true, sp.false) else cond
+        if cond == sp.false:
+            continue
+        out.append(Mode(tuple(choice), cond, ex, res))
+    if not out:
+        raise ValueError("no switching mode is ever active")
+    return out
+
+
 def eliminate(residuals, der_syms, alg_syms) -> Explicit:
+    """Explicit form; switching models (Piecewise) become a Piecewise over their modes."""
+    ms = modes(residuals, der_syms, alg_syms)
+    if len(ms) == 1:
+        return ms[0].explicit
+    def merge(sym, part):
+        pairs = [(getattr(m.explicit, part)[sym], m.condition) for m in ms[:-1]]
+        return sp.Piecewise(*pairs, (getattr(ms[-1].explicit, part)[sym], True))
+    return Explicit({d: merge(d, "der") for d in der_syms},
+                    {a: merge(a, "alg") for a in alg_syms}, residuals)
+
+
+def _eliminate_smooth(residuals, der_syms, alg_syms) -> Explicit:
     unknowns = list(der_syms) + list(alg_syms)
-    sol = sp.solve(residuals, unknowns, dict=True)
+    sol = _solve_linear(residuals, unknowns)
+    if sol is None:
+        # nonlinear in the unknowns: skip sympy's solution checking and simplification, which
+        # can run for minutes on transcendental terms (tanh, sqrt, ...)
+        sol = sp.solve(residuals, unknowns, dict=True, check=False, simplify=False)
     if len(sol) != 1:
         raise ValueError("equations do not determine derivatives and algebraics uniquely")
     s = sol[0]
@@ -107,7 +212,8 @@ def multipliers(residuals, target, params=()):
     if not sol:
         raise ValueError("identity is not a linear combination of the equations")
     (vals,) = sol
-    free = {s: 0 for v in vals for s in v.free_symbols}
+    # only the undetermined multipliers are free; uncertain parameters must stay symbolic
+    free = {s: 0 for v in vals for s in v.free_symbols if s in set(lams)}
     out = []
     for i, v in enumerate(vals):
         v = sp.simplify(sp.sympify(v).subs(free))

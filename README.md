@@ -2,6 +2,9 @@
 
 Machine-checked safety certificates for Modelica models, in Lean 4 / Mathlib.
 
+See [docs/capabilities.md](docs/capabilities.md) for everything it can do today, its limits and known
+defects.
+
 dynacert is the formally verified successor to [cp_reach](https://github.com/micahkc/cp_reach).
 You annotate a Modelica model with what to certify. [rumoca](https://github.com/CogniPilot/rumoca)
 exports the model to Lean and to Python from one DAE IR. Untrusted Python searches for a
@@ -75,16 +78,36 @@ model's own equations.
 | `input Real r annotation(__Dynacert(reference(derivative = "rd", start = r₀)))` | `r` continuous, `r' = rd` (right derivative), `r(0) = r₀` |
 | `Real e annotation(__Dynacert(certify))` | conclusion `\|e(t)\| ≤ b` |
 | `parameter Real c = 0.2 annotation(__Dynacert(uncertain(min = lo, max = hi)))` | the claim holds for every `c ∈ [lo, hi]` |
+| `Real x(start = 0, fixed = true) annotation(__Dynacert(initialSet(min = lo, max = hi)))` | `x(0) ∈ [lo, hi]` instead of `x(0) = start` (`Spec.InitialSet`); the certificate adds the shrinking funnel `Cert.funnel` (`initial` is a Modelica keyword, hence `initialSet`) |
+
+**Array variables** (`Real p[3]`, `input Real d[3]`, `parameter Real K[2, 3]`) are annotated as a
+whole and read per component; the linear methods (`lmi`, `polyhedral`, `layered`) and the
+simulation harness (`montecarlo`, `falsify`, `tube`) treat each element as a scalar coordinate.
+In Lean, rumoca's `v : Fin n → ℝ` field gives the terms `(x t).p 0`, `(x t).p 1`, … (Modelica
+`p[k]` is `p (k-1)`), and the outputs are named `e[1]`, `e[2]`, ….
+
+| Annotation on an array | Meaning in the claim |
+|---|---|
+| `input Real d[3] annotation(__Dynacert(disturbance(bound = δ)))` | `\|d[i](t)\| ≤ δ` for every component (`Spec.Admissible` lists them), as if each were a scalar input; `bound = {δ₁, δ₂, δ₃}` gives one bound per component |
+| `disturbance(bound = δ, norm = "2")` | the Euclidean ball `‖d(t)‖ ≤ δ`: not supported yet, rejected with a message (it would need equal rates per group in the LMI, a grouped budget in the Lean proof, and ball sampling in Monte Carlo) |
+| `input Real r[3] annotation(__Dynacert(reference(derivative = "rd", start = r₀)))` | per component: `r[i]' = rd[i]` (`rd` an array of the same shape), `r[i](0) = r₀` (or `start = {…}`) |
+| `Real e[3] annotation(__Dynacert(certify))` | one bound per component: `\|e[1](t)\| ≤ b₀`, `\|e[2](t)\| ≤ b₁`, … |
+| `parameter Real c[2] = {…} annotation(__Dynacert(uncertain(min = lo, max = hi)))` | every component ranges over `[lo, hi]` independently (`Spec.ParamsOK` per component; `min`/`max` may be arrays) |
+| `Real x[2](…) annotation(__Dynacert(initialSet(min = lo, max = hi)))` | `x[i](0) ∈ [lo, hi]` per component |
+
+Array parameters that only set start values (`start = p0`) or enter the dynamics (gain matrices
+`K * x`) are substituted elementwise from `Params.Bound`, like scalars.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
 | `Dynacert/Core/` | Quadratic forms and `PSDWitness`, dissipation (Grönwall), systems, first-exit tubes |
-| `Dynacert/Linear/` | LTI, per-channel, and polytopic certificates; output bounds; bridge to gnc_lean supplies |
+| `Dynacert/Linear/` | LTI, per-channel, and polytopic certificates; output bounds; bridge to gnc_lean supplies; `Scalar.lean`: lemmas that evaluate one component of rumoca's array equations |
 | `Dynacert/Nonlinear/` | Mean-value Jacobian enclosures |
 | `Dynacert/Prob/` | Scenario (order-statistic) and zero-failure bounds for Monte Carlo validation |
 | `Dynacert/Lie/` | SE₂(3) log-error dynamics with right derivatives, chart-closing log tube, SO(3) invariance, physical output bounds |
+| `Dynacert/Sector/` | Sector-multiplier certificates for nonlinear closed loops: LMI with quadratic supply checked by a dominance witness, regional invariance (several ellipsoids, first exit), composition of block storages, rigorous sector/peak bounds of `sin`, `cos`, `√(s²+h²)`, `atan2` ([docs/sector.md](docs/sector.md)) |
 | `Rumoca/Prelude.lean` | rumoca's lean-dae prelude (the pipeline checks it is unchanged) |
 | `certs/Certs/<Model>/` | Generated `Model`, `Spec`, `Cert`, plus `certified.json` and a plot |
 | `examples/` | Annotated Modelica models; `notebooks/` |
@@ -102,31 +125,89 @@ pip install -e '.[worstcase]'        # optional: CasADi + IPOPT for falsify's co
 
 ### Command line
 
-Give dynacert a Modelica model to see which approaches apply to it, then run one:
+The commands follow the layers of [docs/architecture.md](docs/architecture.md): give dynacert a
+Modelica model to see what applies to it, grouped by layer and with reasons, then certify,
+validate, and view:
 
 ```
-$ dynacert examples/PendulumPD.mo
-PendulumPD (PendulumPD.mo, inferred): 2 states, 1 inputs, 7 parameters
-  spec: certify e; disturbances |tau_d| ≤ 1
+$ dynacert examples/ClosedLoop.mo
+ClosedLoop (ClosedLoop.mo, inferred): 2 states, 4 inputs, 5 parameters
+  spec: certify e, ev; disturbances |d| ≤ 1; references x_ref, v_ref, a_ref
+  certified: |e| ≤ 0.843764 (lmi), |ev| ≤ 1.43073 (lmi)
 
-  lmi         certificate  no   the dynamics are not linear: der(omega) is nonlinear in theta
-  montecarlo  validation   yes  samples disturbance tau_d
-                                no certificate: reports achieved peaks and probabilistic bounds only
-  falsify     validation   yes  searches disturbance tau_d
-                                no certificate: reports achieved peaks and probabilistic bounds only
+L2 analyze (structure)
+  structure   yes  der(x) = A x + B u with constant coefficients
+                   ...
+L3 certify (Lean-checked methods)
+  lmi         yes  linear in (e, ev), 1 disturbance channel
+                   candidate found: |e| ≤ 0.8438, |ev| ≤ 1.431 (not yet checked by Lean)
+  layered     no   layered: references and uncertain parameters are not supported yet (use the lmi approach)
 
-$ dynacert examples/ClosedLoop.mo lmi                 # certify: search, emit Lean, kernel check
-$ dynacert examples/ClosedLoop.mo montecarlo --n 500  # validate against the certificate
+L4 validate (evidence, untrusted)
+  montecarlo  yes  samples disturbance d, reference a_ref
+  ...
+L5 view (products)
+  tube        yes  error frame (e, ev) proved by ClosedLoop.Cert.tube
+
+$ dynacert examples/ClosedLoop.mo certify             # portfolio: every feasible method, cheapest first
+$ dynacert examples/ClosedLoop.mo certify lmi         # or the named methods only
+$ dynacert examples/ClosedLoop.mo validate            # --sample (montecarlo), then --search (falsify)
+$ dynacert examples/ClosedLoop.mo validate --sample --n 500
+$ dynacert examples/ClosedLoop.mo view tube           # the proved tube along a reference
+$ dynacert examples/ClosedLoop.mo view plots          # certificate + tube figures → certs/Certs/<Model>/plots
+$ dynacert examples/ClosedLoop.mo view report         # the same in one PDF (default certs/Certs/<Model>/report.pdf)
+$ dynacert examples/ClosedLoop.mo certify -h          # each verb's options, per method
+$ dynacert --list                                     # every registered approach, by layer
+```
+
+`certify` runs the methods, continuing after one fails, and prints a method × output table:
+
+```
+certify TwoMassLayered: method × output bound   (* = kept, tightest)
+  method          |a.x|         |b.x|
+  lmi          1.33087*      1.01047
+  layered      1.36022      0.549046*
+  kept: |a.x| ≤ 4147/3116 (lmi), |b.x| ≤ 5323/9695 (layered)
+```
+
+Every method that built is recorded in `certs/Certs/<Model>/certificates.json` (theorem, Lean
+file, bounds, axioms, source hash, time) with the kept bound per output; `certified.json` stays
+the `lmi` sidecar. Each sidecar records `source_hash`, the sha256 of the Modelica source and the
+model name, so a certificate of an edited model is recognized as stale. If `certify` emits a
+`Spec.lean` that differs from the one on disk, the model or its annotations changed: once the
+new certificate builds, every other certificate file in that directory that imports the old
+`Spec` (with its sidecar and index entry) is deleted, and the deletions are printed.
+`Model.lean`, `Spec.lean`, and `source.mo` are never deleted.
+
+The direct form still runs any single approach, as before:
+
+```
+$ dynacert examples/ClosedLoop.mo lmi                 # = certify lmi
+$ dynacert examples/ClosedLoop.mo montecarlo --n 500  # = validate --sample --n 500
 $ dynacert examples/ClosedLoop.mo falsify -h          # each approach's own options
-$ dynacert --list                                     # every registered approach
 ```
 
-| Approach | Kind | Applies when |
+| Approach | Layer (verb) | Applies when |
 |---|---|---|
-| `lmi` | certificate (Lean-checked) | error dynamics are linear, `A` multi-affine in uncertain parameters, and the LMI search succeeds (checked during assessment) |
-| `montecarlo` | validation (untrusted) | certified outputs and something to sample; compares against the certificate if it is current |
-| `falsify` | validation (untrusted) | as `montecarlo`; worst-case search: adjoint gradients with switching times (exact for linear models), CasADi/IPOPT direct collocation, cross-entropy |
-| `tube` | validation (set proved by `Cert.tube`) | a current certificate: carries the proved error-frame set along a reference (random or `--reference FILE.csv`), checks simulated runs stay inside; see [docs/tube.md](docs/tube.md) |
+| `structure` | analyze (`structure`) | always: Lie-group, gravity, layer, and linear structure; `--lean` links SE₂(3) in Lean |
+| `lmi` | certify | error dynamics are linear, `A` multi-affine in uncertain parameters, and the LMI search succeeds (checked during assessment) |
+| `layered` | certify | per-component LTI certificates whose couplings close under assume–guarantee |
+| `montecarlo` | validate `--sample` (untrusted) | certified outputs and something to sample; compares against the certificate if it is current |
+| `falsify` | validate `--search` (untrusted) | as `montecarlo`; worst-case search: adjoint gradients with switching times (exact for linear models), CasADi/IPOPT direct collocation, cross-entropy |
+| `sector` | certify | nonlinear dynamics built from `sin`, `cos`, `√(s²+h²)`, `atan2` atoms about an equilibrium: exact linear part + residual channels with sector multipliers, rigorous residual bounds in Lean, region fixed point ([docs/sector.md](docs/sector.md)) |
+| `compose` | certify | as `sector`, decomposed across a cut chosen from the coupling graph and screened by Proposition 2; block LMIs with supply rates, solved by ADMM |
+| `tearing` | analyze | loop-tearing baseline: peak-to-peak cycle gain across each candidate cut |
+| `tube` | view `tube` (set proved by `Cert.tube`) | a current certificate: carries the proved error-frame set along a reference (random or `--reference FILE.csv`), checks simulated runs stay inside; see [docs/tube.md](docs/tube.md) |
+
+### Examples
+
+[examples/README.md](examples/README.md) catalogs 42 annotated models from twelve industries
+(automotive, aerospace, marine, rail, energy, process, buildings, water, robotics, biomedical,
+precision, agriculture): 34 Lean-certified, 8 nonlinear validation-only, each with Monte Carlo
+and worst-case results. `dynacert timings` compares the run times recorded for every model.
+
+[examples/capabilities/](examples/capabilities/README.md) has small models, one per capability,
+including what dynacert rejects and repros of known failures.
 
 ### Figures
 
@@ -150,8 +231,12 @@ Options: `--plot [DIR]`, `--report FILE.pdf`, `--show`, `--figures a,b`,
 `--theme light|dark|paper`, `--format png,svg,pdf`, `--dpi N`. In Python, use `mc.plot("envelope")`
 and the `dynacert.figures` module (`with figures.theme("dark"): ...`).
 
+`view plots` draws the `lmi` certificate figure and the `tube` figures (the tube options such as
+`--n` and `--reference` apply); `view report` puts them in one PDF.
+
 Common options: `--model NAME` (default: the last model in the file), `--json`, `-q`. Exit
-status: 0 success, 1 failed or counterexample, 2 approach not applicable, 64 usage. New
+status: 0 success (for `certify`: at least one method certified), 1 failed or counterexample, 2
+not applicable, 64 usage. New
 approaches are plugins: see [docs/approaches.md](docs/approaches.md).
 
 ### From Python / Jupyter

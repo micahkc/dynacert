@@ -14,6 +14,12 @@ translated along the reference. A Lie-group frame (`ξ = log(Y⁻¹X)`) plugs in
 
 The tube is proved; simulations here only illustrate it and check that the simulator agrees
 (`Tube.margin` ≤ 1 along every run).
+
+**Funnels.** When states carry `initialSet` annotations, the certificate also proves
+`<Model>.Cert.funnel`: `zᵀPz ≤ ρ(t) = V₀ e^{-αt} + r (1 − e^{-αt})` with `r = Σγⱼδⱼ²/α`.
+`Funnel` reads these constants from the sidecar (`"funnel"`); the set at time `t` is the
+tube's ellipsoid scaled by `√(ρ(t)/level)`. `Tube.funnel_runs` simulates the certified
+error-frame dynamics from the corners of the initial box (illustration only).
 """
 
 from __future__ import annotations
@@ -46,6 +52,36 @@ def _f(v) -> float:
 
 
 @dataclass
+class Funnel:
+    """`zᵀPz ≤ ρ(t) = V₀ e^{-αt} + rate·(1 − e^{-αt})`, proved by `<Model>.Cert.funnel`."""
+    V0: float
+    alpha: float
+    rate: float            # asymptotic level Σγⱼδⱼ²/α
+    level: float           # the invariant level of `Cert.tube` (≥ V₀ and ≥ rate)
+    theorem: str = ""
+    initial: list = field(default_factory=list)   # [{"name", "min", "max"}] annotated states
+    centre: np.ndarray | None = None              # z at the centre of the initial box
+
+    @classmethod
+    def from_sidecar(cls, side: dict) -> "Funnel | None":
+        f = side.get("funnel")
+        if f is None:
+            return None
+        return cls(_f(f["V0"]), _f(f["alpha"]), _f(f["rate"]), _f(f.get("level", side["level"])),
+                   f.get("theorem", ""), list(side.get("initial", [])),
+                   np.array([_f(v) for v in side.get("x0", [])]) if side.get("x0") else None)
+
+    def rho(self, t) -> np.ndarray:
+        """The proved level ρ(t)."""
+        e = np.exp(-self.alpha * np.asarray(t, dtype=float))
+        return self.V0 * e + self.rate * (1 - e)
+
+    def scale(self, t) -> np.ndarray:
+        """Size of the funnel's ellipsoid relative to the tube's, `√(ρ(t)/level)` (≤ 1)."""
+        return np.sqrt(self.rho(t) / self.level)
+
+
+@dataclass
 class LinearFrame:
     """`z = F_x x + F_u r` (states `x`, reference inputs `r`), from a certificate sidecar."""
     names: list
@@ -57,6 +93,10 @@ class LinearFrame:
     Fu: np.ndarray
     theorem: str = ""
     outputs: dict = field(default_factory=dict)   # certified output bounds
+    funnel: Funnel | None = None                  # present when an initial set is annotated
+    A: np.ndarray | None = None                   # certified frame dynamics ż = A z + B w
+    B: np.ndarray | None = None
+    dist_bounds: list = field(default_factory=list)
 
     @classmethod
     def from_certificate(cls, cert) -> "LinearFrame":
@@ -77,8 +117,12 @@ class LinearFrame:
                 else:
                     Fu[i, inputs.index(t["var"])] += _f(t["coeff"])
         P = np.array([[_f(v) for v in r] for r in side["P"]])
+        A = np.array([[_f(v) for v in r] for r in side["A"]]) if side.get("A") else None
+        B = np.array([[_f(v) for v in r] for r in side["B"]]) if side.get("B") else None
         return cls(list(fr["coords"]), P, _f(side["level"]), states, inputs, Fx, Fu,
-                   fr.get("theorem", ""), {o["name"]: _f(o["bound"]) for o in side["outputs"]})
+                   fr.get("theorem", ""), {o["name"]: _f(o["bound"]) for o in side["outputs"]},
+                   Funnel.from_sidecar(side), A, B,
+                   [_f(d["bound"]) for d in side.get("disturbances", [])])
 
     @property
     def reconstructs(self) -> bool:
@@ -152,19 +196,33 @@ class Tube:
         U = sphere(self.frame.P.shape[0], n)
         return np.sqrt(self.frame.level) * np.linalg.solve(L.T, U.T).T
 
-    def section(self, i: int, a: str, b: str, n: int = 240):
+    @property
+    def funnel(self) -> Funnel | None:
+        return getattr(self.frame, "funnel", None)
+
+    def level_at(self, i: int | None = None):
+        """The proved level at `t[i]` (all times if `i` is None): ρ(t) with a funnel, else the
+        constant tube level."""
+        tt = self.t if i is None else self.t[i]
+        if self.funnel is None:
+            return np.full_like(np.asarray(tt, dtype=float), self.frame.level)
+        return np.minimum(self.funnel.rho(tt), self.frame.level)
+
+    def section(self, i: int, a: str, b: str, n: int = 240, funnel: bool = True):
         """The set at time `t[i]` projected on physical states `(a, b)`: the exact projected
-        ellipse for an affine frame, else the convex hull of mapped boundary samples."""
+        ellipse for an affine frame, else the convex hull of mapped boundary samples. With a
+        funnel (and `funnel=True`) the set is the funnel's, `{zᵀPz ≤ ρ(t[i])}`."""
         fr = self.frame
+        lvl = float(self.level_at(i)) if funnel else fr.level
         if isinstance(fr, LinearFrame):
             ia, ib = fr.states.index(a), fr.states.index(b)
             S = fr.M @ np.linalg.inv(fr.P) @ fr.M.T
-            S2 = fr.level * S[np.ix_([ia, ib], [ia, ib])]
+            S2 = lvl * S[np.ix_([ia, ib], [ia, ib])]
             th = np.linspace(0, 2 * np.pi, n)
             e = np.linalg.cholesky(S2) @ np.vstack([np.cos(th), np.sin(th)])
             c = fr.to_physical(self.ref_at(i), np.zeros((1, len(fr.names))))
             return c[a][0] + e[0], c[b][0] + e[1]
-        pts = fr.to_physical(self.ref_at(i), self.boundary_z(4 * n))
+        pts = fr.to_physical(self.ref_at(i), self.boundary_z(4 * n) * np.sqrt(lvl / fr.level))
         from scipy.spatial import ConvexHull
 
         P2 = np.column_stack([pts[a], pts[b]])
@@ -177,10 +235,68 @@ class Tube:
         S = fr.level * fr.M @ np.linalg.inv(fr.P) @ fr.M.T
         return {s: float(np.sqrt(S[i, i])) for i, s in enumerate(fr.states)}
 
+    def funnel_halfwidths(self) -> dict:
+        """Per-state half-width of the funnel over `t` (arrays; the tube's without a funnel)."""
+        sc = np.sqrt(self.level_at() / self.frame.level)
+        return {s: h * sc for s, h in self.halfwidths().items()}
+
     def margin(self, run) -> np.ndarray:
         """`zᵀPz / level` along a simulated run (≤ 1 is inside the proved tube)."""
         Z = self.frame.error(run.states, run.inputs)
         return np.einsum("ij,jk,ik->i", Z, self.frame.P, Z) / self.frame.level
+
+    def funnel_margin(self, run) -> np.ndarray:
+        """`zᵀPz / ρ(t)` along a run started in the initial set (≤ 1 is inside the funnel)."""
+        Z = self.frame.error(run.states, run.inputs)
+        V = np.einsum("ij,jk,ik->i", Z, self.frame.P, Z)
+        f = self.funnel
+        return V / (f.rho(run.t) if f is not None else self.frame.level)
+
+    def funnel_runs(self, adversarial: bool = True) -> list:
+        """Illustration: the certified frame dynamics `ż = A z + B w` (nominal `A` for a
+        polytope) from each corner of the initial box, along this reference, with the
+        disturbance `w = δ·sign(BᵀPz)` that pushes `V` up fastest (or `w = 0`). Returns
+        run-like objects (`t`, `states`, `inputs`, `label`). Requires a funnel and a frame
+        that reconstructs the states."""
+        import itertools
+        from types import SimpleNamespace
+
+        from scipy.linalg import expm
+
+        fr, f = self.frame, self.funnel
+        if f is None or fr.A is None or not fr.reconstructs:
+            return []
+        idx = [fr.states.index(b["name"]) for b in f.initial]
+        mids = np.array([(_f(b["min"]) + _f(b["max"])) / 2 for b in f.initial])
+        half = np.array([(_f(b["max"]) - _f(b["min"])) / 2 for b in f.initial])
+        c = f.centre if f.centre is not None else np.zeros(len(fr.names))
+        delta = np.array(fr.dist_bounds) if fr.dist_bounds else np.zeros(fr.B.shape[1])
+        t = self.t
+        runs = []
+        for corner in itertools.product(*[(-1.0, 1.0)] * len(idx)):
+            e = np.array(corner) * half
+            z = c + fr.Fx[:, idx] @ e
+            Z = np.empty((len(t), len(z)))
+            Z[0] = z
+            for k in range(len(t) - 1):
+                h = t[k + 1] - t[k]
+                w = delta * np.sign(fr.B.T @ fr.P @ z) if adversarial else 0 * delta
+                # exact zero-order-hold step of ż = A z + B w
+                E = expm(np.block([[fr.A, fr.B @ np.atleast_1d(w)[:, None]],
+                                   [np.zeros((1, len(z) + 1))]]) * h)
+                z = E[:len(z), :len(z)] @ z + E[:len(z), -1]
+                Z[k + 1] = z
+            states = {s: np.empty(len(t)) for s in fr.states}
+            for k in range(len(t)):
+                p = fr.to_physical(self.ref_at(k), Z[k:k + 1])
+                for s in fr.states:
+                    states[s][k] = p[s][0]
+            label = ", ".join(f"{b['name']}₀={m + ci * hh:+.3g}" for b, m, ci, hh in
+                              zip(f.initial, mids, corner, half))
+            runs.append(SimpleNamespace(t=t, states=states,
+                                        inputs={n: np.asarray(v) for n, v in self.ref.items()},
+                                        label=label))
+        return runs
 
 
 # --- reference trajectories -------------------------------------------------------------------

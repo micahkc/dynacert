@@ -95,14 +95,18 @@ class Certificate:
     # --- model ----------------------------------------------------------------------------------
     @property
     def model(self) -> model_mod.Model:
+        """The model, with array variables as scalar components (`x[1]`, ...), as certified."""
         if self._model is None:
-            self._model = model_mod.load(self.dir / "model_sympy.py")
+            from . import scalarize
+
+            base = model_mod.load(self.dir / "model_sympy.py")
+            self._model, self._spec = scalarize.view(base, spec_mod.from_model(base))
         return self._model
 
     @property
     def spec(self) -> spec_mod.Spec:
         if self._spec is None:
-            self._spec = spec_mod.from_model(self.model)
+            self.model
         return self._spec
 
     # --- checking -------------------------------------------------------------------------------

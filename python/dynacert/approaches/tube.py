@@ -12,13 +12,16 @@ import numpy as np
 
 from .. import montecarlo, tube as tube_mod, worstcase
 from ..sim import Simulator
-from . import VALIDATION, Approach, Assessment, register
+from . import VALIDATION, VIEW, Approach, Assessment, register
 
 
 @register
 class TubeApproach(Approach):
     name = "tube"
     kind = VALIDATION
+    layer = VIEW                      # an L5 product of the certificate (its runs are evidence)
+    classes = ("lti", "lpv")
+    claims = ("tube",)
     summary = "the certified error-frame set along a reference trajectory (proved tube, simulated runs)"
 
     def add_arguments(self, p):
@@ -44,6 +47,7 @@ class TubeApproach(Approach):
         return Assessment.yes(f"error frame ({', '.join(fr.names)}) proved by {fr.theorem}", where)
 
     def run(self, prob, opts, verbose=print):
+        prob = montecarlo.scalar_target(prob)   # array variables: per component
         cert = prob.certificate()
         fr = tube_mod.LinearFrame.from_certificate(cert)
         space = montecarlo.ScenarioSpace(prob.spec, opts.T)

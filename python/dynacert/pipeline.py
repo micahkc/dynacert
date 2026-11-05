@@ -16,7 +16,7 @@ from pathlib import Path
 import sympy as sp
 
 from . import analysis as an
-from . import emit_lti, model as model_mod, spec as spec_mod
+from . import emit_lti, model as model_mod, scalarize, spec as spec_mod
 from . import lean as lean_mod
 from .lean import q
 from .methods import lti
@@ -32,13 +32,21 @@ class CertError(Exception):
     pass
 
 
-DEFAULT_RUMOCA = "/home/micah/Research/development/rumoca/rumoca-dynacert-target/release/rumoca"
+DEFAULT_RUMOCAS = (
+    # physical attributes (flow/stream, quantity, declared type) and connect provenance
+    # (branch dynacert-physical-structure, a3a96a7bf)
+    "/home/micah/Research/development/rumoca/lean_target/rumoca-dynacert-physical",
+    # functions, slices, fill, .^ in lean-dae/sympy-dae; nested redeclare; constrainedby modifiers
+    "/home/micah/Research/development/rumoca/lean_target/rumoca-dynacert-pinned",
+    # vendor-annotation pass-through (branch dynacert-lean)
+    "/home/micah/Research/development/rumoca/rumoca-dynacert-target/release/rumoca",
+)
 
 
 def rumoca_bin() -> str:
     b = os.environ.get("DYNACERT_RUMOCA")
-    if not b and Path(DEFAULT_RUMOCA).exists():
-        b = DEFAULT_RUMOCA  # rumoca with vendor-annotation pass-through (branch dynacert-lean)
+    if not b:
+        b = next((p for p in DEFAULT_RUMOCAS if Path(p).exists()), None)
     b = b or shutil.which("rumoca")
     if not b:
         raise CertError("rumoca not found (set DYNACERT_RUMOCA)")
@@ -53,16 +61,47 @@ def run_rumoca(mo: Path, model: str, target: Path, out: Path):
         raise CertError(f"rumoca failed ({target.name}):\n{r.stdout}\n{r.stderr}")
 
 
-def export(mo: Path, model: str, work: Path, targets: Path = DEFAULT_TARGETS, root: Path = REPO):
+def sync_rumoca(lean_out: Path, root: Path = REPO) -> list[Path]:
+    """Check rumoca's shared Lean modules against dynacert's `Rumoca/` and add new ones.
+
+    `Rumoca/Prelude.lean` must be identical. Each Modelica function is its own module
+    `Rumoca/Fn/<Modelica/path>.lean`, with identical text for identical source, so library
+    lemmas can be proved once about it: a module dynacert doesn't have yet is added, and an
+    existing one with different text is an error (the function or rumoca changed). Returns
+    the modules added."""
+    prelude = (lean_out / "Rumoca" / "Prelude.lean").read_text()
+    if prelude != (root / "Rumoca" / "Prelude.lean").read_text():
+        raise CertError("rumoca's Rumoca/Prelude.lean differs from dynacert's copy; update "
+                        "Rumoca/Prelude.lean deliberately before certifying")
+    fn_out = lean_out / "Rumoca" / "Fn"
+    if not fn_out.is_dir():
+        return []
+    added, changed = [], []
+    for src in sorted(fn_out.rglob("*.lean")):
+        dst = root / "Rumoca" / "Fn" / src.relative_to(fn_out)
+        if not dst.exists():
+            added.append((src, dst))
+        elif dst.read_text() != src.read_text():
+            changed.append(dst.relative_to(root))
+    if changed:
+        raise CertError("rumoca's function modules differ from dynacert's copies (the Modelica "
+                        "function or rumoca changed; lemmas about them may no longer hold): "
+                        + ", ".join(map(str, changed)) + ". Update them deliberately, or "
+                        "remove them to take rumoca's version.")
+    for src, dst in added:
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src, dst)
+    return [dst for _, dst in added]
+
+
+def export(mo: Path, model: str, work: Path, targets: Path = DEFAULT_TARGETS, root: Path = REPO,
+           verbose=lambda _: None):
     """Render the Lean specification and the sympy model from one DAE IR."""
     lean_out, py_out = work / "lean", work / "py"
     run_rumoca(mo, model, targets / "lean_dae", lean_out)
     run_rumoca(mo, model, targets / "sympy_dae", py_out)
-    prelude = (lean_out / "Rumoca" / "Prelude.lean").read_text()
-    ours = (root / "Rumoca" / "Prelude.lean").read_text()
-    if prelude != ours:
-        raise CertError("rumoca's Rumoca/Prelude.lean differs from dynacert's copy; update "
-                        "Rumoca/Prelude.lean deliberately before certifying")
+    for p in sync_rumoca(lean_out, root):
+        verbose(f"rumoca: added {p.relative_to(root)}")
     leans = [p for p in lean_out.glob("*.lean")]
     pys = [p for p in py_out.glob("*.py")]
     if len(leans) != 1 or len(pys) != 1:
@@ -75,8 +114,12 @@ def export(mo: Path, model: str, work: Path, targets: Path = DEFAULT_TARGETS, ro
 def linear_problem(m: model_mod.Model, sp_: spec_mod.Spec, lean_src: str):
     """Coordinates, LTI matrices, and proof multipliers for a linear model."""
     E = emit_lti
-    if any(not v.scalar for v in m.variables):
-        raise CertError("the linear method currently needs scalar variables")
+    base = m
+    try:  # array variables: one scalar coordinate per element (scalarize.py)
+        m, sp_ = scalarize.view(m, sp_, lean_src)
+    except scalarize.ScalarizeError as err:
+        raise CertError(str(err)) from err
+    arrays = isinstance(m, scalarize.ScalarModel)
     if not sp_.certify:
         raise CertError("nothing to certify: annotate outputs with __Dynacert(certify)")
     eqs = []
@@ -222,6 +265,10 @@ def linear_problem(m: model_mod.Model, sp_: spec_mod.Spec, lean_src: str):
     for r in refs.values():
         if r.start is not None:
             init[m.var(r.name).symbol] = an.rat(r.start)
+    # initial boxes (`initialSet`): the box centre replaces the start value; z₀ = c + G e
+    boxes = getattr(sp_, "initial", None) or []
+    for b in boxes:
+        init[m.var(b.name).symbol] = an.rat((b.lo + b.hi) / 2)
     x0 = []
     for (n_, f), z in zip(forms, zexpr):
         missing = [s for s in f if s not in init]
@@ -229,6 +276,14 @@ def linear_problem(m: model_mod.Model, sp_: spec_mod.Spec, lean_src: str):
             raise CertError(f"coordinate {n_} needs initial values for {missing} (fixed start "
                             "values, or reference(start = ...))")
         x0.append(an.to_fraction(sp.expand(z.subs(init))))
+    init_box = None
+    if boxes:
+        bsyms = [m.var(b.name).symbol for b in boxes]
+        G = [[an.to_fraction(f.get(bs, 0)) for bs in bsyms] for _, f in forms]
+        init_box = E.InitialBox(
+            states=[(m.var(b.name).lean, b.lo, b.hi) for b in boxes],
+            others=[v.lean for v in states if v.name not in {b.name for b in boxes}],
+            G=G, rho=[(b.hi - b.lo) / 2 for b in boxes])
     # outputs: express each in the coordinates
     zs = sp.symbols(f"_z0:{k}")
     outputs = []
@@ -281,11 +336,14 @@ def linear_problem(m: model_mod.Model, sp_: spec_mod.Spec, lean_src: str):
     return E.LinearProblem(
         params_ok=params_ok, vertices=vertices, weights=weights,
         model_name=m.name, ns=m.ns, module=f"Certs.{m.ns}",
-        states=[v.lean for v in states], coords=coords,
+        states=[v.lean for v in base.states], coords=coords,
         dists=[m.var(d).lean for d in sp_.disturbance_names],
         dist_bounds=[d.bound for d in sp_.disturbances], refs=erefs, A=A, B=B,
         n_bound=m.n_bound, n_eqs=len(eqs), n_init=m.n_init, multipliers=mult, x0=x0,
-        literals=E.decimal_literals(lean_src), outputs=outputs)
+        literals=E.decimal_literals(lean_src), outputs=outputs, init_box=init_box,
+        state_hyps=({m.var(n_).lean: h for n_, h in m.state_hyps.items()} if arrays else None),
+        eq_handles=m.eq_handles if arrays else None, n_conj=m.n_conj if arrays else 0)
+
 
 
 # --- Lean ---------------------------------------------------------------------------------------
@@ -321,14 +379,25 @@ def axioms(module: str, decl: str, root: Path = REPO) -> set[str]:
 def lti_search(pb):
     """Numeric search (untrusted) for the LTI certificate of a linear problem, or None."""
     rows = [o.row for o in pb.outputs]
+    box = getattr(pb, "init_box", None)
+    kw = {} if box is None else {"init_box": (box.G, box.rho)}
     if pb.vertices is not None:
-        return lti.certify_polytopic(pb.vertices, pb.B, pb.dist_bounds, x0=pb.x0, output_rows=rows)
-    return lti.certify_channels(pb.A, pb.B, pb.dist_bounds, x0=pb.x0, output_rows=rows)
+        return lti.certify_polytopic(pb.vertices, pb.B, pb.dist_bounds, x0=pb.x0, output_rows=rows,
+                                     **kw)
+    return lti.certify_channels(pb.A, pb.B, pb.dist_bounds, x0=pb.x0, output_rows=rows, **kw)
+
+
+def _source_hash(text: str, model: str) -> str:
+    from .certindex import source_hash
+
+    return source_hash(text, model)
 
 
 def emit_and_check(m, sp_, lean_src: str, py_file: Path, mo: Path, pb, cert, plots: bool = True,
                    verbose=print, root: Path = REPO) -> dict:
     """Write Model/Spec/Cert.lean, build them with Lean, audit axioms, write the sidecar."""
+    from . import timing
+
     out = root / "certs" / "Certs" / m.ns
     out.mkdir(parents=True, exist_ok=True)
     (out / "Model.lean").write_text(lean_src)
@@ -338,14 +407,24 @@ def emit_and_check(m, sp_, lean_src: str, py_file: Path, mo: Path, pb, cert, plo
     if Path(mo).resolve() != (out / "source.mo").resolve():
         shutil.copy(mo, out / "source.mo")  # for simulation by rumoca (Monte Carlo)
     verbose(f"lean: lake build Certs.{m.ns}.Cert")
-    lake("build", f"Certs.{m.ns}.Cert", cwd=root)
-    ax = axioms(f"Certs.{m.ns}.Cert", f"{m.ns}.Cert.certified", root=root)
+    with timing.phase("lake build"):
+        lake("build", f"Certs.{m.ns}.Cert", cwd=root)
+    with timing.phase("axioms"):
+        ax = axioms(f"Certs.{m.ns}.Cert", f"{m.ns}.Cert.certified", root=root)
     if not ax <= ALLOWED_AXIOMS:
         raise CertError(f"certificate depends on disallowed axioms: {ax - ALLOWED_AXIOMS}")
     verbose(f"lean: {m.ns}.Cert.certified checked; axioms {sorted(ax)}")
-    tax = axioms(f"Certs.{m.ns}.Cert", f"{m.ns}.Cert.tube", root=root)
+    with timing.phase("axioms"):
+        tax = axioms(f"Certs.{m.ns}.Cert", f"{m.ns}.Cert.tube", root=root)
     if not tax <= ALLOWED_AXIOMS:
         raise CertError(f"tube theorem depends on disallowed axioms: {tax - ALLOWED_AXIOMS}")
+    box = getattr(pb, "init_box", None)
+    if box is not None:  # initial set: `Cert.funnel` (see Dynacert/Linear/Funnel.lean)
+        fax = axioms(f"Certs.{m.ns}.Cert", f"{m.ns}.Cert.funnel", root=root)
+        if not fax <= ALLOWED_AXIOMS:
+            raise CertError(f"funnel theorem depends on disallowed axioms: {fax - ALLOWED_AXIOMS}")
+        verbose(f"lean: {m.ns}.Cert.funnel checked; axioms {sorted(fax)}")
+    m, sp_ = scalarize.view(m, sp_)   # names of array elements (`x[1]`, `d[2]`)
     lean_names = {v.lean: v.name for v in m.variables}
     side = {
         "model": m.name, "ns": m.ns,
@@ -362,6 +441,7 @@ def emit_and_check(m, sp_, lean_src: str, py_file: Path, mo: Path, pb, cert, plo
         "A": [[q(v) for v in r] for r in pb.A], "B": [[q(v) for v in r] for r in pb.B],
         "theorem": f"{m.ns}.Cert.certified", "axioms": sorted(ax),
         "source": "source.mo",
+        "source_hash": _source_hash(Path(mo).read_text(), m.name),  # staleness (§8 A1)
         # the error frame z = Σ coeff·var (states and reference inputs) in which `Cert.tube`
         # proves zᵀ P z ≤ level
         "frame": {"coords": [c.name for c in pb.coords],
@@ -371,6 +451,13 @@ def emit_and_check(m, sp_, lean_src: str, py_file: Path, mo: Path, pb, cert, plo
                             for c in pb.coords],
                   "theorem": f"{m.ns}.Cert.tube"},
     }
+    if box is not None:
+        fc = emit_lti.funnel_constants(pb, cert)
+        # x(0) in the box ⇒ zᵀPz ≤ V0 e^{-αt} + rate (1 - e^{-αt}), rate = budget/α
+        side["initial"] = [{"name": lean_names[f], "min": q(lo), "max": q(hi)}
+                           for f, lo, hi in box.states]
+        side["funnel"] = {k_: q(v_) for k_, v_ in fc.items()} | {
+            "theorem": f"{m.ns}.Cert.funnel", "axioms": sorted(fax)}
     (out / "certified.json").write_text(json.dumps(side, indent=1))
     result = {"dir": str(out), "sidecar": side}
     if plots:
@@ -378,9 +465,10 @@ def emit_and_check(m, sp_, lean_src: str, py_file: Path, mo: Path, pb, cert, plo
         import numpy as np
         A = np.array([[float(v) for v in r] for r in pb.A])
         B = np.array([[float(v) for v in r] for r in pb.B])
-        peaks = plot.plot_certificate(out / "certified.json", lambda x, w: A @ x + B @ w,
-                                      out / "certificate.png",
-                                      x0=np.array([float(v) for v in pb.x0]))
+        with timing.phase("plots"):
+            peaks = plot.plot_certificate(out / "certified.json", lambda x, w: A @ x + B @ w,
+                                          out / "certificate.png",
+                                          x0=np.array([float(v) for v in pb.x0]))
         result["plot"] = str(out / "certificate.png")
         result["simulated_peaks"] = peaks
         verbose(f"plot: {out / 'certificate.png'}")
@@ -395,7 +483,7 @@ def check(mo: Path, model: str, plots: bool = True, verbose=print, root: Path = 
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)
         verbose(f"rumoca: exporting {model} (lean-dae, sympy-dae)")
-        lean_file, py_file = export(mo, model, work, root=root)
+        lean_file, py_file = export(mo, model, work, root=root, verbose=verbose)
         m = model_mod.load(py_file)
         lean_src = lean_file.read_text()
         sp_ = spec_mod.from_model(m)

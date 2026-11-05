@@ -65,6 +65,17 @@ class Output:
 
 
 @dataclass
+class InitialBox:
+    """Initial set from `initialSet` annotations: `z₀ = c + G e`, `|eᵢ| ≤ ρᵢ`, with `c` the
+    frame at the box centre (`LinearProblem.x0`) and `e` the annotated states minus their
+    midpoints."""
+    states: list    # (Lean field, lo, hi) of the annotated states, in annotation order
+    others: list    # Lean fields of the remaining states (they keep `Initial`)
+    G: list         # n × k: coefficient of each annotated state in each coordinate
+    rho: list       # half-widths
+
+
+@dataclass
 class LinearProblem:
     model_name: str
     ns: str
@@ -87,6 +98,15 @@ class LinearProblem:
     params_ok: list | None = None     # ("eq", fld, value) | ("range", fld, lo, hi), Bound order
     vertices: list | None = None      # vertex matrices A_σ
     weights: list | None = None       # list of factor lists [(fld, lo, hi, "up"|"down")]
+    # initial set (`initialSet` annotations): None keeps `Initial p (x 0)`
+    init_box: InitialBox | None = None
+    # array variables (scalarize.py); None for a model with scalar variables only.
+    # `states` then lists the array fields (the conjuncts of `IsSolutionOn`), `state_hyps` maps
+    # each scalar state term (`x 0`) to (conjunct, Lean index arguments), and `eq_handles[k]`
+    # proves scalar equation `k` from the conjuncts `eq0`, `eq1`, … of `Equations`.
+    state_hyps: dict | None = None
+    eq_handles: list | None = None
+    n_conj: int = 0
 
 
 # --- small helpers ------------------------------------------------------------------------------
@@ -157,6 +177,45 @@ def _param_hyps(pb) -> tuple[list[str], list[str]]:
     return names, eqs
 
 
+def state_hyps(pb, prefix: str) -> dict:
+    """Lean field of each scalar state -> its hypothesis in `IsSolutionOn` (`hc0`, or
+    `(hc0 2)` for element 2 of an array state)."""
+    if pb.state_hyps is None:
+        return {s_: f"{prefix}{i}" for i, s_ in enumerate(pb.states)}
+    return {f: (f"({prefix}{i}{idx})" if idx else f"{prefix}{i}")
+            for f, (i, idx) in pb.state_hyps.items()}
+
+
+def eq_pattern(pb, eh: list[str]) -> list[str]:
+    """Names for the conjuncts of `Equations` (the scalar names `eh` without arrays)."""
+    return eh if pb.eq_handles is None else [f"eq{j}" for j in range(pb.n_conj)]
+
+
+def eq_scalars(pb, ind: str) -> list[str]:
+    """`have eₖ := …` lines extracting each scalar equation from an array conjunct."""
+    if pb.eq_handles is None:
+        return []
+    return [f"{ind}have e{k} := {h}" for k, h in enumerate(pb.eq_handles)]
+
+
+def eq_rewrite(pb, rewrite: str) -> str:
+    """The `simp only` set for the scalar equations: parameters and literals, plus the
+    component evaluation lemmas for array equations."""
+    if pb.eq_handles is None:
+        return rewrite
+    from .scalarize import SIMPS
+
+    return ", ".join(x for x in (rewrite, SIMPS) if x)
+
+
+def scalar_import(pb) -> list[str]:
+    if pb.eq_handles is None:
+        return []
+    from .scalarize import LEAN_IMPORT
+
+    return [f"import {LEAN_IMPORT}"]
+
+
 def _fold(items: list[str], op: str) -> str:
     acc = items[0]
     for it in items[1:]:
@@ -208,7 +267,10 @@ def emit_spec(pb: LinearProblem) -> str:
     dr = [r for r in pb.refs if r.deriv]
     if dr:
         cont = [f"ContinuousOn (fun s => (u s).{r.fld}) (Icc 0 T)" for r in dr]
-        der = [f"HasDerivWithinAt (fun s => (u s).{r.fld}) (u t).{r.deriv} (Ici t) t" for r in dr]
+        # an array element (`v_ref 0`) is an application: parenthesize it as an argument
+        der = [f"HasDerivWithinAt (fun s => (u s).{r.fld}) "
+               + (f"((u t).{r.deriv})" if " " in r.deriv else f"(u t).{r.deriv}") + " (Ici t) t"
+               for r in dr]
         out += ["/-- Reference signals: continuous on `[0, T]` with the declared right",
                 "derivatives on `[0, T)`. -/",
                 "def References (u : ℝ → Inputs) (T : ℝ) : Prop :=",
@@ -236,6 +298,11 @@ def emit_spec(pb: LinearProblem) -> str:
                 "def ParamsOK (p : Params) : Prop :=",
                 "  " + " ∧\n  ".join(conds), ""]
         phyp = "ParamsOK p"
+    box = getattr(pb, "init_box", None)
+    init_hyp = "Initial p (x 0)"
+    if box is not None:
+        out += _initial_set_def(box)
+        init_hyp = "InitialSet p (x 0)"
     k = len(pb.outputs)
     groups = []
     for rng, kind in (("Icc", "state"), ("Ico", "algebraic")):
@@ -245,18 +312,36 @@ def emit_spec(pb: LinearProblem) -> str:
     names = ", ".join(f"`{o.name}`" for o in pb.outputs)
     out += [
         "/-- **The claim.** Every solution with admissible parameter values, admissible",
-        "disturbances, the declared references, and the model's initial condition keeps",
+        "disturbances, the declared references, and "
+        + ("an initial state in `InitialSet`" if box is not None else
+           "the model's initial condition") + " keeps",
         f"{names} within the bounds `b`. -/",
         f"def Claim (b : Fin {k} → ℚ) : Prop :=",
         "  ∀ (p : Params) (u : ℝ → Inputs) (x : ℝ → States) (y : ℝ → Algebraics) (T : ℝ),",
         f"    {phyp} → IsSolutionOn p u x y T → Admissible u T → References u T →",
-        "    ReferenceStart u → Initial p (x 0) →",
+        f"    ReferenceStart u → {init_hyp} →",
         "    " + " ∧\n    ".join(groups),
         "",
         f"end {pb.ns}.Spec",
         "",
     ]
     return "\n".join(out)
+
+
+def _initial_set_def(box: InitialBox) -> list[str]:
+    """`Spec.InitialSet`: the annotated states in their boxes, the others as in `Initial`."""
+    names = ", ".join(f"`{f}`" for f, _, _ in box.states)
+    conds = [f"{_c(lo)} ≤ s.{f} ∧ s.{f} ≤ {_c(hi)}" for f, lo, hi in box.states]
+    if box.others:
+        eqs = " ∧ ".join(f"s.{f} = s₀.{f}" for f in box.others)
+        conds.append(f"∃ s₀ : States, Initial p s₀ ∧ {eqs}")
+        doc = [f"/-- Initial set: {names} start anywhere in their annotated intervals",
+               "(`initialSet`); every other state starts as in the model's `Initial`. -/"]
+    else:
+        doc = [f"/-- Initial set: {names} start anywhere in their annotated intervals",
+               "(`initialSet`). -/"]
+    return doc + ["def InitialSet (p : Params) (s : States) : Prop :=",
+                  "  " + " ∧\n  ".join(conds), ""]
 
 
 # --- Cert ---------------------------------------------------------------------------------------
@@ -272,8 +357,11 @@ def emit_cert(pb: LinearProblem, cert) -> str:
     eh = [f"e{i}" for i in range(pb.n_eqs)]
     dr = [r for r in pb.refs if r.deriv]
     rs = [r for r in pb.refs if r.start is not None]
+    box = getattr(pb, "init_box", None)
     out = [f"import {pb.module}.Spec",
-           "import Dynacert.Linear.Polytopic" if poly else "import Dynacert.Linear.Channels", ""]
+           "import Dynacert.Linear.Funnel" if box is not None else
+           "import Dynacert.Linear.Polytopic" if poly else "import Dynacert.Linear.Channels",
+           *scalar_import(pb), ""]
     out += lean.header(f"Certificate for `{pb.model_name}`",
                        "dynacert (" + ("polytopic, " if poly else "LTI, ") + "per-channel)")
     out += LINTERS + [
@@ -286,7 +374,10 @@ def emit_cert(pb: LinearProblem, cert) -> str:
         "/-! ### Link: the rumoca model, in coordinates `z`, is `ż = A z + B w` -/",
         "",
         "/-- Coordinates: " + ", ".join(f"`{c.name}`" for c in pb.coords) + ". -/",
-        f"def vec (s : States) (v : Inputs) : Fin {n} → ℝ :=",
+        # Real division (fractional coefficients) is noncomputable in Lean
+        ("noncomputable " if any(Fraction(tm.coeff).denominator != 1
+                                 for c in pb.coords for tm in c.terms) else "")
+        + f"def vec (s : States) (v : Inputs) : Fin {n} → ℝ :=",
         "  ![" + ", ".join(_coord_def(c) for c in pb.coords) + "]",
         "/-- Disturbance channels: " + ", ".join(f"`{d}`" for d in pb.dists) + ". -/",
         f"def dist (v : Inputs) : Fin {m} → ℝ := ![" + ", ".join(f"v.{d}" for d in pb.dists) + "]",
@@ -342,9 +433,11 @@ def emit_cert(pb: LinearProblem, cert) -> str:
     if pb.literals:
         out.append("")
     rewrite = ", ".join(peqs + lits)
+    erewrite = eq_rewrite(pb, rewrite)
     # hypothesis names by index: field names may be quoted («plant.x»)
-    ch = {s_: f"hc{i}" for i, s_ in enumerate(pb.states)}
-    dh = {s_: f"hd{i}" for i, s_ in enumerate(pb.states)}
+    ch, dh = state_hyps(pb, "hc"), state_hyps(pb, "hd")
+    chb = [f"hc{i}" for i in range(nst)]
+    dhb = [f"hd{i}" for i in range(nst)]
     rc = {r.fld: f"hrc{i}" for i, r in enumerate(dr)}
     rd = {r.fld: f"hrd{i}" for i, r in enumerate(dr)}
     ref_der = {r.fld: r.deriv for r in dr}
@@ -400,7 +493,7 @@ def emit_cert(pb: LinearProblem, cert) -> str:
     ]
     if pnames:
         out.append(f"  obtain {_conj(pnames)} := hp")
-    out.append(f"  obtain ⟨dx, {', '.join(ch[s_] for s_ in pb.states)}, hder⟩ := h")
+    out.append(f"  obtain ⟨dx, {', '.join(chb)}, hder⟩ := h")
     if dr:
         out.append(f"  obtain ⟨{', '.join(rc[r.fld] for r in dr)}, hrder⟩ := hr")
     out += [
@@ -411,12 +504,13 @@ def emit_cert(pb: LinearProblem, cert) -> str:
     for c in pb.coords:
         out += [f"    · show ContinuousOn (fun s => {_coord_expr(c, 's')}) (Icc 0 T)",
                 f"      exact {_fold([cont_term(tm) for tm in c.terms], 'add')}"]
-    out.append(f"  · obtain ⟨{', '.join(dh[s_] for s_ in pb.states)}, "
-               f"{_conj(eh) if pb.n_eqs else '-'}⟩ := hder t ht")
+    out.append(f"  · obtain ⟨{', '.join(dhb)}, "
+               f"{_conj(eq_pattern(pb, eh)) if pb.n_eqs else '-'}⟩ := hder t ht")
     if dr:
         out.append(f"    obtain {_conj([rd[r.fld] for r in dr])} := hrder t ht")
-    if rewrite and pb.n_eqs:
-        out.append(f"    try simp only [{rewrite}] at {' '.join(eh)}")
+    out += eq_scalars(pb, "    ")
+    if erewrite and pb.n_eqs:
+        out.append(f"    try simp only [{erewrite}] at {' '.join(eh)}")
     out += ["    rw [hasDerivWithinAt_pi]", "    intro i", "    fin_cases i"]
     zt = [_coord_expr(c, "t") for c in pb.coords]
     wt = [f"(u t).{d}" for d in pb.dists]
@@ -509,29 +603,32 @@ def emit_cert(pb: LinearProblem, cert) -> str:
     ih = [f"i{i}" for i in range(pb.n_init)]
     rh = [f"r{i}" for i in range(len(rs))]
     x0v = vec(pb.x0)
-    out += [
-        f"theorem init {{p : Params}} (hp : {phyp}) {{s : States}} {{v : Inputs}} (h0 : Initial p s)",
-        "    (hr0 : " + (" ∧ ".join(f"v.{r.fld} = {_c(r.start)}" for r in rs) or "True") + ") :",
-        f"    vec s v = fun i => ((({x0v} : Fin {n} → ℚ) i : ℚ) : ℝ) := by",
-    ]
-    if pnames:
-        out.append(f"  obtain {_conj(pnames)} := hp")
-    if pb.n_init:
-        out.append(f"  obtain {_conj(ih)} := h0")
-    if rs:
-        out.append(f"  obtain {_conj(rh)} := hr0")
-    rw0 = ", ".join(peqs + lits + ih + rh)
-    out += [
-        "  funext i",
-        "  fin_cases i <;>",
-        f"    simp [vec{', ' + rw0 if rw0 else ''}] <;> norm_num",
-        "",
-        "theorem init_le :",
-        f"    quad (toReal P) (fun i => ((({x0v} : Fin {n} → ℚ) i : ℚ) : ℝ)) ≤ (level : ℝ) := by",
-        "  rw [quad_toReal_cast]",
-        f"  exact_mod_cast (by decide +kernel : quad P {x0v} ≤ level)",
-        "",
-    ]
+    if box is not None:
+        out += _init_box_lines(pb, cert, box, phyp, pnames, rs, lits, peqs)
+    else:
+        out += [
+            f"theorem init {{p : Params}} (hp : {phyp}) {{s : States}} {{v : Inputs}} (h0 : Initial p s)",
+            "    (hr0 : " + (" ∧ ".join(f"v.{r.fld} = {_c(r.start)}" for r in rs) or "True") + ") :",
+            f"    vec s v = fun i => ((({x0v} : Fin {n} → ℚ) i : ℚ) : ℝ) := by",
+        ]
+        if pnames:
+            out.append(f"  obtain {_conj(pnames)} := hp")
+        if pb.n_init:
+            out.append(f"  obtain {_conj(ih)} := h0")
+        if rs:
+            out.append(f"  obtain {_conj(rh)} := hr0")
+        rw0 = ", ".join(peqs + lits + ih + rh)
+        out += [
+            "  funext i",
+            "  fin_cases i <;>",
+            f"    simp [vec{', ' + rw0 if rw0 else ''}] <;> norm_num",
+            "",
+            "theorem init_le :",
+            f"    quad (toReal P) (fun i => ((({x0v} : Fin {n} → ℚ) i : ℚ) : ℝ)) ≤ (level : ℝ) := by",
+            "  rw [quad_toReal_cast]",
+            f"  exact_mod_cast (by decide +kernel : quad P {x0v} ≤ level)",
+            "",
+        ]
     # output identities
     for k, o in enumerate(pb.outputs):
         rowv = vec(o.row)
@@ -550,9 +647,10 @@ def emit_cert(pb: LinearProblem, cert) -> str:
                 out.append(f"  obtain {_conj(pnames)} := hp")
             out.append("  obtain ⟨dx, hder⟩ := h")
             out.append(f"  have hE := (hder{'.2' * nst} t ht){'.2' * nst}")
-            out.append(f"  obtain {_conj(eh)} := hE")
-            if rewrite:
-                out.append(f"  try simp only [{rewrite}] at {' '.join(eh)}")
+            out.append(f"  obtain {_conj(eq_pattern(pb, eh))} := hE")
+            out += eq_scalars(pb, "  ")
+            if erewrite:
+                out.append(f"  try simp only [{erewrite}] at {' '.join(eh)}")
         out.append(close(o.mult, "  "))
         out.append("")
     # the tube: the certified ellipsoid in the error frame, then the claim from it
@@ -565,7 +663,8 @@ def emit_cert(pb: LinearProblem, cert) -> str:
         "the physical state lies in the reference plus this ellipsoid. -/",
         "theorem tube : ∀ (p : Params) (u : ℝ → Inputs) (x : ℝ → States) (y : ℝ → Algebraics)",
         f"    (T : ℝ), {phyp} → IsSolutionOn p u x y T → Spec.Admissible u T →",
-        "    Spec.References u T → Spec.ReferenceStart u → Initial p (x 0) →",
+        "    Spec.References u T → Spec.ReferenceStart u → "
+        + ("Spec.InitialSet p (x 0) →" if box is not None else "Initial p (x 0) →"),
         "    ∀ t ∈ Icc 0 T, quad (toReal P) (vec (x t) (u t)) ≤ (level : ℝ) := by",
         "  intro p u x y T hp h hu hr hr0 h0",
         "  have hx := link hp h hr",
@@ -576,7 +675,8 @@ def emit_cert(pb: LinearProblem, cert) -> str:
         "    refine cert.energy_le_of_abs_le (δ := δ) fun j => ?_",
         "    fin_cases j <;> simp [dist, δ] <;> simp_all",
         "  have h0' : quad (toReal cert.P) (vec (x 0) (u 0)) ≤ (level : ℝ) := by",
-        "    rw [init hp h0 hr0]; exact init_le",
+        ("    exact (init_V0 hp h0 hr0).trans (by exact_mod_cast V0_le)" if box is not None else
+         "    rw [init hp h0 hr0]; exact init_le"),
     ]
     if poly:
         out += [
@@ -609,5 +709,121 @@ def emit_cert(pb: LinearProblem, cert) -> str:
         for k in ks:
             b = f"{ind}· " if len(ks) > 1 else ind
             out.append(f"{b}rw [out{k} hp h ht]; exact box{k}.abs_le (hV t {tt})")
+    if box is not None:
+        out += _funnel_lines(pb, cert, phyp)
     out += ["", f"end {ns}.Cert", ""]
     return "\n".join(out)
+
+
+def funnel_constants(pb: LinearProblem, cert) -> dict:
+    """The funnel `ρ(t) = V₀ e^{-αt} + r (1 - e^{-αt})` with `r = budget/α` (exact)."""
+    budget = sum((Fraction(g) * Fraction(d) * Fraction(d)
+                  for g, d in zip(cert.gammas, pb.dist_bounds)), Fraction(0))
+    return {"V0": Fraction(cert.V0), "alpha": Fraction(cert.alpha), "budget": budget,
+            "rate": budget / Fraction(cert.alpha), "level": Fraction(cert.level)}
+
+
+def _init_box_lines(pb, cert, box: InitialBox, phyp, pnames, rs, lits, peqs) -> list[str]:
+    """The initial set in the frame, `z₀ = c₀ + G₀ e`, and `V(z₀) ≤ V₀ ≤ level`."""
+    n, k = len(pb.coords), len(box.states)
+    fc = funnel_constants(pb, cert)
+    rhyp = " ∧ ".join(f"v.{r.fld} = {_c(r.start)}" for r in rs) or "True"
+    out = [
+        "/-! ### Initial set: `z₀ = c₀ + G₀ e` with `|eᵢ| ≤ ρ₀ᵢ` (the `initialSet` box) -/",
+        "",
+        f"def c₀ : Fin {n} → ℚ := {vec(pb.x0)}",
+        f"def G₀ : Matrix (Fin {n}) (Fin {k}) ℚ := {mat(box.G)}",
+        f"def ρ₀ : Fin {k} → ℚ := {vec(box.rho)}",
+        "",
+        "theorem P_symm : Pᵀ = P := by decide +kernel",
+        "",
+        "/-- Bound on `zᵀPz` over the initial set (`boxBound`). -/",
+        f"def V0 : ℚ := {q(fc['V0'])}",
+        "",
+        "theorem init_box : boxBound P c₀ G₀ ρ₀ ≤ V0 := by decide +kernel",
+        "",
+        "theorem V0_le : V0 ≤ level := by decide +kernel",
+        "",
+        f"theorem init {{p : Params}} (hp : {phyp}) {{s : States}} {{v : Inputs}}",
+        f"    (h0 : Spec.InitialSet p s) (hr0 : {rhyp}) :",
+        f"    ∃ e : Fin {k} → ℝ, (∀ i, |e i| ≤ ((ρ₀ i : ℚ) : ℝ)) ∧",
+        "      vec s v = fun i => ((c₀ i : ℚ) : ℝ) + (toReal G₀ *ᵥ e) i := by",
+    ]
+    if pnames:
+        out.append(f"  obtain {_conj(pnames)} := hp")
+    bh = []
+    for i in range(k):
+        bh += [f"l{i}", f"u{i}"]
+    qh = [f"q{i}" for i in range(len(box.others))]
+    ih = []
+    if box.others:
+        out.append(f"  obtain ⟨{', '.join(bh)}, s₀, hs₀, {', '.join(qh)}⟩ := h0")
+        if pb.n_init:
+            ih = [f"i{i}" for i in range(pb.n_init)]
+            out.append(f"  obtain {_conj(ih)} := hs₀")
+    else:
+        out.append(f"  obtain {_conj(bh)} := h0")
+    rh = [f"r{i}" for i in range(len(rs))]
+    if rs:
+        out.append(f"  obtain {_conj(rh)} := hr0")
+    mids = [(Fraction(lo) + Fraction(hi)) / 2 for _, lo, hi in box.states]
+    evec = "![" + ", ".join(f"s.{f} - {_c(md)}" for (f, _, _), md in zip(box.states, mids)) + "]"
+    rw = ", ".join(peqs + lits + ih + qh + rh)
+    out += [
+        f"  refine ⟨{evec}, fun i => ?_, ?_⟩",
+        "  · fin_cases i <;> simp [ρ₀] <;> rw [abs_le] <;> constructor <;> linarith",
+        "  · funext i",
+        "    fin_cases i <;>",
+        f"      simp [vec, c₀, G₀, toReal, mulVec, dotProduct, Fin.sum_univ_succ{', ' + rw if rw else ''}]"
+        " <;> ring",
+        "",
+        f"theorem init_V0 {{p : Params}} (hp : {phyp}) {{s : States}} {{v : Inputs}}",
+        f"    (h0 : Spec.InitialSet p s) (hr0 : {rhyp}) :",
+        "    quad (toReal P) (vec s v) ≤ (V0 : ℝ) := by",
+        "  obtain ⟨e, he, hz⟩ := init hp h0 hr0",
+        "  rw [hz]",
+        "  exact quad_le_boxBound P_symm init_box e he",
+        "",
+    ]
+    return out
+
+
+def _funnel_lines(pb, cert, phyp) -> list[str]:
+    fc = funnel_constants(pb, cert)
+    poly = pb.vertices is not None
+    V0, a, r, b = (f"(({q(fc[x])} : ℚ) : ℝ)" for x in ("V0", "alpha", "rate", "budget"))
+    coords = ", ".join(f"`{c.name}`" for c in pb.coords)
+    out = [
+        "",
+        "/-- The disturbance budget `Σⱼ γⱼ δⱼ²`. -/",
+        "theorem budget_eq :",
+        f"    ∑ j, (γ j : ℝ) * ((δ j : ℝ) * (δ j : ℝ)) = {b} := by",
+        f"  have h : ∑ j, γ j * (δ j * δ j) = {q(fc['budget'])} := by decide +kernel",
+        "  exact_mod_cast h",
+        "",
+        "/-- **Funnel.** Under the hypotheses of `Spec.Claim`, the storage of the error-frame",
+        f"state `z = vec (x t) (u t)` (coordinates {coords}) obeys the shrinking bound",
+        "`zᵀPz ≤ V₀ e^{-αt} + (γμ/α)(1 - e^{-αt})` on `[0, T]`: `V₀` bounds `zᵀPz` on the",
+        "initial set, `α` is the decay rate and `γμ/α = Σⱼγⱼδⱼ²/α` the asymptotic level. -/",
+        "theorem funnel : ∀ (p : Params) (u : ℝ → Inputs) (x : ℝ → States) (y : ℝ → Algebraics)",
+        f"    (T : ℝ), {phyp} → IsSolutionOn p u x y T → Spec.Admissible u T →",
+        "    Spec.References u T → Spec.ReferenceStart u → Spec.InitialSet p (x 0) →",
+        "    ∀ t ∈ Icc 0 T, quad (toReal P) (vec (x t) (u t)) ≤",
+        f"      {V0} * Real.exp (-{a} * t) + {r} * (1 - Real.exp (-{a} * t)) := by",
+        "  intro p u x y T hp h hu hr hr0 h0",
+        "  have hx := link hp h hr",
+        f"  have hw : ∀ t ∈ Ico 0 T, cert.energy (dist (u t)) ≤ {b} := by",
+        "    intro t ht",
+        "    have hut := hu t ht",
+        "    refine (cert.energy_le_of_abs_le (δ := δ) fun j => ?_).trans_eq budget_eq",
+        "    fin_cases j <;> simp [dist, δ] <;> simp_all",
+    ]
+    if poly:
+        out += [
+            "  exact cert.funnel (wt := fun _ => weights p) hx.1 hx.2",
+            "    (fun _ _ => weights_nonneg hp) (fun _ _ => weights_sum p) hw (init_V0 hp h0 hr0)",
+            "    (by decide +kernel)",
+        ]
+    else:
+        out += ["  exact cert.funnel hx hw (init_V0 hp h0 hr0) (by decide +kernel)"]
+    return out

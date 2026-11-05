@@ -39,11 +39,40 @@ from fractions import Fraction
 from pathlib import Path
 
 import numpy as np
+import sympy as sp
 
 from . import stats
 from .sim import Run, Simulator
 
 TWO_PI = 2 * math.pi
+
+
+# --- array variables ----------------------------------------------------------------------------
+
+class ScalarTarget:
+    """A simulation target (a `Problem` or a `Certificate`) seen with array variables as scalar
+    components (`scalarize.view`): one signal per component of an array input (Modelica
+    `sys.d[1] = …`), one parameter per component, one reported peak per component of an array
+    output. Every other attribute is the target's own."""
+
+    def __init__(self, target):
+        from . import scalarize
+
+        self._target = target
+        self.model, self.spec = scalarize.view(target.model, target.spec)
+
+    def __getattr__(self, name):
+        return getattr(self._target, name)
+
+
+def scalar_target(target):
+    """`target` itself when it has no array variables (or is already scalar), else a
+    `ScalarTarget`."""
+    from . import scalarize
+
+    if isinstance(target, ScalarTarget) or not scalarize.has_arrays(target.model):
+        return target
+    return ScalarTarget(target)
 
 
 # --- scenarios ----------------------------------------------------------------------------------
@@ -222,14 +251,43 @@ def harness(model, spec, space: ScenarioSpace, model_name: str) -> tuple[str, st
             decl.append(f"  Real {s}(start = {float(r.start or 0)!r}, fixed = true);")
             eqs += [f"  der({s}) = sys.{r.derivative};", f"  sys.{r.name} = {s};"]
             driven.add(r.name)
-    for v in model.inputs:
-        if not v.scalar:
-            raise ValueError(f"Monte Carlo harness: array input {v.name} is not supported")
-        if v.name not in driven:
-            eqs.append(f"  sys.{v.name} = 0;")
-    src = "\n".join([f"model {cls}", f"  {model_name} sys;", *decl, "equation", *eqs,
-                     f"end {cls};", ""])
+    from . import scalarize
+
+    for v in model.inputs:   # array inputs: one equation per component (`sys.d[1] = 0`)
+        for e in scalarize.elements(v):
+            if e.name not in driven:
+                eqs.append(f"  sys.{e.name} = 0;")
+    # uncertain array parameters: rumoca tunes whole arrays only, so each array with an
+    # uncertain component is bound to one wrapper parameter per component (`tunable`)
+    mods = []
+    unc = {n for n, _, _ in space.params}
+    vals = None
+    for v in model.params:
+        if not isinstance(v, scalarize.ElemVar) or v.name not in unc or \
+                any(m_.startswith(f"{v.base} =") for m_ in mods):
+            continue
+        if vals is None:
+            vals = model.param_values()
+        es = [e for e in model.params if isinstance(e, scalarize.ElemVar) and e.base == v.base]
+        for e in es:
+            nominal = float(sp.sympify(e.symbol).subs(vals).subs(vals))
+            decl.append(f"  parameter Real {tunable(e.name)} = {nominal!r};")
+        shape = max(e.index for e in es)
+        if len(shape) == 1:
+            lit = "{" + ", ".join(tunable(e.name) for e in es) + "}"
+        else:
+            rows = [[tunable(e.name) for e in es if e.index[0] == i] for i in range(shape[0] + 1)]
+            lit = "{" + ", ".join("{" + ", ".join(r) + "}" for r in rows) + "}"
+        mods.append(f"{v.base} = {lit}")
+    inst = f"  {model_name} sys" + (f"({', '.join(mods)})" if mods else "") + ";"
+    src = "\n".join([f"model {cls}", inst, *decl, "equation", *eqs, f"end {cls};", ""])
     return cls, src
+
+
+def tunable(name: str) -> str:
+    """The harness parameter that sets the model parameter `name`: `sys.c`, or a wrapper
+    parameter `th_c_1_` for the component `c[1]` of an array."""
+    return f"th_{_mo(name)}" if "[" in name else f"sys.{name}"
 
 
 class RumocaBackend:
@@ -252,8 +310,8 @@ class RumocaBackend:
         self.fallbacks = []              # (label, first error) for each re-solved run
         known = set(self.model.parameters.names)
         for n, _, _ in space.params:
-            if f"sys.{n}" not in known:
-                raise ValueError(f"uncertain parameter sys.{n} is not a tunable parameter")
+            if tunable(n) not in known:
+                raise ValueError(f"uncertain parameter {tunable(n)} is not a tunable parameter")
 
     def params(self, scn: Scenario) -> dict:
         p = {}
@@ -265,7 +323,7 @@ class RumocaBackend:
             for j, (a, f, ph) in enumerate(c):
                 p.update({f"dr_{_mo(n)}_a{j + 1}": float(a), f"dr_{_mo(n)}_f{j + 1}": float(f),
                           f"dr_{_mo(n)}_p{j + 1}": float(ph)})
-        p.update({f"sys.{n}": float(v) for n, v in scn.theta.items()})
+        p.update({tunable(n): float(v) for n, v in scn.theta.items()})
         return p
 
     def run(self, scn: Scenario, label: str = "") -> Run:
@@ -305,6 +363,7 @@ class SympyBackend:
 
 
 def backend(cert, space: ScenarioSpace, name: str = "rumoca", dt=None, solver=None):
+    cert = scalar_target(cert)
     if name == "rumoca":
         return RumocaBackend(cert.model, cert.spec, space, cert.source, cert.model.name, dt, solver)
     if name == "sympy":
@@ -496,6 +555,7 @@ def run(cert, n: int | None = None, *, eps=None, beta=Fraction(1, 10 ** 6), T: f
     `cert` is a `Certificate` or a `problem.Problem` (anything with `.model`, `.spec`,
     `.source`, `.name`); `bounds` defaults to its certified bounds, if any. Each run's outputs
     are kept on a `trace_points` grid for plotting (0: keep peaks only)."""
+    cert = scalar_target(cert)
     if n is None:
         n = stats.samples_for(eps if eps is not None else Fraction(1, 100), beta)
     space = ScenarioSpace(cert.spec, T, dist)
@@ -505,6 +565,10 @@ def run(cert, n: int | None = None, *, eps=None, beta=Fraction(1, 10 ** 6), T: f
     grid = np.linspace(0.0, float(T), trace_points) if trace_points else None
     traces = {o: [] for o in cert.spec.certify}
     t0 = time.time()
+    from . import timing
+
+    timer = timing.phase(f"simulate {n} scenarios ({be.name})")
+    timer.__enter__()
     for i in range(n):
         scn = space.sample(rng)
         scns.append(scn)
@@ -522,6 +586,7 @@ def run(cert, n: int | None = None, *, eps=None, beta=Fraction(1, 10 ** 6), T: f
                 traces[o].append(downsample(r.t, r.outputs[o], grid))
         if verbose and (i + 1) % max(1, n // 10) == 0:
             verbose(f"  {i + 1}/{n} scenarios")
+    timer.__exit__(None, None, None)    # per-run failures are caught above, so this always runs
     return MonteCarlo(cert.name, be.name, _bounds(cert, bounds),
                       {o: np.array(v) for o, v in peaks.items()}, scns, errors, space.T, seed,
                       asdict(space.dist), time.time() - t0,
@@ -553,6 +618,7 @@ def crosscheck(cert, n: int = 20, *, T: float = 10.0, seed: int = 0,
                bounds: dict | None = None) -> CrossCheck:
     """Simulate the same scenarios through rumoca's native solver and through the sympy export
     (the Lean-side DAE); large differences point at a transcription or simulator problem."""
+    cert = scalar_target(cert)
     space = ScenarioSpace(cert.spec, T, dist)
     bes = [backend(cert, space, "rumoca", dt), backend(cert, space, "sympy", dt)]
     rng = np.random.default_rng(seed)
@@ -602,6 +668,7 @@ def falsify(cert, output: str | None = None, *, iters: int = 20, pop: int = 60,
     elite frequencies. Uncertain parameters and reference coefficients are independent clipped
     Gaussians refit to the elite mean and spread. `init` (a scenario, or a Monte Carlo run, on the
     same grid) biases the start toward it (its worst scenario)."""
+    cert = scalar_target(cert)
     space = ScenarioSpace(cert.spec, T, dist)
     be = backend(cert, space, backend_name, dt)
     lo, hi = space.box()
