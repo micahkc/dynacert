@@ -1,0 +1,21 @@
+rumoca: compiling DiodeClampExp from DiodeClampExp.mo
+model: DiodeClampExp (inferred; use --model to choose)
+no certificate: reports achieved peaks and probabilistic bounds only
+Monte Carlo: 100 runs to seed the search
+adjoint |v|
+  adjoint scan: 0.991333
+  adjoint refine: 0.991333, switching times: 0.991333
+  adjoint multistart (5 starts): 0.991333
+  adjoint/scan: 0.991333
+  adjoint/switch: 0.991333
+  adjoint/multistart: 0.991333
+collocation |v|
+  collocation t*=10-: 0.991333
+figure: worstcase-v
+|v|: achieved 0.991333 (no certificate)  by adjoint/scan
+    adjoint/scan                 0.991333
+    adjoint/switch               0.991333
+    adjoint/multistart           0.991333
+    collocation t*=10-           0.991333
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/DiodeClampExp_plots/falsify-worstcase-v.png

@@ -1,0 +1,32 @@
+rumoca: compiling MotorCommandOutput from MotorCommandOutput.mo
+model: MotorCommandOutput (inferred; use --model to choose)
+compares against certificate MotorCommandOutput.Cert.certified
+adjoint |w|
+  adjoint scan: 1.04599
+  adjoint refine: 1.04609, switching times: 1.04714
+  adjoint/scan: 1.04605
+  adjoint/switch: 1.047139
+collocation |w|
+  collocation t*=6.83-: 1.046419
+adjoint |u|
+  adjoint scan: 2.09199
+  adjoint refine: 2.09219, switching times: 2.09428
+  adjoint/scan: 2.092099
+  adjoint/switch: 2.094278
+collocation |u|
+  collocation t*=6.83-: 2.092837
+figure: worstcase-w
+figure: worstcase-u
+figure: tightness
+|w|: achieved 1.047139 vs certified 1.16045 (ratio 0.90235)  by adjoint/switch
+    adjoint/scan                 1.04605
+    adjoint/switch               1.047139
+    collocation t*=6.83-         1.046419
+|u|: achieved 2.094278 vs certified 2.3209 (ratio 0.90235)  by adjoint/switch
+    adjoint/scan                 2.092099
+    adjoint/switch               2.094278
+    collocation t*=6.83-         2.092837
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/MotorCommandOutput/plots/falsify-worstcase-w.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/MotorCommandOutput/plots/falsify-worstcase-u.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/MotorCommandOutput/plots/falsify-tightness.png

@@ -1,0 +1,47 @@
+rumoca: compiling PlotterXYTracking from PlotterXYTracking.mo
+model: PlotterXYTracking (inferred; use --model to choose)
+compares against certificate PlotterXYTracking.Cert.certified
+collocation skipped: Target rendering error: unsupported-feature:residual_equations: Target 'casadi-ode' does not support feature 'residual_equations': checked algebraic refresh ret
+adjoint |e[1]|
+  adjoint scan: 0.0625
+  adjoint refine: 0.0625, switching times: 0.0625
+  adjoint/scan: 0.0625
+  adjoint/switch: 0.0625
+adjoint |e[2]|
+  adjoint scan: 0.02
+  adjoint refine: 0.02, switching times: 0.02
+  adjoint/scan: 0.02
+  adjoint/switch: 0.02
+adjoint |ev[1]|
+  adjoint scan: 0.176568
+  adjoint refine: 0.176568, switching times: 0.176568
+  adjoint/scan: 0.1765677
+  adjoint/switch: 0.1765677
+adjoint |ev[2]|
+  adjoint scan: 0.071196
+  adjoint refine: 0.071196, switching times: 0.071196
+  adjoint/scan: 0.07119862
+  adjoint/switch: 0.07119862
+figure: worstcase-e[1]
+figure: worstcase-e[2]
+figure: worstcase-ev[1]
+figure: worstcase-ev[2]
+figure: tightness
+|e[1]|: achieved 0.0625 vs certified 0.0761963 (ratio 0.82025)  by adjoint/scan
+    adjoint/scan                 0.0625
+    adjoint/switch               0.0625
+|e[2]|: achieved 0.02 vs certified 0.0578344 (ratio 0.34581)  by adjoint/scan
+    adjoint/scan                 0.02
+    adjoint/switch               0.02
+|ev[1]|: achieved 0.1765677 vs certified 0.218517 (ratio 0.80803)  by adjoint/scan
+    adjoint/scan                 0.1765677
+    adjoint/switch               0.1765677
+|ev[2]|: achieved 0.07119862 vs certified 0.220675 (ratio 0.32264)  by adjoint/scan
+    adjoint/scan                 0.07119862
+    adjoint/switch               0.07119862
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PlotterXYTracking/plots/falsify-worstcase-e[1].png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PlotterXYTracking/plots/falsify-worstcase-e[2].png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PlotterXYTracking/plots/falsify-worstcase-ev[1].png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PlotterXYTracking/plots/falsify-worstcase-ev[2].png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PlotterXYTracking/plots/falsify-tightness.png

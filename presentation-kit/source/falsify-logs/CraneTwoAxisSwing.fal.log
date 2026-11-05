@@ -1,0 +1,53 @@
+rumoca: compiling CraneTwoAxisSwing from CraneTwoAxisSwing.mo
+model: CraneTwoAxisSwing (inferred; use --model to choose)
+no certificate: reports achieved peaks and probabilistic bounds only
+Monte Carlo: 100 runs to seed the search
+adjoint |phi1|
+  adjoint scan: 0.0293415
+  adjoint refine: 0.0300288, switching times: 0.0300288
+  adjoint multistart (5 starts): 0.0300419
+  adjoint/scan: 0.02934143
+  adjoint/switch: 0.03002873
+  adjoint/multistart: 0.03004186
+collocation |phi1|
+  collocation t*=7.825-: 0.03004177
+adjoint |phi2|
+  adjoint scan: 0.0176044
+  adjoint refine: 0.0180168, switching times: 0.0180168
+  adjoint multistart (5 starts): 0.0180246
+  adjoint/scan: 0.0176044
+  adjoint/switch: 0.01801679
+  adjoint/multistart: 0.01802463
+collocation |phi2|
+  collocation t*=6.625+: 0.01802467
+adjoint |e|
+  adjoint scan: 0.03125
+  adjoint refine: 0.03125, switching times: 0.03125
+  adjoint multistart (5 starts): 0.03125
+  adjoint/scan: 0.03125
+  adjoint/switch: 0.03125
+  adjoint/multistart: 0.03125
+collocation |e|
+  collocation t*=9.275+: 0.03125
+figure: worstcase-phi1
+figure: worstcase-phi2
+figure: worstcase-e
+|phi1|: achieved 0.03004186 (no certificate)  by adjoint/multistart
+    adjoint/scan                 0.02934143
+    adjoint/switch               0.03002873
+    adjoint/multistart           0.03004186
+    collocation t*=7.825-        0.03004177
+|phi2|: achieved 0.01802467 (no certificate)  by collocation t*=6.625+
+    adjoint/scan                 0.0176044
+    adjoint/switch               0.01801679
+    adjoint/multistart           0.01802463
+    collocation t*=6.625+        0.01802467
+|e|: achieved 0.03125 (no certificate)  by adjoint/scan
+    adjoint/scan                 0.03125
+    adjoint/switch               0.03125
+    adjoint/multistart           0.03125
+    collocation t*=9.275+        0.03125
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/CraneTwoAxisSwing_plots/falsify-worstcase-phi1.png
+  wrote /home/micah/Research/development/dynacert/CraneTwoAxisSwing_plots/falsify-worstcase-phi2.png
+  wrote /home/micah/Research/development/dynacert/CraneTwoAxisSwing_plots/falsify-worstcase-e.png

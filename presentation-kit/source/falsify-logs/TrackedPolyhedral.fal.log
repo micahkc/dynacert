@@ -1,0 +1,32 @@
+rumoca: compiling TrackedPolyhedral from TrackedPolyhedral.mo
+model: TrackedPolyhedral (inferred; use --model to choose)
+compares against certificate TrackedPolyhedral.Cert.certified
+adjoint |e|
+  adjoint scan: 0.166667
+  adjoint refine: 0.166667, switching times: 0.166667
+  adjoint/scan: 0.1666667
+  adjoint/switch: 0.1666667
+collocation |e|
+  collocation t*=10+: 0.1666666
+adjoint |ev|
+  adjoint scan: 0.296269
+  adjoint refine: 0.296269, switching times: 0.296296
+  adjoint/scan: 0.2962693
+  adjoint/switch: 0.2962961
+collocation |ev|
+  collocation t*=8+: 0.2962959
+figure: worstcase-e
+figure: worstcase-ev
+figure: tightness
+|e|: achieved 0.1666667 vs certified 0.181921 (ratio 0.91615)  by adjoint/scan
+    adjoint/scan                 0.1666667
+    adjoint/switch               0.1666667
+    collocation t*=10+           0.1666666
+|ev|: achieved 0.2962961 vs certified 0.340667 (ratio 0.86975)  by adjoint/switch
+    adjoint/scan                 0.2962693
+    adjoint/switch               0.2962961
+    collocation t*=8+            0.2962959
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TrackedPolyhedral/plots/falsify-worstcase-e.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TrackedPolyhedral/plots/falsify-worstcase-ev.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TrackedPolyhedral/plots/falsify-tightness.png

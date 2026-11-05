@@ -1,0 +1,47 @@
+rumoca: compiling SwitchedTrackingFunnel from SwitchedTrackingFunnel.mo
+model: SwitchedTrackingFunnel (inferred; use --model to choose)
+compares against the current switched certificate (certificates.json)
+collocation skipped: Target rendering error: unsupported-feature:events: Target 'casadi-ode' does not support feature 'events': event or condition partitions present (its target.tom
+Monte Carlo: 100 runs to seed the search
+adjoint |xi|
+  adjoint scan: 0.204513
+  adjoint refine: 0.204513, switching times: 0.204513
+  adjoint multistart (5 starts): 0.204513
+  adjoint/scan: 0.2045112
+  adjoint/switch: 0.2045112
+  adjoint/multistart: 0.2045112
+adjoint |e|
+  adjoint scan: 0.0977836
+  adjoint refine: 0.0977836, switching times: 0.0977836
+  adjoint multistart (5 starts): 0.0977836
+  adjoint/scan: 0.09778603
+  adjoint/switch: 0.09778603
+  adjoint/multistart: 0.09778622
+adjoint |ev|
+  adjoint scan: 0.0998608
+  adjoint refine: 0.0998608, switching times: 0.0998722
+  adjoint multistart (5 starts): 0.0955363
+  adjoint/scan: 0.09986119
+  adjoint/switch: 0.09987202
+  adjoint/multistart: 0.09553623
+figure: worstcase-xi
+figure: worstcase-e
+figure: worstcase-ev
+figure: tightness
+|xi|: achieved 0.2045112 vs certified 0.253676 (ratio 0.80619)  by adjoint/multistart
+    adjoint/scan                 0.2045112
+    adjoint/switch               0.2045112
+    adjoint/multistart           0.2045112
+|e|: achieved 0.09778622 vs certified 0.121858 (ratio 0.80246)  by adjoint/multistart
+    adjoint/scan                 0.09778603
+    adjoint/switch               0.09778603
+    adjoint/multistart           0.09778622
+|ev|: achieved 0.09987202 vs certified 0.180977 (ratio 0.55185)  by adjoint/switch
+    adjoint/scan                 0.09986119
+    adjoint/switch               0.09987202
+    adjoint/multistart           0.09553623
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/SwitchedTrackingFunnel_plots/falsify-worstcase-xi.png
+  wrote /home/micah/Research/development/dynacert/SwitchedTrackingFunnel_plots/falsify-worstcase-e.png
+  wrote /home/micah/Research/development/dynacert/SwitchedTrackingFunnel_plots/falsify-worstcase-ev.png
+  wrote /home/micah/Research/development/dynacert/SwitchedTrackingFunnel_plots/falsify-tightness.png

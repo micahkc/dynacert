@@ -1,0 +1,32 @@
+rumoca: compiling DockingAllAnnotations from DockingAllAnnotations.mo
+model: DockingAllAnnotations (inferred; use --model to choose)
+compares against certificate DockingAllAnnotations.Cert.certified
+adjoint |e|
+  adjoint scan: 0.05
+  adjoint refine: 0.05, switching times: 0.05
+  adjoint/scan: 0.04999994
+  adjoint/switch: 0.04999994
+collocation |e|
+  collocation t*=10+: 0.04999993
+adjoint |ev|
+  adjoint scan: 0.0711982
+  adjoint refine: 0.0711982, switching times: 0.0711986
+  adjoint/scan: 0.07119855
+  adjoint/switch: 0.07119856
+collocation |ev|
+  collocation t*=9.99+: 0.07119854
+figure: worstcase-e
+figure: worstcase-ev
+figure: tightness
+|e|: achieved 0.04999994 vs certified 0.119479 (ratio 0.41848)  by adjoint/scan
+    adjoint/scan                 0.04999994
+    adjoint/switch               0.04999994
+    collocation t*=10+           0.04999993
+|ev|: achieved 0.07119856 vs certified 0.164568 (ratio 0.43264)  by adjoint/switch
+    adjoint/scan                 0.07119855
+    adjoint/switch               0.07119856
+    collocation t*=9.99+         0.07119854
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/DockingAllAnnotations/plots/falsify-worstcase-e.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/DockingAllAnnotations/plots/falsify-worstcase-ev.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/DockingAllAnnotations/plots/falsify-tightness.png

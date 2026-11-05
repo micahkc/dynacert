@@ -1,0 +1,45 @@
+rumoca: compiling ThreeZoneRadiant from ThreeZoneRadiant.mo
+model: ThreeZoneRadiant (inferred; use --model to choose)
+compares against certificate ThreeZoneRadiant.Cert.certified
+adjoint |z1.T|
+  adjoint scan: 0.785809
+  adjoint refine: 0.785809, switching times: 0.785809
+  adjoint/scan: 0.7858086
+  adjoint/switch: 0.7858086
+collocation |z1.T|
+  collocation t*=10+: 0.7858086
+adjoint |z2.T|
+  adjoint scan: 0.405639
+  adjoint refine: 0.405639, switching times: 0.405639
+  adjoint/scan: 0.4056385
+  adjoint/switch: 0.4056385
+collocation |z2.T|
+  collocation t*=10+: 0.4056385
+adjoint |z3.T|
+  adjoint scan: 0.748549
+  adjoint refine: 0.748549, switching times: 0.748549
+  adjoint/scan: 0.7485488
+  adjoint/switch: 0.7485488
+collocation |z3.T|
+  collocation t*=10+: 0.7485487
+figure: worstcase-z1.T
+figure: worstcase-z2.T
+figure: worstcase-z3.T
+figure: tightness
+|z1.T|: achieved 0.7858086 vs certified 1.1119 (ratio 0.70673)  by adjoint/scan
+    adjoint/scan                 0.7858086
+    adjoint/switch               0.7858086
+    collocation t*=10+           0.7858086
+|z2.T|: achieved 0.4056385 vs certified 0.858699 (ratio 0.47239)  by adjoint/scan
+    adjoint/scan                 0.4056385
+    adjoint/switch               0.4056385
+    collocation t*=10+           0.4056385
+|z3.T|: achieved 0.7485488 vs certified 1.10413 (ratio 0.67795)  by adjoint/scan
+    adjoint/scan                 0.7485488
+    adjoint/switch               0.7485488
+    collocation t*=10+           0.7485487
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ThreeZoneRadiant/plots/falsify-worstcase-z1.T.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ThreeZoneRadiant/plots/falsify-worstcase-z2.T.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ThreeZoneRadiant/plots/falsify-worstcase-z3.T.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ThreeZoneRadiant/plots/falsify-tightness.png

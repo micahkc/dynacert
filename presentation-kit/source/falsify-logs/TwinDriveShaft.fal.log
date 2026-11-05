@@ -1,0 +1,32 @@
+rumoca: compiling TwinDriveShaft from TwinDriveShaft.mo
+model: TwinDriveShaft (inferred; use --model to choose)
+compares against certificate TwinDriveShaft.Cert.certified
+adjoint |a.th|
+  adjoint scan: 0.502859
+  adjoint refine: 0.502859, switching times: 0.50286
+  adjoint/scan: 0.5028593
+  adjoint/switch: 0.5028599
+collocation |a.th|
+  collocation t*=10+: 0.5028594
+adjoint |b.th|
+  adjoint scan: 0.0380895
+  adjoint refine: 0.0380895, switching times: 0.0380905
+  adjoint/scan: 0.03808947
+  adjoint/switch: 0.03809048
+collocation |b.th|
+  collocation t*=9+: 0.03809008
+figure: worstcase-a.th
+figure: worstcase-b.th
+figure: tightness
+|a.th|: achieved 0.5028599 vs certified 0.572112 (ratio 0.87895)  by adjoint/switch
+    adjoint/scan                 0.5028593
+    adjoint/switch               0.5028599
+    collocation t*=10+           0.5028594
+|b.th|: achieved 0.03809048 vs certified 0.367978 (ratio 0.10351)  by adjoint/switch
+    adjoint/scan                 0.03808947
+    adjoint/switch               0.03809048
+    collocation t*=9+            0.03809008
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TwinDriveShaft/plots/falsify-worstcase-a.th.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TwinDriveShaft/plots/falsify-worstcase-b.th.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/TwinDriveShaft/plots/falsify-tightness.png

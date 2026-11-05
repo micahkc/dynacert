@@ -1,0 +1,17 @@
+rumoca: compiling UnstablePlantRejected from UnstablePlantRejected.mo
+model: UnstablePlantRejected (inferred; use --model to choose)
+no certificate: reports achieved peaks and probabilistic bounds only
+adjoint |x|
+  adjoint scan: 6.36185
+  adjoint refine: 6.36185, switching times: 6.36185
+  adjoint/scan: 6.361854
+  adjoint/switch: 6.361854
+collocation |x|
+  collocation t*=10+: 6.361854
+figure: worstcase-x
+|x|: achieved 6.361854 (no certificate)  by adjoint/scan
+    adjoint/scan                 6.361854
+    adjoint/switch               6.361854
+    collocation t*=10+           6.361854
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/UnstablePlantRejected_plots/falsify-worstcase-x.png

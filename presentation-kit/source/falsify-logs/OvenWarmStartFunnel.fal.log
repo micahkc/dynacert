@@ -1,0 +1,19 @@
+rumoca: compiling OvenWarmStartFunnel from OvenWarmStartFunnel.mo
+model: OvenWarmStartFunnel (inferred; use --model to choose)
+compares against certificate OvenWarmStartFunnel.Cert.certified
+adjoint |T|
+  adjoint scan: 0.177207
+  adjoint refine: 0.177207, switching times: 0.177211
+  adjoint/scan: 0.1772068
+  adjoint/switch: 0.1772106
+collocation |T|
+  collocation t*=10+: 0.1772105
+figure: worstcase-T
+figure: tightness
+|T|: achieved 0.1772106 vs certified 2.41809 (ratio 0.07329)  by adjoint/switch
+    adjoint/scan                 0.1772068
+    adjoint/switch               0.1772106
+    collocation t*=10+           0.1772105
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/OvenWarmStartFunnel/plots/falsify-worstcase-T.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/OvenWarmStartFunnel/plots/falsify-tightness.png

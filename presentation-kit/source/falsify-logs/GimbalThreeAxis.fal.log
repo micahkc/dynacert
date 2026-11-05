@@ -1,0 +1,10 @@
+rumoca: compiling GimbalThreeAxis from GimbalThreeAxis.mo
+model: GimbalThreeAxis (inferred; use --model to choose)
+compares against certificate GimbalThreeAxis.Cert.certified
+adjoint |th[1]|
+  adjoint scan: 0.0538844
+  adjoint refine: 0.0538844, switching times: 0.053888
+  adjoint/scan: 0.05388439
+  adjoint/switch: 0.05388797
+collocation |th[1]|
+dynacert: 'd[1]' is not in list

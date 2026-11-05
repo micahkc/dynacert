@@ -1,0 +1,39 @@
+rumoca: compiling PathFollowScheduled from PathFollowScheduled.mo
+model: PathFollowScheduled (inferred; use --model to choose)
+compares against the current sector certificate (certificates.json)
+Monte Carlo: 100 runs to seed the search
+adjoint |y|
+  adjoint scan: 0.0479405
+  adjoint refine: 0.0491206, switching times: 0.0491206
+  adjoint multistart (5 starts): 0.0491206
+  adjoint/scan: 0.04794027
+  adjoint/switch: 0.04912028
+  adjoint/multistart: 0.04912028
+collocation |y|
+  collocation t*=10+: 0.04912025
+adjoint |psi|
+  adjoint scan: 0.0266274
+  adjoint refine: 0.0274439, switching times: 0.027444
+  adjoint multistart (5 starts): 0.0273893
+  adjoint/scan: 0.02662731
+  adjoint/switch: 0.02744392
+  adjoint/multistart: 0.02738924
+collocation |psi|
+  collocation t*=10+: 0.02744361
+figure: worstcase-y
+figure: worstcase-psi
+figure: tightness
+|y|: achieved 0.04912028 vs certified 0.050357 (ratio 0.97544)  by adjoint/switch
+    adjoint/scan                 0.04794027
+    adjoint/switch               0.04912028
+    adjoint/multistart           0.04912028
+    collocation t*=10+           0.04912025
+|psi|: achieved 0.02744392 vs certified 0.030562 (ratio 0.89798)  by adjoint/switch
+    adjoint/scan                 0.02662731
+    adjoint/switch               0.02744392
+    adjoint/multistart           0.02738924
+    collocation t*=10+           0.02744361
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/PathFollowScheduled_plots/falsify-worstcase-y.png
+  wrote /home/micah/Research/development/dynacert/PathFollowScheduled_plots/falsify-worstcase-psi.png
+  wrote /home/micah/Research/development/dynacert/PathFollowScheduled_plots/falsify-tightness.png

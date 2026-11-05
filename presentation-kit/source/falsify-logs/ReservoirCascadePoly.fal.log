@@ -1,0 +1,32 @@
+rumoca: compiling ReservoirCascadePoly from ReservoirCascadePoly.mo
+model: ReservoirCascadePoly (inferred; use --model to choose)
+compares against certificate ReservoirCascadePoly.Cert.certified
+adjoint |h1|
+  adjoint scan: 0.999955
+  adjoint refine: 0.999955, switching times: 0.999955
+  adjoint/scan: 0.9999546
+  adjoint/switch: 0.9999546
+collocation |h1|
+  collocation t*=10+: 0.9999546
+adjoint |h2|
+  adjoint scan: 2.9664
+  adjoint refine: 2.9664, switching times: 2.9664
+  adjoint/scan: 2.9664
+  adjoint/switch: 2.9664
+collocation |h2|
+  collocation t*=10+: 2.9664
+figure: worstcase-h1
+figure: worstcase-h2
+figure: tightness
+|h1|: achieved 0.9999546 vs certified 1.47098 (ratio 0.67979)  by adjoint/scan
+    adjoint/scan                 0.9999546
+    adjoint/switch               0.9999546
+    collocation t*=10+           0.9999546
+|h2|: achieved 2.9664 vs certified 3.20932 (ratio 0.92431)  by adjoint/scan
+    adjoint/scan                 2.9664
+    adjoint/switch               2.9664
+    collocation t*=10+           2.9664
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ReservoirCascadePoly/plots/falsify-worstcase-h1.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ReservoirCascadePoly/plots/falsify-worstcase-h2.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/ReservoirCascadePoly/plots/falsify-tightness.png

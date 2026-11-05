@@ -1,0 +1,41 @@
+rumoca: compiling RobotArmSwingFunnel from RobotArmSwingFunnel.mo
+model: RobotArmSwingFunnel (inferred; use --model to choose)
+compares against the current funnel certificate (certificates.json)
+Monte Carlo: 100 runs to seed the search
+adjoint |e|
+Traceback (most recent call last):
+  File "/home/micah/.local/bin/dynacert", line 8, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/cli.py", line 199, in main
+    code = _main(argv)
+           ^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/cli.py", line 233, in _main
+    return _legacy(mo, rest)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/cli.py", line 276, in _legacy
+    out = a.run(prob, opts, verbose=say)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/approaches/falsify.py", line 157, in run
+    r = adj.search(o, starts=starts, verbose=verbose)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/worstcase.py", line 265, in search
+    run0 = self._forward(base)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/worstcase.py", line 128, in _forward
+    return self.fwd.run(scn)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/montecarlo.py", line 362, in run
+    return self.sim.integrate(theta, dist, free, sp_.T, self.dt, label=label, breaks=breaks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/sim.py", line 164, in integrate
+    x, r = rk4(t0, tb - t0, x, r)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/sim.py", line 139, in rk4
+    k1x, k1r = F(t0, x, r)
+               ^^^^^^^^^^^
+  File "/home/micah/Research/development/dynacert/python/dynacert/sim.py", line 136, in F
+    fr = np.array(f(xx, uu), dtype=float).reshape(-1)
+                  ^^^^^^^^^
+  File "<lambdifygenerated-9>", line 4, in _lambdifygenerated
+NameError: name 't' is not defined

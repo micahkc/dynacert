@@ -1,0 +1,17 @@
+rumoca: compiling ValveGainTwoSwitches from ValveGainTwoSwitches.mo
+model: ValveGainTwoSwitches (inferred; use --model to choose)
+compares against the current switched certificate (certificates.json)
+collocation skipped: Target rendering error: unsupported-feature:events: Target 'casadi-ode' does not support feature 'events': event or condition partitions present (its target.tom
+Monte Carlo: 100 runs to seed the search
+adjoint |x|
+  adjoint scan: 0.108516
+  adjoint refine: 0.108516, switching times: 0.108516
+  adjoint multistart (5 starts): 0.1123
+  adjoint/scan: 0.1085448
+  adjoint/switch: 0.1085448
+  adjoint/multistart: 0.1122581
+adjoint |v|
+  adjoint scan: 0.198421
+  adjoint refine: 0.199077, switching times: 0.199086
+  adjoint multistart (5 starts): 0.202346
+  adjoint/scan: 0.198417

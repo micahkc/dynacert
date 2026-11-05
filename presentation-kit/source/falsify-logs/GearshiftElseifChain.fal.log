@@ -1,0 +1,34 @@
+rumoca: compiling GearshiftElseifChain from GearshiftElseifChain.mo
+model: GearshiftElseifChain (inferred; use --model to choose)
+compares against the current switched certificate (certificates.json)
+collocation skipped: Target rendering error: unsupported-feature:events: Target 'casadi-ode' does not support feature 'events': event or condition partitions present (its target.tom
+Monte Carlo: 100 runs to seed the search
+adjoint |w|
+  adjoint scan: 0.158178
+  adjoint refine: 0.162397, switching times: 0.16242
+  adjoint multistart (5 starts): 0.160111
+  adjoint/scan: 0.1581756
+  adjoint/switch: 0.1624178
+  adjoint/multistart: 0.1601086
+adjoint |u|
+  adjoint scan: 0.485335
+  adjoint refine: 0.485335, switching times: 0.485335
+  adjoint multistart (5 starts): 0.669525
+  adjoint/scan: 0.4853334
+  adjoint/switch: 0.4853334
+  adjoint/multistart: 0.6709842
+figure: worstcase-w
+figure: worstcase-u
+figure: tightness
+|w|: achieved 0.1624178 vs certified 0.452116 (ratio 0.35924)  by adjoint/switch
+    adjoint/scan                 0.1581756
+    adjoint/switch               0.1624178
+    adjoint/multistart           0.1601086
+|u|: achieved 0.6709842 vs certified 3.59084 (ratio 0.18686)  by adjoint/multistart
+    adjoint/scan                 0.4853334
+    adjoint/switch               0.4853334
+    adjoint/multistart           0.6709842
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/GearshiftElseifChain_plots/falsify-worstcase-w.png
+  wrote /home/micah/Research/development/dynacert/GearshiftElseifChain_plots/falsify-worstcase-u.png
+  wrote /home/micah/Research/development/dynacert/GearshiftElseifChain_plots/falsify-tightness.png

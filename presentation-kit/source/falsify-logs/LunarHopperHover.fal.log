@@ -1,0 +1,39 @@
+rumoca: compiling LunarHopperHover from LunarHopperHover.mo
+model: LunarHopperHover (inferred; use --model to choose)
+compares against the current sector certificate (certificates.json)
+Monte Carlo: 100 runs to seed the search
+adjoint |ex|
+  adjoint scan: 0.0264436
+  adjoint refine: 0.0265858, switching times: 0.0265859
+  adjoint multistart (5 starts): 0.0265859
+  adjoint/scan: 0.02644339
+  adjoint/switch: 0.02658586
+  adjoint/multistart: 0.02658586
+collocation |ex|
+  collocation t*=10+: 0.02658579
+adjoint |th|
+  adjoint scan: 0.0346047
+  adjoint refine: 0.0351291, switching times: 0.0351334
+  adjoint multistart (5 starts): 0.0351197
+  adjoint/scan: 0.03460442
+  adjoint/switch: 0.03513278
+  adjoint/multistart: 0.0351191
+collocation |th|
+  collocation t*=9.995+: 0.03512229
+figure: worstcase-ex
+figure: worstcase-th
+figure: tightness
+|ex|: achieved 0.02658586 vs certified 0.033526 (ratio 0.79299)  by adjoint/switch
+    adjoint/scan                 0.02644339
+    adjoint/switch               0.02658586
+    adjoint/multistart           0.02658586
+    collocation t*=10+           0.02658579
+|th|: achieved 0.03513278 vs certified 0.044617 (ratio 0.78743)  by adjoint/switch
+    adjoint/scan                 0.03460442
+    adjoint/switch               0.03513278
+    adjoint/multistart           0.0351191
+    collocation t*=9.995+        0.03512229
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/LunarHopperHover_plots/falsify-worstcase-ex.png
+  wrote /home/micah/Research/development/dynacert/LunarHopperHover_plots/falsify-worstcase-th.png
+  wrote /home/micah/Research/development/dynacert/LunarHopperHover_plots/falsify-tightness.png

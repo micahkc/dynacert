@@ -1,0 +1,13 @@
+rumoca: compiling QuaternionAttitudeReport from QuaternionAttitudeReport.mo
+model: QuaternionAttitudeReport (inferred; use --model to choose)
+no certificate: reports achieved peaks and probabilistic bounds only
+Monte Carlo: 100 runs to seed the search
+adjoint |e1|
+  adjoint scan: 0.0249989
+  adjoint refine: 0.0249989, switching times: 0.0249989
+  adjoint multistart (5 starts): 0.0255343
+  adjoint/scan: 0.0249988
+  adjoint/switch: 0.0249988
+  adjoint/multistart: 0.02553429
+collocation |e1|
+dynacert: 'd[1]' is not in list

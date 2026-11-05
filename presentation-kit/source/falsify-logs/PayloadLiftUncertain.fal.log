@@ -1,0 +1,32 @@
+rumoca: compiling PayloadLiftUncertain from PayloadLiftUncertain.mo
+model: PayloadLiftUncertain (inferred; use --model to choose)
+compares against certificate PayloadLiftUncertain.Cert.certified
+adjoint |z|
+  adjoint scan: 0.0625
+  adjoint refine: 0.0625, switching times: 0.0625
+  adjoint/scan: 0.0625
+  adjoint/switch: 0.0625
+collocation |z|
+  collocation t*=10+: 0.06249999
+adjoint |w|
+  adjoint scan: 0.181664
+  adjoint refine: 0.181664, switching times: 0.181667
+  adjoint/scan: 0.1816672
+  adjoint/switch: 0.1816674
+collocation |w|
+  collocation t*=10+: 0.1816674
+figure: worstcase-z
+figure: worstcase-w
+figure: tightness
+|z|: achieved 0.0625 vs certified 0.0708326 (ratio 0.88236)  by adjoint/scan
+    adjoint/scan                 0.0625
+    adjoint/switch               0.0625
+    collocation t*=10+           0.06249999
+|w|: achieved 0.1816674 vs certified 0.211522 (ratio 0.85886)  by adjoint/switch
+    adjoint/scan                 0.1816672
+    adjoint/switch               0.1816674
+    collocation t*=10+           0.1816674
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PayloadLiftUncertain/plots/falsify-worstcase-z.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PayloadLiftUncertain/plots/falsify-worstcase-w.png
+  wrote /home/micah/Research/development/dynacert/certs/Certs/PayloadLiftUncertain/plots/falsify-tightness.png

@@ -1,0 +1,5 @@
+rumoca: compiling GeoServicerTracking from GeoServicerTracking.mo
+model: GeoServicerTracking (inferred; use --model to choose)
+compares against the current lie certificate (certificates.json)
+Monte Carlo: 100 runs to seed the search
+adjoint |pos_err|

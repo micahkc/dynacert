@@ -1,0 +1,53 @@
+rumoca: compiling TwoAxisTiltHeave from TwoAxisTiltHeave.mo
+model: TwoAxisTiltHeave (inferred; use --model to choose)
+no certificate: reports achieved peaks and probabilistic bounds only
+Monte Carlo: 100 runs to seed the search
+adjoint |z|
+  adjoint scan: 0.0555556
+  adjoint refine: 0.0555556, switching times: 0.0555556
+  adjoint multistart (5 starts): 0.0559915
+  adjoint/scan: 0.05555556
+  adjoint/switch: 0.05555556
+  adjoint/multistart: 0.05599154
+collocation |z|
+  collocation t*=10-: 0.05599151
+adjoint |t1|
+  adjoint scan: 0.02
+  adjoint refine: 0.02, switching times: 0.02
+  adjoint multistart (5 starts): 0.02
+  adjoint/scan: 0.02
+  adjoint/switch: 0.02
+  adjoint/multistart: 0.02
+collocation |t1|
+  collocation t*=3.755+: 0.02
+adjoint |t2|
+  adjoint scan: 0.02
+  adjoint refine: 0.02, switching times: 0.02
+  adjoint multistart (5 starts): 0.02
+  adjoint/scan: 0.02
+  adjoint/switch: 0.02
+  adjoint/multistart: 0.02
+collocation |t2|
+  collocation t*=3.755+: 0.02
+figure: worstcase-z
+figure: worstcase-t1
+figure: worstcase-t2
+|z|: achieved 0.05599154 (no certificate)  by adjoint/multistart
+    adjoint/scan                 0.05555556
+    adjoint/switch               0.05555556
+    adjoint/multistart           0.05599154
+    collocation t*=10-           0.05599151
+|t1|: achieved 0.02 (no certificate)  by collocation t*=3.755+
+    adjoint/scan                 0.02
+    adjoint/switch               0.02
+    adjoint/multistart           0.02
+    collocation t*=3.755+        0.02
+|t2|: achieved 0.02 (no certificate)  by collocation t*=3.755+
+    adjoint/scan                 0.02
+    adjoint/switch               0.02
+    adjoint/multistart           0.02
+    collocation t*=3.755+        0.02
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/TwoAxisTiltHeave_plots/falsify-worstcase-z.png
+  wrote /home/micah/Research/development/dynacert/TwoAxisTiltHeave_plots/falsify-worstcase-t1.png
+  wrote /home/micah/Research/development/dynacert/TwoAxisTiltHeave_plots/falsify-worstcase-t2.png

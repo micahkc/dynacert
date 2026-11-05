@@ -1,0 +1,39 @@
+rumoca: compiling TwinPendulumHold from TwinPendulumHold.mo
+model: TwinPendulumHold (inferred; use --model to choose)
+compares against the current sector certificate (certificates.json)
+Monte Carlo: 100 runs to seed the search
+adjoint |th1|
+  adjoint scan: 0.0638912
+  adjoint refine: 0.0638912, switching times: 0.0638912
+  adjoint multistart (5 starts): 0.0638912
+  adjoint/scan: 0.06389123
+  adjoint/switch: 0.06389123
+  adjoint/multistart: 0.06389123
+collocation |th1|
+  collocation t*=10+: 0.0638912
+adjoint |th2|
+  adjoint scan: 0.0348253
+  adjoint refine: 0.0348253, switching times: 0.0348253
+  adjoint multistart (5 starts): 0.0348253
+  adjoint/scan: 0.03482534
+  adjoint/switch: 0.03482534
+  adjoint/multistart: 0.03482534
+collocation |th2|
+  collocation t*=10+: 0.03482531
+figure: worstcase-th1
+figure: worstcase-th2
+figure: tightness
+|th1|: achieved 0.06389123 vs certified 0.070403 (ratio 0.90751)  by adjoint/scan
+    adjoint/scan                 0.06389123
+    adjoint/switch               0.06389123
+    adjoint/multistart           0.06389123
+    collocation t*=10+           0.0638912
+|th2|: achieved 0.03482534 vs certified 0.039379 (ratio 0.88436)  by adjoint/scan
+    adjoint/scan                 0.03482534
+    adjoint/switch               0.03482534
+    adjoint/multistart           0.03482534
+    collocation t*=10+           0.03482531
+Values are re-simulated with rumoca over [0, 10]: achieved peaks, lower bounds on the worst case, with no probability attached.
+  wrote /home/micah/Research/development/dynacert/TwinPendulumHold_plots/falsify-worstcase-th1.png
+  wrote /home/micah/Research/development/dynacert/TwinPendulumHold_plots/falsify-worstcase-th2.png
+  wrote /home/micah/Research/development/dynacert/TwinPendulumHold_plots/falsify-tightness.png
