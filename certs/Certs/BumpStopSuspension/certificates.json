@@ -1,0 +1,33 @@
+{
+ "model": "BumpStopSuspension",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "BumpStopSuspension.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "x": "8217/9868",
+    "v": "18912/9355"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "cb554569b104ef2de64c1435ff114fc5edb21b9b2727437c0bc964a6efb056e5",
+   "time": "2026-10-16T17:42:42"
+  }
+ ],
+ "source_hash": "cb554569b104ef2de64c1435ff114fc5edb21b9b2727437c0bc964a6efb056e5",
+ "kept": {
+  "x": {
+   "bound": "8217/9868",
+   "method": "switched"
+  },
+  "v": {
+   "bound": "18912/9355",
+   "method": "switched"
+  }
+ }
+}

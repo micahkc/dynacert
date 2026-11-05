@@ -1,0 +1,33 @@
+{
+ "model": "CanalPoolLevelPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "CanalPoolLevelPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dy": "2821/9830",
+    "dqc": "173683/3649"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "17b8ef438855b0946ccd953a0c5af09bda7312e520b071d15f4bcd09c178d02d",
+   "time": "2026-10-14T14:39:24"
+  }
+ ],
+ "source_hash": "17b8ef438855b0946ccd953a0c5af09bda7312e520b071d15f4bcd09c178d02d",
+ "kept": {
+  "dy": {
+   "bound": "2821/9830",
+   "method": "lmi"
+  },
+  "dqc": {
+   "bound": "173683/3649",
+   "method": "lmi"
+  }
+ }
+}

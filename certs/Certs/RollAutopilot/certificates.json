@@ -1,0 +1,38 @@
+{
+ "model": "RollAutopilot",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "RollAutopilot.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "phi": "25/561",
+    "p": "1807/9623",
+    "da": "554/4645"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "d81b83a19bb145520145afde6613be8829e571287cad08d10e8242f8c7e9b238",
+   "time": "2026-10-14T14:12:21"
+  }
+ ],
+ "source_hash": "d81b83a19bb145520145afde6613be8829e571287cad08d10e8242f8c7e9b238",
+ "kept": {
+  "phi": {
+   "bound": "25/561",
+   "method": "lmi"
+  },
+  "p": {
+   "bound": "1807/9623",
+   "method": "lmi"
+  },
+  "da": {
+   "bound": "554/4645",
+   "method": "lmi"
+  }
+ }
+}

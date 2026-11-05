@@ -1,0 +1,38 @@
+{
+ "model": "VentilatorPressure",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "VentilatorPressure.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "3776/2105",
+    "el": "1682/6733",
+    "ei": "537/3956"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "f999f7fc8fc1e15ec0083acdf680e902ee7aa56afd8d5f2f0f5a0a9590bccde5",
+   "time": "2026-10-14T14:32:31"
+  }
+ ],
+ "source_hash": "f999f7fc8fc1e15ec0083acdf680e902ee7aa56afd8d5f2f0f5a0a9590bccde5",
+ "kept": {
+  "e": {
+   "bound": "3776/2105",
+   "method": "lmi"
+  },
+  "el": {
+   "bound": "1682/6733",
+   "method": "lmi"
+  },
+  "ei": {
+   "bound": "537/3956",
+   "method": "lmi"
+  }
+ }
+}

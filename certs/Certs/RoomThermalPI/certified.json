@@ -1,0 +1,137 @@
+{
+ "model": "RoomThermalPI",
+ "ns": "RoomThermalPI",
+ "method": "lti-polytopic",
+ "states": [
+  "dTa",
+  "dTe",
+  "z"
+ ],
+ "P": [
+  [
+   "26213949/271916",
+   "-17441150/573713",
+   "7587773/125693"
+  ],
+  [
+   "-17441150/573713",
+   "13802317/982729",
+   "-18455279/721986"
+  ],
+  [
+   "7587773/125693",
+   "-18455279/721986",
+   "8374423/163835"
+  ]
+ ],
+ "level": "64323093425/12545150194",
+ "alpha": "282460/879031",
+ "gammas": [
+  "14635/888278"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dTo",
+   "bound": "10"
+  }
+ ],
+ "coords": [
+  "dTa",
+  "dTe",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dTa",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "1681/3717"
+  },
+  {
+   "name": "dQ",
+   "row": [
+    "-4",
+    "0",
+    "-4"
+   ],
+   "state": null,
+   "bound": "33926/8019"
+  }
+ ],
+ "A": [
+  [
+   "-6",
+   "2",
+   "-4"
+  ],
+  [
+   "1/4",
+   "-5/16",
+   "0"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1/16"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "RoomThermalPI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "fc8e19e85ed0ce9079fb54edff607a60a1d55e965c18b4a10f57c1a8b7bde9dd",
+ "frame": {
+  "coords": [
+   "dTa",
+   "dTe",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dTa"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dTe"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "RoomThermalPI.Cert.tube"
+ }
+}

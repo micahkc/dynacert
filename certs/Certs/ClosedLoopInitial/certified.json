@@ -1,0 +1,142 @@
+{
+ "model": "ClosedLoopInitial",
+ "ns": "ClosedLoopInitial",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "1916377/655643",
+   "7333/33665"
+  ],
+  [
+   "7333/33665",
+   "868631/847714"
+  ]
+ ],
+ "level": "82014071763254747/18710931257183830",
+ "alpha": "87617/209308",
+ "gammas": [
+  "37443/40939"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "11649/9436"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "12112/5809"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-3",
+   "-1"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "ClosedLoopInitial.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "c67454d4c8be41da7d8cb86fa7d51dea4d4f8df942da79255fbe7b356b52b498",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "ClosedLoopInitial.Cert.tube"
+ },
+ "initial": [
+  {
+   "name": "x",
+   "min": "-1",
+   "max": "1"
+  },
+  {
+   "name": "v",
+   "min": "-1",
+   "max": "1"
+  }
+ ],
+ "funnel": {
+  "V0": "82014071763254747/18710931257183830",
+  "alpha": "87617/209308",
+  "budget": "37443/40939",
+  "rate": "7837119444/3586952363",
+  "level": "82014071763254747/18710931257183830",
+  "theorem": "ClosedLoopInitial.Cert.funnel",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ }
+}

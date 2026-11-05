@@ -1,0 +1,182 @@
+{
+ "model": "SatelliteAttitudeFlexible",
+ "ns": "SatelliteAttitudeFlexible",
+ "method": "lti-channel",
+ "states": [
+  "th_hub",
+  "w_hub",
+  "th_arr",
+  "w_arr"
+ ],
+ "P": [
+  [
+   "3965973/437926",
+   "1332928/694967",
+   "-3466128/555167",
+   "162612/463727"
+  ],
+  [
+   "1332928/694967",
+   "5509725/991681",
+   "-126089/125871",
+   "85199/506053"
+  ],
+  [
+   "-3466128/555167",
+   "-126089/125871",
+   "5526833/894629",
+   "-46539/949648"
+  ],
+  [
+   "162612/463727",
+   "85199/506053",
+   "-46539/949648",
+   "546885/464387"
+  ]
+ ],
+ "level": "2637093/125170877930",
+ "alpha": "282460/879031",
+ "gammas": [
+  "6/886291"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "tau_d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "th_hub",
+  "w_hub",
+  "th_arr",
+  "w_arr"
+ ],
+ "outputs": [
+  {
+   "name": "th_hub",
+   "row": [
+    "1",
+    "0",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "17/5891"
+  },
+  {
+   "name": "w_hub",
+   "row": [
+    "0",
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 1,
+   "bound": "9/4424"
+  },
+  {
+   "name": "twist",
+   "row": [
+    "1",
+    "0",
+    "-1",
+    "0"
+   ],
+   "state": null,
+   "bound": "18/9599"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0",
+   "0"
+  ],
+  [
+   "-12/5",
+   "-61/25",
+   "8/5",
+   "1/25"
+  ],
+  [
+   "0",
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "16/3",
+   "2/15",
+   "-16/3",
+   "-2/15"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1/500"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "SatelliteAttitudeFlexible.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "46ba99fb93338f87933317e9a82accfab0aca434558fa0a4c89dfc74b2e40d7f",
+ "frame": {
+  "coords": [
+   "th_hub",
+   "w_hub",
+   "th_arr",
+   "w_arr"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "th_hub"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "w_hub"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "th_arr"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "w_arr"
+    }
+   ]
+  ],
+  "theorem": "SatelliteAttitudeFlexible.Cert.tube"
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "model": "ShipHeadingNomoto",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ShipHeadingNomoto.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "xi": "3634/8711",
+    "e_psi": "119/6567",
+    "e_r": "19/9829"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "417a1ba14f28f42ea3df6b37563ed5d71ff8d2112bbce4702f57ee30b95dc04b",
+   "time": "2026-10-14T14:31:05"
+  }
+ ],
+ "source_hash": "417a1ba14f28f42ea3df6b37563ed5d71ff8d2112bbce4702f57ee30b95dc04b",
+ "kept": {
+  "xi": {
+   "bound": "3634/8711",
+   "method": "lmi"
+  },
+  "e_psi": {
+   "bound": "119/6567",
+   "method": "lmi"
+  },
+  "e_r": {
+   "bound": "19/9829",
+   "method": "lmi"
+  }
+ }
+}

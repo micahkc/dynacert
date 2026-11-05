@@ -1,0 +1,155 @@
+{
+ "model": "GantryPayload",
+ "ns": "GantryPayload",
+ "method": "lti-polytopic",
+ "states": [
+  "x",
+  "v",
+  "xi"
+ ],
+ "P": [
+  [
+   "222824447/806210",
+   "6119915/886141",
+   "261216245/363601"
+  ],
+  [
+   "6119915/886141",
+   "1138358/970211",
+   "2721838/147509"
+  ],
+  [
+   "261216245/363601",
+   "2721838/147509",
+   "3623263109/994275"
+  ]
+ ],
+ "level": "1564968302532137/473217394142754450",
+ "alpha": "4073657/789058",
+ "gammas": [
+  "33829/693513",
+  "69869/572859"
+ ],
+ "x0": [
+  "1/500",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "a_vib",
+   "bound": "1/2"
+  },
+  {
+   "name": "a_drag",
+   "bound": "1/5"
+  }
+ ],
+ "coords": [
+  "x",
+  "v",
+  "xi"
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "45/8743"
+  },
+  {
+   "name": "v",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "242/4209"
+  },
+  {
+   "name": "xi",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "13/9527"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "-400",
+   "-32",
+   "-1000"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "0",
+   "0"
+  ],
+  [
+   "1",
+   "1"
+  ],
+  [
+   "0",
+   "0"
+  ]
+ ],
+ "theorem": "GantryPayload.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "9882378be58ba6fde08f86481e157e6f16eb1c61bb25b0955f72d5ae5c4b699d",
+ "frame": {
+  "coords": [
+   "x",
+   "v",
+   "xi"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "GantryPayload.Cert.tube"
+ }
+}

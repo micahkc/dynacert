@@ -1,0 +1,38 @@
+{
+ "model": "GimbalThreeAxis",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "GimbalThreeAxis.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "th[1]": "652/9153",
+    "th[2]": "565/9813",
+    "th[3]": "620/9893"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "1bb5a37947c53756ef45a102b55378d205c42aed327eae910605494c7fd46015",
+   "time": "2026-11-02T11:53:11"
+  }
+ ],
+ "source_hash": "1bb5a37947c53756ef45a102b55378d205c42aed327eae910605494c7fd46015",
+ "kept": {
+  "th[1]": {
+   "bound": "652/9153",
+   "method": "lmi"
+  },
+  "th[2]": {
+   "bound": "565/9813",
+   "method": "lmi"
+  },
+  "th[3]": {
+   "bound": "620/9893",
+   "method": "lmi"
+  }
+ }
+}

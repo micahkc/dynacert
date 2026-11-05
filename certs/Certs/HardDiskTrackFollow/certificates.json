@@ -1,0 +1,48 @@
+{
+ "model": "HardDiskTrackFollow",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "HardDiskTrackFollow.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "y": "55875/9488",
+    "v": "118445/6317",
+    "q": "452/4975",
+    "qd": "21847/9021",
+    "xi": "3817/983"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "77c454914cffd338414099538aa1abb0ca901942623584d8919712ab53926f91",
+   "time": "2026-10-14T14:10:16"
+  }
+ ],
+ "source_hash": "77c454914cffd338414099538aa1abb0ca901942623584d8919712ab53926f91",
+ "kept": {
+  "y": {
+   "bound": "55875/9488",
+   "method": "lmi"
+  },
+  "v": {
+   "bound": "118445/6317",
+   "method": "lmi"
+  },
+  "q": {
+   "bound": "452/4975",
+   "method": "lmi"
+  },
+  "qd": {
+   "bound": "21847/9021",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "3817/983",
+   "method": "lmi"
+  }
+ }
+}

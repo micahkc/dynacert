@@ -1,0 +1,38 @@
+{
+ "model": "QuadcopterAltitude",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "QuadcopterAltitude.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "xi": "2992/4933",
+    "e_z": "768/2399",
+    "e_w": "6003/9137"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "433916dffc1b617335ed4e1328bfd2cae58589aeb96b9993577fd30e5ce546cc",
+   "time": "2026-10-14T14:28:16"
+  }
+ ],
+ "source_hash": "433916dffc1b617335ed4e1328bfd2cae58589aeb96b9993577fd30e5ce546cc",
+ "kept": {
+  "xi": {
+   "bound": "2992/4933",
+   "method": "lmi"
+  },
+  "e_z": {
+   "bound": "768/2399",
+   "method": "lmi"
+  },
+  "e_w": {
+   "bound": "6003/9137",
+   "method": "lmi"
+  }
+ }
+}

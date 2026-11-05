@@ -1,0 +1,147 @@
+{
+ "model": "RollAutopilot",
+ "ns": "RollAutopilot",
+ "method": "lti-polytopic",
+ "states": [
+  "phi",
+  "p",
+  "da"
+ ],
+ "P": [
+  [
+   "70556031/366560",
+   "18276466/610895",
+   "69972831/997166"
+  ],
+  [
+   "18276466/610895",
+   "2241690/379057",
+   "7452170/639359"
+  ],
+  [
+   "69972831/997166",
+   "7452170/639359",
+   "5933629/206641"
+  ]
+ ],
+ "level": "313810588971/8205991003448",
+ "alpha": "2064259/883971",
+ "gammas": [
+  "355001/993818"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "L_dist",
+   "bound": "1/2"
+  }
+ ],
+ "coords": [
+  "phi",
+  "p",
+  "da"
+ ],
+ "outputs": [
+  {
+   "name": "phi",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "25/561"
+  },
+  {
+   "name": "p",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "1807/9623"
+  },
+  {
+   "name": "da",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "554/4645"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "-3/2",
+   "8"
+  ],
+  [
+   "-25",
+   "-15/2",
+   "-25/2"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "RollAutopilot.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "d81b83a19bb145520145afde6613be8829e571287cad08d10e8242f8c7e9b238",
+ "frame": {
+  "coords": [
+   "phi",
+   "p",
+   "da"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "phi"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "p"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "da"
+    }
+   ]
+  ],
+  "theorem": "RollAutopilot.Cert.tube"
+ }
+}

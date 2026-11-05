@@ -1,0 +1,50 @@
+{
+ "model": "ReservoirCascadePoly",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ReservoirCascadePoly.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "h1": "8389/5703",
+    "h2": "5167/1610"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "a230d72e10d668d7d026306cba98fd1e1d8996d39387ea21a28aaf22b992d900",
+   "time": "2026-11-02T11:56:19"
+  },
+  {
+   "method": "polyhedral",
+   "theorem": "ReservoirCascadePoly.PolyCert.certified",
+   "file": "PolyCert.lean",
+   "sidecar": "polyhedral.json",
+   "bounds": {
+    "h1": "250047/250000",
+    "h2": "3000473/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "a230d72e10d668d7d026306cba98fd1e1d8996d39387ea21a28aaf22b992d900",
+   "time": "2026-11-02T11:57:10"
+  }
+ ],
+ "source_hash": "a230d72e10d668d7d026306cba98fd1e1d8996d39387ea21a28aaf22b992d900",
+ "kept": {
+  "h1": {
+   "bound": "250047/250000",
+   "method": "polyhedral"
+  },
+  "h2": {
+   "bound": "3000473/1000000",
+   "method": "polyhedral"
+  }
+ }
+}

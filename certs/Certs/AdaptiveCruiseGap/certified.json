@@ -1,0 +1,147 @@
+{
+ "model": "AdaptiveCruiseGap",
+ "ns": "AdaptiveCruiseGap",
+ "method": "lti-polytopic",
+ "states": [
+  "e",
+  "dv",
+  "a_ego"
+ ],
+ "P": [
+  [
+   "744101/355291",
+   "558085/500286",
+   "-529491/521144"
+  ],
+  [
+   "558085/500286",
+   "4386467/989466",
+   "-2143621/540155"
+  ],
+  [
+   "-529491/521144",
+   "-2143621/540155",
+   "5622418/988199"
+  ]
+ ],
+ "level": "1398596893232/75193347485",
+ "alpha": "87617/209308",
+ "gammas": [
+  "1670501/858205"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "a_lead",
+   "bound": "2"
+  }
+ ],
+ "coords": [
+  "e",
+  "dv",
+  "a_ego"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "8651/2701"
+  },
+  {
+   "name": "dv",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "32452/9453"
+  },
+  {
+   "name": "a_ego",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "5441/1844"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "-3/2"
+  ],
+  [
+   "0",
+   "0",
+   "-1"
+  ],
+  [
+   "6/5",
+   "27/10",
+   "-3"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "AdaptiveCruiseGap.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "e2af9e6a760e67b9e6249cf223c22f1592c774babd18e44d7a77c5d86e44e957",
+ "frame": {
+  "coords": [
+   "e",
+   "dv",
+   "a_ego"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "e"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dv"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "a_ego"
+    }
+   ]
+  ],
+  "theorem": "AdaptiveCruiseGap.Cert.tube"
+ }
+}

@@ -1,0 +1,157 @@
+{
+ "model": "ShipHeadingNomoto",
+ "ns": "ShipHeadingNomoto",
+ "method": "lti-channel",
+ "states": [
+  "xi",
+  "e_psi",
+  "e_r"
+ ],
+ "P": [
+  [
+   "898718/674817",
+   "5956263/493798",
+   "77410477/734665"
+  ],
+  [
+   "5956263/493798",
+   "632068051/972612",
+   "1269798774/764603"
+  ],
+  [
+   "77410477/734665",
+   "1269798774/764603",
+   "54894633612/982979"
+  ]
+ ],
+ "level": "613821832127/3526941357500",
+ "alpha": "27811/935216",
+ "gammas": [
+  "1500211/355091"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d_wave",
+   "bound": "7/200"
+  }
+ ],
+ "coords": [
+  "xi",
+  "e_psi",
+  "e_r"
+ ],
+ "outputs": [
+  {
+   "name": "xi",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "3634/8711"
+  },
+  {
+   "name": "e_psi",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "119/6567"
+  },
+  {
+   "name": "e_r",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "19/9829"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "-1/2000",
+   "-9/500",
+   "-21/100"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "0"
+  ],
+  [
+   "1/200"
+  ]
+ ],
+ "theorem": "ShipHeadingNomoto.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "417a1ba14f28f42ea3df6b37563ed5d71ff8d2112bbce4702f57ee30b95dc04b",
+ "frame": {
+  "coords": [
+   "xi",
+   "e_psi",
+   "e_r"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "psi"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "psi_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "r"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "r_ref"
+    }
+   ]
+  ],
+  "theorem": "ShipHeadingNomoto.Cert.tube"
+ }
+}

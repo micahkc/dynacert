@@ -1,0 +1,33 @@
+{
+ "model": "SwitchedPILeak",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "SwitchedPILeak.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "x": "28/171",
+    "z": "369/1778"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "23e73f329a75ed78110091408b286029a9440cb92c4a73f920a0a7b16ec6edd4",
+   "time": "2026-10-16T17:41:40"
+  }
+ ],
+ "source_hash": "23e73f329a75ed78110091408b286029a9440cb92c4a73f920a0a7b16ec6edd4",
+ "kept": {
+  "x": {
+   "bound": "28/171",
+   "method": "switched"
+  },
+  "z": {
+   "bound": "369/1778",
+   "method": "switched"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "model": "ValveGainTwoSwitches",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "ValveGainTwoSwitches.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "x": "1526/9481",
+    "v": "3007/9469"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "1a2f8c35f506d002036dcd1a8f367f5a7dde10ce355795f98f3c053dcf51f016",
+   "time": "2026-11-02T12:00:28"
+  }
+ ],
+ "source_hash": "1a2f8c35f506d002036dcd1a8f367f5a7dde10ce355795f98f3c053dcf51f016",
+ "kept": {
+  "x": {
+   "bound": "1526/9481",
+   "method": "switched"
+  },
+  "v": {
+   "bound": "3007/9469",
+   "method": "switched"
+  }
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "model": "DynamicPositioningSurge",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "DynamicPositioningSurge.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "x": "5690/5871",
+    "u": "1394/8335",
+    "xi": "254165/9339"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "10d78ca79eb4f12855585223fdd3052c3668b6ca5df253af921fa1fa7a1fb98e",
+   "time": "2026-10-14T14:33:15"
+  }
+ ],
+ "source_hash": "10d78ca79eb4f12855585223fdd3052c3668b6ca5df253af921fa1fa7a1fb98e",
+ "kept": {
+  "x": {
+   "bound": "5690/5871",
+   "method": "lmi"
+  },
+  "u": {
+   "bound": "1394/8335",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "254165/9339",
+   "method": "lmi"
+  }
+ }
+}

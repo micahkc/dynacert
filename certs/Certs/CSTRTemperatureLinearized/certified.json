@@ -1,0 +1,155 @@
+{
+ "model": "CSTRTemperatureLinearized",
+ "ns": "CSTRTemperatureLinearized",
+ "method": "lti-channel",
+ "states": [
+  "dCa",
+  "dT",
+  "z"
+ ],
+ "P": [
+  [
+   "187928143/435902",
+   "-5749393/991804",
+   "-2603738/386417"
+  ],
+  [
+   "-5749393/991804",
+   "246864/166879",
+   "318204/915485"
+  ],
+  [
+   "-2603738/386417",
+   "318204/915485",
+   "1204313/948353"
+  ]
+ ],
+ "level": "6941543263280573707/427729903047538000",
+ "alpha": "221753/604633",
+ "gammas": [
+  "22383/139828",
+  "107604547/551780"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dTf",
+   "bound": "5"
+  },
+  {
+   "name": "dCaf",
+   "bound": "1/10"
+  }
+ ],
+ "coords": [
+  "dCa",
+  "dT",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dCa",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "494/2403"
+  },
+  {
+   "name": "dT",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "747/215"
+  },
+  {
+   "name": "dTc",
+   "row": [
+    "0",
+    "-2",
+    "-1"
+   ],
+   "state": null,
+   "bound": "67959/9410"
+  }
+ ],
+ "A": [
+  [
+   "-57/50",
+   "-51/5000",
+   "0"
+  ],
+  [
+   "2927/100",
+   "-51419/10000",
+   "-523/250"
+  ],
+  [
+   "0",
+   "1",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "0"
+  ]
+ ],
+ "theorem": "CSTRTemperatureLinearized.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "4eca2045511d7db1073d613afcd0e583573a2b4926af89a4901187e6ebc3d89d",
+ "frame": {
+  "coords": [
+   "dCa",
+   "dT",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dCa"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dT"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "CSTRTemperatureLinearized.Cert.tube"
+ }
+}

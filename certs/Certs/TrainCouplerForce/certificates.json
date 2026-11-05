@@ -1,0 +1,38 @@
+{
+ "model": "TrainCouplerForce",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TrainCouplerForce.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dv_loco": "1060/2633",
+    "s": "354/5821",
+    "F_c": "2804054/9187"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "373e157d6c2ecba8779deadc04768dae1bcc5e6138c030d0503deec175272cdd",
+   "time": "2026-10-14T14:37:39"
+  }
+ ],
+ "source_hash": "373e157d6c2ecba8779deadc04768dae1bcc5e6138c030d0503deec175272cdd",
+ "kept": {
+  "dv_loco": {
+   "bound": "1060/2633",
+   "method": "lmi"
+  },
+  "s": {
+   "bound": "354/5821",
+   "method": "lmi"
+  },
+  "F_c": {
+   "bound": "2804054/9187",
+   "method": "lmi"
+  }
+ }
+}

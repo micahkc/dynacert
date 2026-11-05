@@ -1,0 +1,33 @@
+{
+ "model": "PayloadLiftUncertain",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "PayloadLiftUncertain.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "z": "399/5633",
+    "w": "1487/7030"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "4d8779653397e00a422d042751b2f77ef8178dc6e248a218772d8c266d05195f",
+   "time": "2026-11-02T11:54:07"
+  }
+ ],
+ "source_hash": "4d8779653397e00a422d042751b2f77ef8178dc6e248a218772d8c266d05195f",
+ "kept": {
+  "z": {
+   "bound": "399/5633",
+   "method": "lmi"
+  },
+  "w": {
+   "bound": "1487/7030",
+   "method": "lmi"
+  }
+ }
+}

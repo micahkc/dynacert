@@ -1,0 +1,33 @@
+{
+ "model": "LunarHopperHover",
+ "certificates": [
+  {
+   "method": "sector",
+   "theorem": "LunarHopperHover.SectorCert.certified",
+   "file": "SectorCert.lean",
+   "sidecar": "sector.json",
+   "bounds": {
+    "ex": "16763/500000",
+    "th": "44617/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "5cb91b531e06fd247603e588fa5cbbbfe929202a3b4837736ea92527c55b54ba",
+   "time": "2026-11-02T12:04:48"
+  }
+ ],
+ "source_hash": "5cb91b531e06fd247603e588fa5cbbbfe929202a3b4837736ea92527c55b54ba",
+ "kept": {
+  "ex": {
+   "bound": "16763/500000",
+   "method": "sector"
+  },
+  "th": {
+   "bound": "44617/1000000",
+   "method": "sector"
+  }
+ }
+}

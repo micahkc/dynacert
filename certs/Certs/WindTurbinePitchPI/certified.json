@@ -1,0 +1,137 @@
+{
+ "model": "WindTurbinePitchPI",
+ "ns": "WindTurbinePitchPI",
+ "method": "lti-polytopic",
+ "states": [
+  "dw",
+  "dtheta",
+  "z"
+ ],
+ "P": [
+  [
+   "2883478654/155857",
+   "-229024872/862039",
+   "5191332171/991024"
+  ],
+  [
+   "-229024872/862039",
+   "2236629/459889",
+   "-63510287/798601"
+  ],
+  [
+   "5191332171/991024",
+   "-63510287/798601",
+   "1696130505/907312"
+  ]
+ ],
+ "level": "276582102896/18484120405",
+ "alpha": "87617/209308",
+ "gammas": [
+  "330353/210965"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dv_wind",
+   "bound": "2"
+  }
+ ],
+ "coords": [
+  "dw",
+  "dtheta",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dw",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "256/3363"
+  },
+  {
+   "name": "dtheta",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "26137/6757"
+  }
+ ],
+ "A": [
+  [
+   "-3/80",
+   "-1/50",
+   "0"
+  ],
+  [
+   "200",
+   "-10/3",
+   "50"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "3/200"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "WindTurbinePitchPI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "02df0fcac5dac6ee7bd6c0ccce1c7f73251139e1c86589f05217de4493424565",
+ "frame": {
+  "coords": [
+   "dw",
+   "dtheta",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dw"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dtheta"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "WindTurbinePitchPI.Cert.tube"
+ }
+}

@@ -1,0 +1,184 @@
+{
+ "model": "PathFollowScheduled",
+ "ns": "PathFollowScheduled",
+ "method": "sector",
+ "theorem": "PathFollowScheduled.SectorCert.certified",
+ "tube_theorem": "PathFollowScheduled.SectorCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "bounds": {
+  "y": "50357/1000000",
+  "psi": "15281/500000"
+ },
+ "region": {
+  "y": "347/6759",
+  "dV": "545/9832",
+  "psi": "209/6711"
+ },
+ "channels": [
+  {
+   "kind": "sector",
+   "expr": "-psi + sin(psi)",
+   "enters": {
+    "y": "1"
+   },
+   "sector": [
+    "-81/500000",
+    "0"
+   ],
+   "q": "psi"
+  },
+  {
+   "kind": "sector",
+   "expr": "psi_d + s/2",
+   "enters": {
+    "r": "25"
+   },
+   "sector": [
+    "-6799/500000",
+    "14253/1000000"
+   ],
+   "q": "-s"
+  }
+ ],
+ "ellipsoids": [
+  {
+   "objective": "y",
+   "alpha": "3096/5219",
+   "level": "24999971/25000000",
+   "outer": "51919/50000",
+   "blocks": [
+    [
+     "y",
+     "psi",
+     "r",
+     "dV"
+    ]
+   ]
+  },
+  {
+   "objective": "psi",
+   "alpha": "5291/9660",
+   "level": "99999919/100000000",
+   "outer": "1037357/1000000",
+   "blocks": [
+    [
+     "y",
+     "psi",
+     "r",
+     "dV"
+    ]
+   ]
+  },
+  {
+   "objective": "dV",
+   "alpha": "1613/1326",
+   "level": "9999993/10000000",
+   "outer": "1037641/1000000",
+   "blocks": [
+    [
+     "y",
+     "psi",
+     "r",
+     "dV"
+    ]
+   ]
+  }
+ ],
+ "states": [
+  "y",
+  "psi",
+  "r",
+  "dV"
+ ],
+ "disturbances": [
+  {
+   "name": "dy",
+   "bound": "1/50"
+  },
+  {
+   "name": "dr",
+   "bound": "1/10"
+  },
+  {
+   "name": "du",
+   "bound": "1/10"
+  }
+ ],
+ "fixed_point": {
+  "iterations": 3,
+  "history": [
+   {
+    "region": [
+     0.01,
+     0.01,
+     0.01
+    ],
+    "projections": [
+     0.049179642476360294,
+     0.05319473746048088,
+     0.029491185864208146
+    ],
+    "supports": {
+     "y": 0.04918001964249031,
+     "psi": 0.029490889755296467,
+     "dV": 0.053194824137707514
+    }
+   },
+   {
+    "region": [
+     0.050163220892274214,
+     0.05425860782432577,
+     0.03008103008103008
+    ],
+    "projections": [
+     0.050332306006492335,
+     0.05434435412159972,
+     0.030532246548372662
+    ],
+    "supports": {
+     "y": 0.05033260975520892,
+     "psi": 0.03053221726599261,
+     "dV": 0.05434435494508706
+    }
+   },
+   {
+    "region": [
+     0.051338955466785026,
+     0.055431244914564685,
+     0.03114289971688273
+    ],
+    "projections": [
+     0.05036297941589088,
+     0.054344353367088837,
+     0.030560941211174704
+    ],
+    "supports": {
+     "y": 0.05036300840024841,
+     "psi": 0.030560920739649184,
+     "dV": 0.0543443539998816
+    }
+   }
+  ]
+ },
+ "stats": {
+  "search_s": 2.1,
+  "exact_s": 0.4,
+  "lean_s": {
+   "SectorLink": 10.4,
+   "SectorM0": 9.7,
+   "SectorM1": 10.3,
+   "SectorM2": 10.2,
+   "SectorCert": 8.7
+  }
+ },
+ "source_hash": "347276fc07a5e8d972ac0168a95ba58b508a71a4643e4e9a58a752b3ebd6e98a"
+}

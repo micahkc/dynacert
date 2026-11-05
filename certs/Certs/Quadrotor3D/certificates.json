@@ -1,0 +1,48 @@
+{
+ "model": "Quadrotor3D",
+ "certificates": [
+  {
+   "method": "compose",
+   "theorem": "Quadrotor3D.ComposeCert.certified",
+   "file": "ComposeCert.lean",
+   "sidecar": "compose.json",
+   "bounds": {
+    "e_x": "3417/62500",
+    "e_y": "54671/1000000",
+    "e_z": "8099/200000",
+    "qx": "24589/1000000",
+    "qy": "2459/100000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "ea4593a2cb660885ca8b880c2fbad59248af0fdbd2409538b52db04db18a5052",
+   "time": "2026-11-02T12:26:50"
+  }
+ ],
+ "source_hash": "ea4593a2cb660885ca8b880c2fbad59248af0fdbd2409538b52db04db18a5052",
+ "kept": {
+  "e_x": {
+   "bound": "3417/62500",
+   "method": "compose"
+  },
+  "e_y": {
+   "bound": "54671/1000000",
+   "method": "compose"
+  },
+  "e_z": {
+   "bound": "8099/200000",
+   "method": "compose"
+  },
+  "qx": {
+   "bound": "24589/1000000",
+   "method": "compose"
+  },
+  "qy": {
+   "bound": "2459/100000",
+   "method": "compose"
+  }
+ }
+}

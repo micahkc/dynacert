@@ -1,0 +1,33 @@
+{
+ "model": "WaterTowerPressurePI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "WaterTowerPressurePI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dn": "42147/1081",
+    "dp": "58246/6397"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "2c4d5a6f392e27fb091068e7595cd1fee2217b8861899fc4987cac6d46e899d3",
+   "time": "2026-10-14T14:41:39"
+  }
+ ],
+ "source_hash": "2c4d5a6f392e27fb091068e7595cd1fee2217b8861899fc4987cac6d46e899d3",
+ "kept": {
+  "dn": {
+   "bound": "42147/1081",
+   "method": "lmi"
+  },
+  "dp": {
+   "bound": "58246/6397",
+   "method": "lmi"
+  }
+ }
+}

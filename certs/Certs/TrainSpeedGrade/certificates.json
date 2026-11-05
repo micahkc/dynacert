@@ -1,0 +1,38 @@
+{
+ "model": "TrainSpeedGrade",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TrainSpeedGrade.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "xi": "46641/3638",
+    "e_x": "4441/2677",
+    "e_v": "5297/9669"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "a2069f3c20a964f2a4393e61d5f8f0aa6d3d8a71effa4e90cccb7bc4da68b5b1",
+   "time": "2026-10-14T14:34:49"
+  }
+ ],
+ "source_hash": "a2069f3c20a964f2a4393e61d5f8f0aa6d3d8a71effa4e90cccb7bc4da68b5b1",
+ "kept": {
+  "xi": {
+   "bound": "46641/3638",
+   "method": "lmi"
+  },
+  "e_x": {
+   "bound": "4441/2677",
+   "method": "lmi"
+  },
+  "e_v": {
+   "bound": "5297/9669",
+   "method": "lmi"
+  }
+ }
+}

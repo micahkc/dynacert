@@ -1,0 +1,147 @@
+{
+ "model": "DynamicPositioningSurge",
+ "ns": "DynamicPositioningSurge",
+ "method": "lti-polytopic",
+ "states": [
+  "x",
+  "u",
+  "xi"
+ ],
+ "P": [
+  [
+   "284423503/326922",
+   "163632167/292171",
+   "2294199/242860"
+  ],
+  [
+   "163632167/292171",
+   "3310371900/119641",
+   "11709735/332024"
+  ],
+  [
+   "2294199/242860",
+   "11709735/332024",
+   "976810/861483"
+  ]
+ ],
+ "level": "25100000/33891",
+ "alpha": "1/50",
+ "gammas": [
+  "251/169455"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "F_wave",
+   "bound": "100"
+  }
+ ],
+ "coords": [
+  "x",
+  "u",
+  "xi"
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "5690/5871"
+  },
+  {
+   "name": "u",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "1394/8335"
+  },
+  {
+   "name": "xi",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "254165/9339"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "-1/25",
+   "-41/100",
+   "-1/1250"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1/5000"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "DynamicPositioningSurge.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "10d78ca79eb4f12855585223fdd3052c3668b6ca5df253af921fa1fa7a1fb98e",
+ "frame": {
+  "coords": [
+   "x",
+   "u",
+   "xi"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "u"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "DynamicPositioningSurge.Cert.tube"
+ }
+}

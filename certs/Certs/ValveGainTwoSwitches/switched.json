@@ -1,0 +1,165 @@
+{
+ "model": "ValveGainTwoSwitches",
+ "ns": "ValveGainTwoSwitches",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0,
+    0
+   ],
+   "condition": "x.v > 0 \u2227 |x.x| > p.band",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-6",
+     "-3"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    0,
+    1
+   ],
+   "condition": "x.v > 0 \u2227 \u00ac(|x.x| > p.band)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-3"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1,
+    0
+   ],
+   "condition": "\u00ac(x.v > 0) \u2227 |x.x| > p.band",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-6",
+     "-4"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1,
+    1
+   ],
+   "condition": "\u00ac(x.v > 0) \u2227 \u00ac(|x.x| > p.band)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-4"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "x.v > 0"
+   ],
+   "equations": [
+    1
+   ]
+  },
+  {
+   "conditions": [
+    "|x.x| > p.band"
+   ],
+   "equations": [
+    1
+   ]
+  }
+ ],
+ "coords": [
+  "x",
+  "v"
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "P": [
+  [
+   "3600646/793881",
+   "152139/199126"
+  ],
+  [
+   "152139/199126",
+   "637877/547482"
+  ]
+ ],
+ "level": "45874123890/439002399067",
+ "alpha": "474329/512540",
+ "gammas": [
+  "358014/925523"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1/2"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "1526/9481"
+  },
+  {
+   "name": "v",
+   "row": [
+    "0",
+    "1"
+   ],
+   "bound": "3007/9469"
+  }
+ ],
+ "bounds": {
+  "x": "1526/9481",
+  "v": "3007/9469"
+ },
+ "theorem": "ValveGainTwoSwitches.SwitchedCert.certified",
+ "tube": "ValveGainTwoSwitches.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "1a2f8c35f506d002036dcd1a8f367f5a7dde10ce355795f98f3c053dcf51f016",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

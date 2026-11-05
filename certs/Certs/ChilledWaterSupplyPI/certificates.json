@@ -1,0 +1,38 @@
+{
+ "model": "ChilledWaterSupplyPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ChilledWaterSupplyPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dTs": "2295/5392",
+    "dTr": "9928/9403",
+    "dQch": "586051/2539"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "768872a3c07790b9b183faf88002d47c79da01da986b12a6f939123a5769b85a",
+   "time": "2026-10-14T14:35:04"
+  }
+ ],
+ "source_hash": "768872a3c07790b9b183faf88002d47c79da01da986b12a6f939123a5769b85a",
+ "kept": {
+  "dTs": {
+   "bound": "2295/5392",
+   "method": "lmi"
+  },
+  "dTr": {
+   "bound": "9928/9403",
+   "method": "lmi"
+  },
+  "dQch": {
+   "bound": "586051/2539",
+   "method": "lmi"
+  }
+ }
+}

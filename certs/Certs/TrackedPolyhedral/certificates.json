@@ -1,0 +1,50 @@
+{
+ "model": "TrackedPolyhedral",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TrackedPolyhedral.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "1123/6173",
+    "ev": "480/1409"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "312b6e1cb5e1b4ee0abeb0e5232ccb1098b9a712efbfbb84660dedcc4ca1f31d",
+   "time": "2026-11-02T11:57:36"
+  },
+  {
+   "method": "polyhedral",
+   "theorem": "TrackedPolyhedral.PolyCert.certified",
+   "file": "PolyCert.lean",
+   "sidecar": "polyhedral.json",
+   "bounds": {
+    "e": "1667917/10000000",
+    "ev": "94113/312500"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "312b6e1cb5e1b4ee0abeb0e5232ccb1098b9a712efbfbb84660dedcc4ca1f31d",
+   "time": "2026-11-02T11:58:27"
+  }
+ ],
+ "source_hash": "312b6e1cb5e1b4ee0abeb0e5232ccb1098b9a712efbfbb84660dedcc4ca1f31d",
+ "kept": {
+  "e": {
+   "bound": "1667917/10000000",
+   "method": "polyhedral"
+  },
+  "ev": {
+   "bound": "94113/312500",
+   "method": "polyhedral"
+  }
+ }
+}

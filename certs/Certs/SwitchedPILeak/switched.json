@@ -1,0 +1,121 @@
+{
+ "model": "SwitchedPILeak",
+ "ns": "SwitchedPILeak",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0
+   ],
+   "condition": "|y.u| > p.ulim",
+   "A": [
+    [
+     "-3",
+     "-1"
+    ],
+    [
+     "0",
+     "-1/2"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1
+   ],
+   "condition": "\u00ac(|y.u| > p.ulim)",
+   "A": [
+    [
+     "-3",
+     "-1"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "|y.u| > p.ulim"
+   ],
+   "equations": [
+    2
+   ]
+  }
+ ],
+ "coords": [
+  "x",
+  "z"
+ ],
+ "B": [
+  [
+   "1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "P": [
+  [
+   "1451682/804551",
+   "98166/311863"
+  ],
+  [
+   "98166/311863",
+   "817229/727600"
+  ]
+ ],
+ "level": "320950919689/6976776123000",
+ "alpha": "282460/879031",
+ "gammas": [
+  "365119/988002"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1/5"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "28/171"
+  },
+  {
+   "name": "z",
+   "row": [
+    "0",
+    "1"
+   ],
+   "bound": "369/1778"
+  }
+ ],
+ "bounds": {
+  "x": "28/171",
+  "z": "369/1778"
+ },
+ "theorem": "SwitchedPILeak.SwitchedCert.certified",
+ "tube": "SwitchedPILeak.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "23e73f329a75ed78110091408b286029a9440cb92c4a73f920a0a7b16ec6edd4",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

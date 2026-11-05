@@ -1,0 +1,162 @@
+{
+ "model": "BuckConverterPI",
+ "ns": "BuckConverterPI",
+ "method": "lti-channel",
+ "states": [
+  "z",
+  "e",
+  "ei"
+ ],
+ "P": [
+  [
+   "5159223641/692975",
+   "152495725/304029",
+   "4350286/27063"
+  ],
+  [
+   "152495725/304029",
+   "83574395/958641",
+   "2193699/173389"
+  ],
+  [
+   "4350286/27063",
+   "2193699/173389",
+   "4112069/906851"
+  ]
+ ],
+ "level": "12519761876048/430164057543",
+ "alpha": "901923/440827",
+ "gammas": [
+  "7100156/476941"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "i_load",
+   "bound": "2"
+  }
+ ],
+ "coords": [
+  "z",
+  "e",
+  "ei"
+ ],
+ "outputs": [
+  {
+   "name": "z",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "695/5299"
+  },
+  {
+   "name": "e",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "4773/6272"
+  },
+  {
+   "name": "ei",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "25398/4711"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "-1",
+   "1"
+  ],
+  [
+   "-100",
+   "-60",
+   "-5"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "-1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "BuckConverterPI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "4d3f42d683a78dd17d49b1cf44cf4f0fc68994a8f9579fa0423834b0462a64b8",
+ "frame": {
+  "coords": [
+   "z",
+   "e",
+   "ei"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "i"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "dv_ref"
+    }
+   ]
+  ],
+  "theorem": "BuckConverterPI.Cert.tube"
+ }
+}

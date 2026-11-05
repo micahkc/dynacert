@@ -1,0 +1,29 @@
+{
+ "model": "RobotArmSwingFunnel",
+ "method": "funnel-sos",
+ "theorem": "RobotArmSwingFunnel.Funnel.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "horizon": "2",
+ "segments": 8,
+ "degree": 3,
+ "bounds": {
+  "e": "25279/1000000"
+ },
+ "segment_bounds": {
+  "e": [
+   "2583/250000",
+   "1749/125000",
+   "17191/1000000",
+   "61/3125",
+   "341/15625",
+   "2367/100000",
+   "24943/1000000",
+   "25279/1000000"
+  ]
+ },
+ "source_hash": "db1361e9e77726e23e193562d7737a155f3d837958971aaceef4f1a792ef884e"
+}

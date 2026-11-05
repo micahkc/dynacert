@@ -1,0 +1,171 @@
+{
+ "model": "QuarterCarSuspension",
+ "ns": "QuarterCarSuspension",
+ "method": "lti-channel",
+ "states": [
+  "susp_defl",
+  "v_body",
+  "tire_defl",
+  "v_wheel"
+ ],
+ "P": [
+  [
+   "458064427/262231",
+   "211702918/796925",
+   "68579199/149387",
+   "3761124/562849"
+  ],
+  [
+   "211702918/796925",
+   "44890050/959773",
+   "2009259/281842",
+   "89139/122456"
+  ],
+  [
+   "68579199/149387",
+   "2009259/281842",
+   "780690731/147051",
+   "10145084/409081"
+  ],
+  [
+   "3761124/562849",
+   "89139/122456",
+   "10145084/409081",
+   "1117861/991048"
+  ]
+ ],
+ "level": "452778207/323884000",
+ "alpha": "10",
+ "gammas": [
+  "150926069/971652"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "w_road",
+   "bound": "3/10"
+  }
+ ],
+ "coords": [
+  "susp_defl",
+  "v_body",
+  "tire_defl",
+  "v_wheel"
+ ],
+ "outputs": [
+  {
+   "name": "susp_defl",
+   "row": [
+    "1",
+    "0",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "816/9871"
+  },
+  {
+   "name": "tire_defl",
+   "row": [
+    "0",
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 2,
+   "bound": "14/767"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0",
+   "-1"
+  ],
+  [
+   "-160/3",
+   "-40/3",
+   "0",
+   "10/3"
+  ],
+  [
+   "0",
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "400",
+   "100",
+   "-4750",
+   "-25"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "0"
+  ],
+  [
+   "-1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "QuarterCarSuspension.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "720c64ffd485ef7ebc8ba0c37242d8216c77221f1c99b4af2ff301c3ca50aab5",
+ "frame": {
+  "coords": [
+   "susp_defl",
+   "v_body",
+   "tire_defl",
+   "v_wheel"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "susp_defl"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v_body"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "tire_defl"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v_wheel"
+    }
+   ]
+  ],
+  "theorem": "QuarterCarSuspension.Cert.tube"
+ }
+}

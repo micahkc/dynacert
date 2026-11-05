@@ -1,0 +1,157 @@
+{
+ "model": "TrainSpeedGrade",
+ "ns": "TrainSpeedGrade",
+ "method": "lti-channel",
+ "states": [
+  "xi",
+  "e_x",
+  "e_v"
+ ],
+ "P": [
+  [
+   "1024888/784133",
+   "2559503/672198",
+   "3941944/363135"
+  ],
+  [
+   "2559503/672198",
+   "60854123/845655",
+   "47030307/846997"
+  ],
+  [
+   "3941944/363135",
+   "47030307/846997",
+   "584960187/902273"
+  ]
+ ],
+ "level": "1981237741033/12031833771",
+ "alpha": "63156/737413",
+ "gammas": [
+  "1744/762039"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "F_grade",
+   "bound": "157/2"
+  }
+ ],
+ "coords": [
+  "xi",
+  "e_x",
+  "e_v"
+ ],
+ "outputs": [
+  {
+   "name": "xi",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "46641/3638"
+  },
+  {
+   "name": "e_x",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "4441/2677"
+  },
+  {
+   "name": "e_v",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "5297/9669"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "-1/50",
+   "-1/5",
+   "-203/200"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "0"
+  ],
+  [
+   "1/400"
+  ]
+ ],
+ "theorem": "TrainSpeedGrade.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "a2069f3c20a964f2a4393e61d5f8f0aa6d3d8a71effa4e90cccb7bc4da68b5b1",
+ "frame": {
+  "coords": [
+   "xi",
+   "e_x",
+   "e_v"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "TrainSpeedGrade.Cert.tube"
+ }
+}

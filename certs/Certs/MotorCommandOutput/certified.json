@@ -1,0 +1,114 @@
+{
+ "model": "MotorCommandOutput",
+ "ns": "MotorCommandOutput",
+ "method": "lti-channel",
+ "states": [
+  "i",
+  "w"
+ ],
+ "P": [
+  [
+   "880435/698451",
+   "199625/883463"
+  ],
+  [
+   "199625/883463",
+   "56705/47414"
+  ]
+ ],
+ "level": "10525714907067185042/6766010540527112925",
+ "alpha": "924923/588917",
+ "gammas": [
+  "6705481/742701",
+  "20507827/393979"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "n",
+   "bound": "1/5"
+  },
+  {
+   "name": "tl",
+   "bound": "1/5"
+  }
+ ],
+ "coords": [
+  "i",
+  "w"
+ ],
+ "outputs": [
+  {
+   "name": "w",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "4419/3808"
+  },
+  {
+   "name": "u",
+   "row": [
+    "0",
+    "-2"
+   ],
+   "state": null,
+   "bound": "4419/1904"
+  }
+ ],
+ "A": [
+  [
+   "-2",
+   "-5"
+  ],
+  [
+   "5",
+   "-1"
+  ]
+ ],
+ "B": [
+  [
+   "2",
+   "0"
+  ],
+  [
+   "0",
+   "-10"
+  ]
+ ],
+ "theorem": "MotorCommandOutput.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "2b8e3a7e806f371096423f087d39c2c5b4ff24d995274a3fd0d1dbc14e8fc1bc",
+ "frame": {
+  "coords": [
+   "i",
+   "w"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "i"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "w"
+    }
+   ]
+  ],
+  "theorem": "MotorCommandOutput.Cert.tube"
+ }
+}

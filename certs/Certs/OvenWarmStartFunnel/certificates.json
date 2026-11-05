@@ -1,0 +1,28 @@
+{
+ "model": "OvenWarmStartFunnel",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "OvenWarmStartFunnel.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "T": "10023/4145"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "4de7791fd2e5ddd95e732991c4891e4237dd7e0d3013905df4bbd70c692d8805",
+   "time": "2026-11-02T11:54:40"
+  }
+ ],
+ "source_hash": "4de7791fd2e5ddd95e732991c4891e4237dd7e0d3013905df4bbd70c692d8805",
+ "kept": {
+  "T": {
+   "bound": "10023/4145",
+   "method": "lmi"
+  }
+ }
+}

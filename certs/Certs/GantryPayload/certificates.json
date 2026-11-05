@@ -1,0 +1,38 @@
+{
+ "model": "GantryPayload",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "GantryPayload.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "x": "45/8743",
+    "v": "242/4209",
+    "xi": "13/9527"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "9882378be58ba6fde08f86481e157e6f16eb1c61bb25b0955f72d5ae5c4b699d",
+   "time": "2026-10-14T14:32:05"
+  }
+ ],
+ "source_hash": "9882378be58ba6fde08f86481e157e6f16eb1c61bb25b0955f72d5ae5c4b699d",
+ "kept": {
+  "x": {
+   "bound": "45/8743",
+   "method": "lmi"
+  },
+  "v": {
+   "bound": "242/4209",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "13/9527",
+   "method": "lmi"
+  }
+ }
+}

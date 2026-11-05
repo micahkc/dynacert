@@ -1,0 +1,53 @@
+{
+ "model": "TwinDriveShaft",
+ "method": "layered-lti",
+ "theorem": "TwinDriveShaft.LayeredCert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "layers": [
+  {
+   "component": "a",
+   "states": [
+    "a.th",
+    "a.w"
+   ],
+   "reads": [
+    "b.th"
+   ],
+   "level": "14999947318177345718339345191/13523310738512311405342080000"
+  },
+  {
+   "component": "b",
+   "states": [
+    "b.th",
+    "b.w"
+   ],
+   "reads": [
+    "a.th"
+   ],
+   "level": "3684377767759886626615129/250742797305658480909598720"
+  }
+ ],
+ "coupling": {
+  "a.th": {
+   "assumed": "37261/62080",
+   "guaranteed": "2271/3959"
+  },
+  "b.th": {
+   "assumed": "7749/156320",
+   "guaranteed": "302/6385"
+  }
+ },
+ "bounds": {
+  "a.th": "2271/3959",
+  "b.th": "302/6385"
+ },
+ "monolithic_bounds": {
+  "a.th": "718/1255",
+  "b.th": "1356/3685"
+ },
+ "source_hash": "8e1980830b808969866bc33422f9ba36c5e27645bfc23bd4798be0a729b06679"
+}

@@ -1,0 +1,33 @@
+{
+ "model": "DockingAllAnnotations",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "DockingAllAnnotations.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "541/4528",
+    "ev": "928/5639"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "483d171703d3f75559d86f630aa09b01ff88fdaa52cc9b9b78eb0f9ce1281562",
+   "time": "2026-11-02T11:55:21"
+  }
+ ],
+ "source_hash": "483d171703d3f75559d86f630aa09b01ff88fdaa52cc9b9b78eb0f9ce1281562",
+ "kept": {
+  "e": {
+   "bound": "541/4528",
+   "method": "lmi"
+  },
+  "ev": {
+   "bound": "928/5639",
+   "method": "lmi"
+  }
+ }
+}

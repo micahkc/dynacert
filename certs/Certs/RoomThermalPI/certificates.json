@@ -1,0 +1,33 @@
+{
+ "model": "RoomThermalPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "RoomThermalPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dTa": "1681/3717",
+    "dQ": "33926/8019"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "fc8e19e85ed0ce9079fb54edff607a60a1d55e965c18b4a10f57c1a8b7bde9dd",
+   "time": "2026-10-14T14:46:40"
+  }
+ ],
+ "source_hash": "fc8e19e85ed0ce9079fb54edff607a60a1d55e965c18b4a10f57c1a8b7bde9dd",
+ "kept": {
+  "dTa": {
+   "bound": "1681/3717",
+   "method": "lmi"
+  },
+  "dQ": {
+   "bound": "33926/8019",
+   "method": "lmi"
+  }
+ }
+}

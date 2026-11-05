@@ -1,0 +1,155 @@
+{
+ "model": "WebTensionControl",
+ "ns": "WebTensionControl",
+ "method": "lti-channel",
+ "states": [
+  "T",
+  "v_f",
+  "xi"
+ ],
+ "P": [
+  [
+   "1277972/829183",
+   "11567426/126343",
+   "7787129/735267"
+  ],
+  [
+   "11567426/126343",
+   "9148960998/431773",
+   "685765563/609355"
+  ],
+  [
+   "7787129/735267",
+   "685765563/609355",
+   "82172467/287238"
+  ]
+ ],
+ "level": "46533880314129781/2842894365750000",
+ "alpha": "10",
+ "gammas": [
+  "162128305502/153865",
+  "5387243/369531"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "v_lead",
+   "bound": "1/100"
+  },
+  {
+   "name": "F_d",
+   "bound": "2"
+  }
+ ],
+ "coords": [
+  "T",
+  "v_f",
+  "xi"
+ ],
+ "outputs": [
+  {
+   "name": "T",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "8381/2072"
+  },
+  {
+   "name": "v_f",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "205/6121"
+  },
+  {
+   "name": "xi",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "672/2335"
+  }
+ ],
+ "A": [
+  [
+   "-2",
+   "5000",
+   "0"
+  ],
+  [
+   "-3/5",
+   "-302/5",
+   "-4"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "-5000",
+   "0"
+  ],
+  [
+   "0",
+   "1/5"
+  ],
+  [
+   "0",
+   "0"
+  ]
+ ],
+ "theorem": "WebTensionControl.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "c8c5c0c5774ebf92298525d9ff23bc194f08600e887e4d45eecda7bcbe30dc6d",
+ "frame": {
+  "coords": [
+   "T",
+   "v_f",
+   "xi"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "T"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v_f"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "WebTensionControl.Cert.tube"
+ }
+}

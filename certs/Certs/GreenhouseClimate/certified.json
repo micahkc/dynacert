@@ -1,0 +1,155 @@
+{
+ "model": "GreenhouseClimate",
+ "ns": "GreenhouseClimate",
+ "method": "lti-polytopic",
+ "states": [
+  "Ta",
+  "Ts",
+  "xi"
+ ],
+ "P": [
+  [
+   "882217/881870",
+   "-14001/895426",
+   "108893/745291"
+  ],
+  [
+   "-14001/895426",
+   "15774704/676597",
+   "-3922147/761842"
+  ],
+  [
+   "108893/745291",
+   "-3922147/761842",
+   "30806811/557338"
+  ]
+ ],
+ "level": "4933977436870361480/17275690863228987",
+ "alpha": "272045/966302",
+ "gammas": [
+  "1053916/764631",
+  "5300/415253"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "To",
+   "bound": "5"
+  },
+  {
+   "name": "Qsun",
+   "bound": "60"
+  }
+ ],
+ "coords": [
+  "Ta",
+  "Ts",
+  "xi"
+ ],
+ "outputs": [
+  {
+   "name": "Ta",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "85538/5061"
+  },
+  {
+   "name": "Ts",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "30251/8553"
+  },
+  {
+   "name": "xi",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "20535/8938"
+  }
+ ],
+ "A": [
+  [
+   "-5400/133",
+   "500/133",
+   "-8000/133"
+  ],
+  [
+   "1/4",
+   "-1/4",
+   "0"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "900/133",
+   "100/133"
+  ],
+  [
+   "0",
+   "0"
+  ],
+  [
+   "0",
+   "0"
+  ]
+ ],
+ "theorem": "GreenhouseClimate.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "9864e8be7d1d1cb7d2ff61cb91ebc8b200f916c53c8f1d94e17d11d6a31900ee",
+ "frame": {
+  "coords": [
+   "Ta",
+   "Ts",
+   "xi"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "Ta"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "Ts"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "GreenhouseClimate.Cert.tube"
+ }
+}

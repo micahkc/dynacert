@@ -1,0 +1,162 @@
+{
+ "model": "VentilatorPressure",
+ "ns": "VentilatorPressure",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "el",
+  "ei"
+ ],
+ "P": [
+  [
+   "751276/744865",
+   "-257362/582275",
+   "1316025/879122"
+  ],
+  [
+   "-257362/582275",
+   "41693703/542771",
+   "-40466240/497749"
+  ],
+  [
+   "1316025/879122",
+   "-40466240/497749",
+   "166526318/636245"
+  ]
+ ],
+ "level": "191195392543849/59427766598200",
+ "alpha": "901923/440827",
+ "gammas": [
+  "2602318722/988351"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "q_leak",
+   "bound": "1/20"
+  }
+ ],
+ "coords": [
+  "e",
+  "el",
+  "ei"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "3776/2105"
+  },
+  {
+   "name": "el",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "1682/6733"
+  },
+  {
+   "name": "ei",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "537/3956"
+  }
+ ],
+ "A": [
+  [
+   "-50",
+   "25",
+   "-250"
+  ],
+  [
+   "1",
+   "-1",
+   "0"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "-500"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "VentilatorPressure.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "f999f7fc8fc1e15ec0083acdf680e902ee7aa56afd8d5f2f0f5a0a9590bccde5",
+ "frame": {
+  "coords": [
+   "e",
+   "el",
+   "ei"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "Paw"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "P_ref"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "dP_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "Pl"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "P_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "VentilatorPressure.Cert.tube"
+ }
+}

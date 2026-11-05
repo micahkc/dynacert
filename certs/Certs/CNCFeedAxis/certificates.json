@@ -1,0 +1,38 @@
+{
+ "model": "CNCFeedAxis",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "CNCFeedAxis.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "1946/6163",
+    "ev": "217919/5263",
+    "ei": "48/8305"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "285e9263eb6f336c6c283cc8dc67ac62c535d943119b806784ff52f1c6141121",
+   "time": "2026-10-14T14:04:12"
+  }
+ ],
+ "source_hash": "285e9263eb6f336c6c283cc8dc67ac62c535d943119b806784ff52f1c6141121",
+ "kept": {
+  "e": {
+   "bound": "1946/6163",
+   "method": "lmi"
+  },
+  "ev": {
+   "bound": "217919/5263",
+   "method": "lmi"
+  },
+  "ei": {
+   "bound": "48/8305",
+   "method": "lmi"
+  }
+ }
+}

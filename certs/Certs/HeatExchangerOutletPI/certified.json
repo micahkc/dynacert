@@ -1,0 +1,137 @@
+{
+ "model": "HeatExchangerOutletPI",
+ "ns": "HeatExchangerOutletPI",
+ "method": "lti-polytopic",
+ "states": [
+  "dT",
+  "dTh",
+  "z"
+ ],
+ "P": [
+  [
+   "662843067/527650",
+   "873124391/983949",
+   "47895107/930125"
+  ],
+  [
+   "873124391/983949",
+   "1272588749/980333",
+   "53371665/829556"
+  ],
+  [
+   "47895107/930125",
+   "53371665/829556",
+   "478603/111889"
+  ]
+ ],
+ "level": "9895107500/970627",
+ "alpha": "1/50",
+ "gammas": [
+  "7916086/970627"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dTin",
+   "bound": "5"
+  }
+ ],
+ "coords": [
+  "dT",
+  "dTh",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dT",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "35663/8635"
+  },
+  {
+   "name": "dTh",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "41238/7195"
+  }
+ ],
+ "A": [
+  [
+   "-1/8",
+   "3/40",
+   "0"
+  ],
+  [
+   "-3/10",
+   "-1/5",
+   "-1/100"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "1/20"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "HeatExchangerOutletPI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "edfdf71025cea3d90281109e5a5546f6f195d7bacedbbb88d30773083f51a443",
+ "frame": {
+  "coords": [
+   "dT",
+   "dTh",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dT"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dTh"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "HeatExchangerOutletPI.Cert.tube"
+ }
+}

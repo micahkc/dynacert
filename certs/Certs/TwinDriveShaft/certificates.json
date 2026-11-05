@@ -1,0 +1,50 @@
+{
+ "model": "TwinDriveShaft",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TwinDriveShaft.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "a.th": "718/1255",
+    "b.th": "1356/3685"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "8e1980830b808969866bc33422f9ba36c5e27645bfc23bd4798be0a729b06679",
+   "time": "2026-11-02T11:59:41"
+  },
+  {
+   "method": "layered",
+   "theorem": "TwinDriveShaft.LayeredCert.certified",
+   "file": "LayeredCert.lean",
+   "sidecar": "layered.json",
+   "bounds": {
+    "a.th": "2271/3959",
+    "b.th": "302/6385"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "8e1980830b808969866bc33422f9ba36c5e27645bfc23bd4798be0a729b06679",
+   "time": "2026-11-02T12:00:01"
+  }
+ ],
+ "source_hash": "8e1980830b808969866bc33422f9ba36c5e27645bfc23bd4798be0a729b06679",
+ "kept": {
+  "a.th": {
+   "bound": "718/1255",
+   "method": "lmi"
+  },
+  "b.th": {
+   "bound": "302/6385",
+   "method": "layered"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "model": "LaneKeepingLateral",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "LaneKeepingLateral.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e_y": "2461/9597",
+    "e_psi": "193/5251"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "6c712bfc91b83de91413afd17c2aa47d1e4cf68e1e3442492e491398392c536b",
+   "time": "2026-10-14T14:09:43"
+  }
+ ],
+ "source_hash": "6c712bfc91b83de91413afd17c2aa47d1e4cf68e1e3442492e491398392c536b",
+ "kept": {
+  "e_y": {
+   "bound": "2461/9597",
+   "method": "lmi"
+  },
+  "e_psi": {
+   "bound": "193/5251",
+   "method": "lmi"
+  }
+ }
+}

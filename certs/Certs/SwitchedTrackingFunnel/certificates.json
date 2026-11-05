@@ -1,0 +1,38 @@
+{
+ "model": "SwitchedTrackingFunnel",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "SwitchedTrackingFunnel.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "xi": "2536/9997",
+    "e": "543/4456",
+    "ev": "919/5078"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "f737899d2fdca0e7ed74eb18fb7f10247af3ced4780a81b9d6d120110d6e8afd",
+   "time": "2026-11-02T12:01:30"
+  }
+ ],
+ "source_hash": "f737899d2fdca0e7ed74eb18fb7f10247af3ced4780a81b9d6d120110d6e8afd",
+ "kept": {
+  "xi": {
+   "bound": "2536/9997",
+   "method": "switched"
+  },
+  "e": {
+   "bound": "543/4456",
+   "method": "switched"
+  },
+  "ev": {
+   "bound": "919/5078",
+   "method": "switched"
+  }
+ }
+}

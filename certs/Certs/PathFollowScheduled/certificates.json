@@ -1,0 +1,33 @@
+{
+ "model": "PathFollowScheduled",
+ "certificates": [
+  {
+   "method": "sector",
+   "theorem": "PathFollowScheduled.SectorCert.certified",
+   "file": "SectorCert.lean",
+   "sidecar": "sector.json",
+   "bounds": {
+    "y": "50357/1000000",
+    "psi": "15281/500000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "347276fc07a5e8d972ac0168a95ba58b508a71a4643e4e9a58a752b3ebd6e98a",
+   "time": "2026-11-02T12:02:55"
+  }
+ ],
+ "source_hash": "347276fc07a5e8d972ac0168a95ba58b508a71a4643e4e9a58a752b3ebd6e98a",
+ "kept": {
+  "y": {
+   "bound": "50357/1000000",
+   "method": "sector"
+  },
+  "psi": {
+   "bound": "15281/500000",
+   "method": "sector"
+  }
+ }
+}

@@ -1,0 +1,117 @@
+{
+ "model": "TrackedPolyhedral",
+ "ns": "TrackedPolyhedral",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "3999495/939323",
+   "565876/677373"
+  ],
+  [
+   "565876/677373",
+   "240743/198270"
+  ]
+ ],
+ "level": "13802602316/113258094235",
+ "alpha": "157105/114173",
+ "gammas": [
+  "120892/720907"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "1123/6173"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "480/1409"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-6",
+   "-5"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "TrackedPolyhedral.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "312b6e1cb5e1b4ee0abeb0e5232ccb1098b9a712efbfbb84660dedcc4ca1f31d",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "TrackedPolyhedral.Cert.tube"
+ }
+}

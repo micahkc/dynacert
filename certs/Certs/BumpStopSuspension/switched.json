@@ -1,0 +1,200 @@
+{
+ "model": "BumpStopSuspension",
+ "ns": "BumpStopSuspension",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0,
+    0
+   ],
+   "condition": "x.v > p.vKnee \u2227 |x.x| > p.xFree",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-8",
+     "-2"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    0,
+    1
+   ],
+   "condition": "x.v > p.vKnee \u2227 \u00ac(|x.x| > p.xFree)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-2"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1,
+    0
+   ],
+   "condition": "\u00ac(x.v > p.vKnee) \u2227 x.v < -p.vKnee \u2227 |x.x| > p.xFree",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-8",
+     "-6/5"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1,
+    1
+   ],
+   "condition": "\u00ac(x.v > p.vKnee) \u2227 x.v < -p.vKnee \u2227 \u00ac(|x.x| > p.xFree)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-6/5"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    2,
+    0
+   ],
+   "condition": "\u00ac(x.v > p.vKnee) \u2227 \u00ac(x.v < -p.vKnee) \u2227 |x.x| > p.xFree",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-8",
+     "-3"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    2,
+    1
+   ],
+   "condition": "\u00ac(x.v > p.vKnee) \u2227 \u00ac(x.v < -p.vKnee) \u2227 \u00ac(|x.x| > p.xFree)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-3"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "x.v > p.vKnee",
+    "x.v < -p.vKnee"
+   ],
+   "equations": [
+    1
+   ]
+  },
+  {
+   "conditions": [
+    "|x.x| > p.xFree"
+   ],
+   "equations": [
+    1
+   ]
+  }
+ ],
+ "coords": [
+  "x",
+  "v"
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "P": [
+  [
+   "828821/133718",
+   "342357/661016"
+  ],
+  [
+   "342357/661016",
+   "364840/346937"
+  ]
+ ],
+ "level": "265380573773/64412172682",
+ "alpha": "91963/554351",
+ "gammas": [
+  "957446/350207"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "f",
+   "bound": "1/2"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "8217/9868"
+  },
+  {
+   "name": "v",
+   "row": [
+    "0",
+    "1"
+   ],
+   "bound": "18912/9355"
+  }
+ ],
+ "bounds": {
+  "x": "8217/9868",
+  "v": "18912/9355"
+ },
+ "theorem": "BumpStopSuspension.SwitchedCert.certified",
+ "tube": "BumpStopSuspension.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "cb554569b104ef2de64c1435ff114fc5edb21b9b2727437c0bc964a6efb056e5",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

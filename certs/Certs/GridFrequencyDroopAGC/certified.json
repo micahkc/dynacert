@@ -1,0 +1,147 @@
+{
+ "model": "GridFrequencyDroopAGC",
+ "ns": "GridFrequencyDroopAGC",
+ "method": "lti-channel",
+ "states": [
+  "df",
+  "dPm",
+  "dPc"
+ ],
+ "P": [
+  [
+   "406419807/729115",
+   "10237267/418161",
+   "-24845345/740504"
+  ],
+  [
+   "10237267/418161",
+   "124703/56883",
+   "-1156756/661709"
+  ],
+  [
+   "-24845345/740504",
+   "-1156756/661709",
+   "2969987/810278"
+  ]
+ ],
+ "level": "833301812037/21683889351800",
+ "alpha": "491803/790158",
+ "gammas": [
+  "2109203/881812"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dPL",
+   "bound": "1/10"
+  }
+ ],
+ "coords": [
+  "df",
+  "dPm",
+  "dPc"
+ ],
+ "outputs": [
+  {
+   "name": "df",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "131/9387"
+  },
+  {
+   "name": "dPm",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "856/4519"
+  },
+  {
+   "name": "dPc",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "223/1429"
+  }
+ ],
+ "A": [
+  [
+   "-1/10",
+   "1/10",
+   "0"
+  ],
+  [
+   "-40",
+   "-2",
+   "2"
+  ],
+  [
+   "-63/10",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "-1/10"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "GridFrequencyDroopAGC.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "3ce94cfe54857c88081aa14eb80d910952450303eac438dd4c8bc1de9d51ebe8",
+ "frame": {
+  "coords": [
+   "df",
+   "dPm",
+   "dPc"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "df"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dPm"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dPc"
+    }
+   ]
+  ],
+  "theorem": "GridFrequencyDroopAGC.Cert.tube"
+ }
+}

@@ -1,0 +1,140 @@
+{
+ "model": "GainScheduledPI",
+ "ns": "GainScheduledPI",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0
+   ],
+   "condition": "|x.z| > p.zLoad",
+   "A": [
+    [
+     "-42/5",
+     "-4"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1
+   ],
+   "condition": "\u00ac(|x.z| > p.zLoad)",
+   "A": [
+    [
+     "-17/5",
+     "-4"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "|x.z| > p.zLoad"
+   ],
+   "equations": [
+    0
+   ]
+  }
+ ],
+ "coords": [
+  "w",
+  "z"
+ ],
+ "B": [
+  [
+   "2"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "P": [
+  [
+   "809726/726943",
+   "49311/99481"
+  ],
+  [
+   "49311/99481",
+   "1354115/428846"
+  ]
+ ],
+ "level": "85157880173/782906374800",
+ "alpha": "324346/456569",
+ "gammas": [
+  "186517/217242"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "tau",
+   "bound": "3/10"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "w",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "2617/8076"
+  },
+  {
+   "name": "z",
+   "row": [
+    "0",
+    "1"
+   ],
+   "bound": "1185/6157"
+  },
+  {
+   "name": "u",
+   "row": [
+    "-4",
+    "-2"
+   ],
+   "bound": "11984/9581",
+   "rows_by_mode": [
+    [
+     "-4",
+     "-2"
+    ],
+    [
+     "-3/2",
+     "-2"
+    ]
+   ]
+  }
+ ],
+ "bounds": {
+  "w": "2617/8076",
+  "z": "1185/6157",
+  "u": "11984/9581"
+ },
+ "theorem": "GainScheduledPI.SwitchedCert.certified",
+ "tube": "GainScheduledPI.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "6476fb0613fa879f6980dc926a367aeae45e89504b1aff2fa0fcd2a10a07fee8",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

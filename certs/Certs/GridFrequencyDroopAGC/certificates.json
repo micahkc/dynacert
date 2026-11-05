@@ -1,0 +1,38 @@
+{
+ "model": "GridFrequencyDroopAGC",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "GridFrequencyDroopAGC.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "df": "131/9387",
+    "dPm": "856/4519",
+    "dPc": "223/1429"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "3ce94cfe54857c88081aa14eb80d910952450303eac438dd4c8bc1de9d51ebe8",
+   "time": "2026-10-14T14:02:13"
+  }
+ ],
+ "source_hash": "3ce94cfe54857c88081aa14eb80d910952450303eac438dd4c8bc1de9d51ebe8",
+ "kept": {
+  "df": {
+   "bound": "131/9387",
+   "method": "lmi"
+  },
+  "dPm": {
+   "bound": "856/4519",
+   "method": "lmi"
+  },
+  "dPc": {
+   "bound": "223/1429",
+   "method": "lmi"
+  }
+ }
+}

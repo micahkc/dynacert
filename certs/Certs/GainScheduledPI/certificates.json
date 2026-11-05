@@ -1,0 +1,38 @@
+{
+ "model": "GainScheduledPI",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "GainScheduledPI.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "w": "2617/8076",
+    "z": "1185/6157",
+    "u": "11984/9581"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "6476fb0613fa879f6980dc926a367aeae45e89504b1aff2fa0fcd2a10a07fee8",
+   "time": "2026-10-16T17:48:11"
+  }
+ ],
+ "source_hash": "6476fb0613fa879f6980dc926a367aeae45e89504b1aff2fa0fcd2a10a07fee8",
+ "kept": {
+  "w": {
+   "bound": "2617/8076",
+   "method": "switched"
+  },
+  "z": {
+   "bound": "1185/6157",
+   "method": "switched"
+  },
+  "u": {
+   "bound": "11984/9581",
+   "method": "switched"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "model": "QuarterCarSuspension",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "QuarterCarSuspension.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "susp_defl": "816/9871",
+    "tire_defl": "14/767"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "720c64ffd485ef7ebc8ba0c37242d8216c77221f1c99b4af2ff301c3ca50aab5",
+   "time": "2026-10-14T14:07:05"
+  }
+ ],
+ "source_hash": "720c64ffd485ef7ebc8ba0c37242d8216c77221f1c99b4af2ff301c3ca50aab5",
+ "kept": {
+  "susp_defl": {
+   "bound": "816/9871",
+   "method": "lmi"
+  },
+  "tire_defl": {
+   "bound": "14/767",
+   "method": "lmi"
+  }
+ }
+}

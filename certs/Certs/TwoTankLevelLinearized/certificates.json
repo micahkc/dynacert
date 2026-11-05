@@ -1,0 +1,38 @@
+{
+ "model": "TwoTankLevelLinearized",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TwoTankLevelLinearized.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dh1": "3478/9089",
+    "dh2": "1522/7381",
+    "dqp": "230/1129"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "da9afbf351bd7964c32eca3035fd3c15a2664ec9cac229d7cda0d734722c5b96",
+   "time": "2026-10-14T14:37:06"
+  }
+ ],
+ "source_hash": "da9afbf351bd7964c32eca3035fd3c15a2664ec9cac229d7cda0d734722c5b96",
+ "kept": {
+  "dh1": {
+   "bound": "3478/9089",
+   "method": "lmi"
+  },
+  "dh2": {
+   "bound": "1522/7381",
+   "method": "lmi"
+  },
+  "dqp": {
+   "bound": "230/1129",
+   "method": "lmi"
+  }
+ }
+}

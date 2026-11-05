@@ -1,0 +1,38 @@
+{
+ "model": "WebTensionControl",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "WebTensionControl.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "T": "8381/2072",
+    "v_f": "205/6121",
+    "xi": "672/2335"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "c8c5c0c5774ebf92298525d9ff23bc194f08600e887e4d45eecda7bcbe30dc6d",
+   "time": "2026-10-14T14:06:23"
+  }
+ ],
+ "source_hash": "c8c5c0c5774ebf92298525d9ff23bc194f08600e887e4d45eecda7bcbe30dc6d",
+ "kept": {
+  "T": {
+   "bound": "8381/2072",
+   "method": "lmi"
+  },
+  "v_f": {
+   "bound": "205/6121",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "672/2335",
+   "method": "lmi"
+  }
+ }
+}

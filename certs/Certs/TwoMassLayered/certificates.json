@@ -1,0 +1,50 @@
+{
+ "model": "TwoMassLayered",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TwoMassLayered.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "a.x": "4147/3116",
+    "b.x": "1255/1242"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "58f18a00419b6d3081559770964aa5a9c62e03c52fcac9a742f5c79d1d88308f",
+   "time": "2026-10-14T14:03:07"
+  },
+  {
+   "method": "layered",
+   "theorem": "TwoMassLayered.LayeredCert.certified",
+   "file": "LayeredCert.lean",
+   "sidecar": "layered.json",
+   "bounds": {
+    "a.x": "8315/6113",
+    "b.x": "5323/9695"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "58f18a00419b6d3081559770964aa5a9c62e03c52fcac9a742f5c79d1d88308f",
+   "time": "2026-10-14T14:03:29"
+  }
+ ],
+ "source_hash": "58f18a00419b6d3081559770964aa5a9c62e03c52fcac9a742f5c79d1d88308f",
+ "kept": {
+  "a.x": {
+   "bound": "4147/3116",
+   "method": "lmi"
+  },
+  "b.x": {
+   "bound": "5323/9695",
+   "method": "layered"
+  }
+ }
+}

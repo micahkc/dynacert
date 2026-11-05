@@ -1,0 +1,48 @@
+{
+ "model": "WaferStageScan",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "WaferStageScan.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "q": "53174/9479",
+    "qd": "1183531/6875",
+    "e": "2741/8131",
+    "ev": "462875/2689",
+    "ei": "4581/7670"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "f6b208bf6aef27d728d5a3a4f0dd60043470ee253381583c1cfd5ae75e1b2f2b",
+   "time": "2026-10-14T14:11:15"
+  }
+ ],
+ "source_hash": "f6b208bf6aef27d728d5a3a4f0dd60043470ee253381583c1cfd5ae75e1b2f2b",
+ "kept": {
+  "q": {
+   "bound": "53174/9479",
+   "method": "lmi"
+  },
+  "qd": {
+   "bound": "1183531/6875",
+   "method": "lmi"
+  },
+  "e": {
+   "bound": "2741/8131",
+   "method": "lmi"
+  },
+  "ev": {
+   "bound": "462875/2689",
+   "method": "lmi"
+  },
+  "ei": {
+   "bound": "4581/7670",
+   "method": "lmi"
+  }
+ }
+}

@@ -1,0 +1,157 @@
+{
+ "model": "QuadcopterAltitude",
+ "ns": "QuadcopterAltitude",
+ "method": "lti-channel",
+ "states": [
+  "xi",
+  "e_z",
+  "e_w"
+ ],
+ "P": [
+  [
+   "1611367/899837",
+   "1742749/947580",
+   "300060/945637"
+  ],
+  [
+   "1742749/947580",
+   "5423055/840874",
+   "508321/818394"
+  ],
+  [
+   "300060/945637",
+   "508321/818394",
+   "56451/49562"
+  ]
+ ],
+ "level": "25618606384/55809790343",
+ "alpha": "434429/796648",
+ "gammas": [
+  "16079/256934"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "F_d",
+   "bound": "2"
+  }
+ ],
+ "coords": [
+  "xi",
+  "e_z",
+  "e_w"
+ ],
+ "outputs": [
+  {
+   "name": "xi",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "2992/4933"
+  },
+  {
+   "name": "e_z",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "768/2399"
+  },
+  {
+   "name": "e_w",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "6003/9137"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "0",
+   "1"
+  ],
+  [
+   "-8/3",
+   "-8",
+   "-73/15"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "0"
+  ],
+  [
+   "2/3"
+  ]
+ ],
+ "theorem": "QuadcopterAltitude.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "433916dffc1b617335ed4e1328bfd2cae58589aeb96b9993577fd30e5ce546cc",
+ "frame": {
+  "coords": [
+   "xi",
+   "e_z",
+   "e_w"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "z_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "w"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "w_ref"
+    }
+   ]
+  ],
+  "theorem": "QuadcopterAltitude.Cert.tube"
+ }
+}

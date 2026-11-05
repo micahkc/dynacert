@@ -1,0 +1,33 @@
+{
+ "model": "TwinPendulumHold",
+ "certificates": [
+  {
+   "method": "sector",
+   "theorem": "TwinPendulumHold.SectorCert.certified",
+   "file": "SectorCert.lean",
+   "sidecar": "sector.json",
+   "bounds": {
+    "th1": "70403/1000000",
+    "th2": "39379/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "2e39fffc8f4bb8f848bd563d09ff2e1c5cbebe0ae29b32a7ff9296b7ef1af9c6",
+   "time": "2026-11-02T12:09:55"
+  }
+ ],
+ "source_hash": "2e39fffc8f4bb8f848bd563d09ff2e1c5cbebe0ae29b32a7ff9296b7ef1af9c6",
+ "kept": {
+  "th1": {
+   "bound": "70403/1000000",
+   "method": "sector"
+  },
+  "th2": {
+   "bound": "39379/1000000",
+   "method": "sector"
+  }
+ }
+}

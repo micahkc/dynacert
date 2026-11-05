@@ -1,0 +1,33 @@
+{
+ "model": "BatteryPackThermalFan",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "BatteryPackThermalFan.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dTc": "13666/6153",
+    "dfan": "435443/8598"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "325d4470cf613809d82b5658046709fb77a4ca7da333db805dc2a9c1635569d0",
+   "time": "2026-10-14T14:09:03"
+  }
+ ],
+ "source_hash": "325d4470cf613809d82b5658046709fb77a4ca7da333db805dc2a9c1635569d0",
+ "kept": {
+  "dTc": {
+   "bound": "13666/6153",
+   "method": "lmi"
+  },
+  "dfan": {
+   "bound": "435443/8598",
+   "method": "lmi"
+  }
+ }
+}

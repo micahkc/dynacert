@@ -1,0 +1,193 @@
+{
+ "model": "AircraftPitchShortPeriod",
+ "ns": "AircraftPitchShortPeriod",
+ "method": "lti-channel",
+ "states": [
+  "alpha",
+  "q",
+  "theta",
+  "de"
+ ],
+ "P": [
+  [
+   "998041/473811",
+   "427981/947884",
+   "2754753/997490",
+   "-1000534/984317"
+  ],
+  [
+   "427981/947884",
+   "1799808/272345",
+   "20813635/982424",
+   "-9167090/994831"
+  ],
+  [
+   "2754753/997490",
+   "20813635/982424",
+   "84598113/891992",
+   "-33741445/930309"
+  ],
+  [
+   "-1000534/984317",
+   "-9167090/994831",
+   "-33741445/930309",
+   "7845127/480679"
+  ]
+ ],
+ "level": "757242609603/324791104265000",
+ "alpha": "522689/494842",
+ "gammas": [
+  "1020181/372831"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "alpha_g",
+   "bound": "3/100"
+  }
+ ],
+ "coords": [
+  "alpha",
+  "q",
+  "theta",
+  "de"
+ ],
+ "outputs": [
+  {
+   "name": "alpha",
+   "row": [
+    "1",
+    "0",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "335/9834"
+  },
+  {
+   "name": "q",
+   "row": [
+    "0",
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 1,
+   "bound": "194/4685"
+  },
+  {
+   "name": "theta",
+   "row": [
+    "0",
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 2,
+   "bound": "122/9361"
+  },
+  {
+   "name": "de",
+   "row": [
+    "0",
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 3,
+   "bound": "143/3961"
+  }
+ ],
+ "A": [
+  [
+   "-1",
+   "1",
+   "0",
+   "-1/10"
+  ],
+  [
+   "-4",
+   "-3/2",
+   "0",
+   "-6"
+  ],
+  [
+   "0",
+   "1",
+   "0",
+   "0"
+  ],
+  [
+   "0",
+   "16",
+   "40",
+   "-20"
+  ]
+ ],
+ "B": [
+  [
+   "-1"
+  ],
+  [
+   "-4"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "AircraftPitchShortPeriod.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "4803f5d65516f35388ac1eec06c08484ad405c452ca5d15882e9ce2e2e610de0",
+ "frame": {
+  "coords": [
+   "alpha",
+   "q",
+   "theta",
+   "de"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "alpha"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "q"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "theta"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "de"
+    }
+   ]
+  ],
+  "theorem": "AircraftPitchShortPeriod.Cert.tube"
+ }
+}

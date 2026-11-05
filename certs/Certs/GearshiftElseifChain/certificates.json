@@ -1,0 +1,33 @@
+{
+ "model": "GearshiftElseifChain",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "GearshiftElseifChain.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "w": "2927/6474",
+    "u": "7372/2053"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "bc99b281731db3a8d2f73e3309c46d4c15a05126a7582c5dc8b9fcf37ce767aa",
+   "time": "2026-11-02T12:00:56"
+  }
+ ],
+ "source_hash": "bc99b281731db3a8d2f73e3309c46d4c15a05126a7582c5dc8b9fcf37ce767aa",
+ "kept": {
+  "w": {
+   "bound": "2927/6474",
+   "method": "switched"
+  },
+  "u": {
+   "bound": "7372/2053",
+   "method": "switched"
+  }
+ }
+}

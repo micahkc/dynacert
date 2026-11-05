@@ -1,0 +1,48 @@
+{
+ "model": "AnesthesiaDepthPKPD",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "AnesthesiaDepthPKPD.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "A1": "108788/7605",
+    "A2": "38176/8859",
+    "A3": "76717/6229",
+    "Ce": "2491/8279",
+    "xi": "122/7283"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "9f97e04429e014481cf8d859a45eaad3a1e062b5b33801701cb97991b09037cf",
+   "time": "2026-10-14T14:08:39"
+  }
+ ],
+ "source_hash": "9f97e04429e014481cf8d859a45eaad3a1e062b5b33801701cb97991b09037cf",
+ "kept": {
+  "A1": {
+   "bound": "108788/7605",
+   "method": "lmi"
+  },
+  "A2": {
+   "bound": "38176/8859",
+   "method": "lmi"
+  },
+  "A3": {
+   "bound": "76717/6229",
+   "method": "lmi"
+  },
+  "Ce": {
+   "bound": "2491/8279",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "122/7283",
+   "method": "lmi"
+  }
+ }
+}

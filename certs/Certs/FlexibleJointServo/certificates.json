@@ -1,0 +1,43 @@
+{
+ "model": "FlexibleJointServo",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "FlexibleJointServo.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e_l": "217/3691",
+    "ev_l": "2922/6293",
+    "e_s": "13060/2711",
+    "ev_s": "233610/2251"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "dd0216b4acb63e563d1ad67e9b061631c84a877ae01d5c50d1b291a72f2fcd95",
+   "time": "2026-10-14T14:31:38"
+  }
+ ],
+ "source_hash": "dd0216b4acb63e563d1ad67e9b061631c84a877ae01d5c50d1b291a72f2fcd95",
+ "kept": {
+  "e_l": {
+   "bound": "217/3691",
+   "method": "lmi"
+  },
+  "ev_l": {
+   "bound": "2922/6293",
+   "method": "lmi"
+  },
+  "e_s": {
+   "bound": "13060/2711",
+   "method": "lmi"
+  },
+  "ev_s": {
+   "bound": "233610/2251",
+   "method": "lmi"
+  }
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "model": "IrrigationSoilMoisture",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "IrrigationSoilMoisture.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "th1": "8627/7135",
+    "th2": "9740/4551",
+    "w": "25273/5526",
+    "xi": "370/193"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "f12d9e2f5f084ff553051cd0f4a3c7c95ee19d6aa586ff4eb88b8486b0af81d6",
+   "time": "2026-10-14T14:12:57"
+  }
+ ],
+ "source_hash": "f12d9e2f5f084ff553051cd0f4a3c7c95ee19d6aa586ff4eb88b8486b0af81d6",
+ "kept": {
+  "th1": {
+   "bound": "8627/7135",
+   "method": "lmi"
+  },
+  "th2": {
+   "bound": "9740/4551",
+   "method": "lmi"
+  },
+  "w": {
+   "bound": "25273/5526",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "370/193",
+   "method": "lmi"
+  }
+ }
+}

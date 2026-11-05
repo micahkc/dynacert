@@ -1,0 +1,33 @@
+{
+ "model": "ClosedLoopInitial",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ClosedLoopInitial.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "11649/9436",
+    "ev": "12112/5809"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "c67454d4c8be41da7d8cb86fa7d51dea4d4f8df942da79255fbe7b356b52b498",
+   "time": "2026-10-14T14:09:48"
+  }
+ ],
+ "source_hash": "c67454d4c8be41da7d8cb86fa7d51dea4d4f8df942da79255fbe7b356b52b498",
+ "kept": {
+  "e": {
+   "bound": "11649/9436",
+   "method": "lmi"
+  },
+  "ev": {
+   "bound": "12112/5809",
+   "method": "lmi"
+  }
+ }
+}

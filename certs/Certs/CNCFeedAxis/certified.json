@@ -1,0 +1,157 @@
+{
+ "model": "CNCFeedAxis",
+ "ns": "CNCFeedAxis",
+ "method": "lti-channel",
+ "states": [
+  "e",
+  "ev",
+  "ei"
+ ],
+ "P": [
+  [
+   "71402270119/952736",
+   "62192708/894911",
+   "2940571757103/865547"
+  ],
+  [
+   "62192708/894911",
+   "17229/14485",
+   "302151317/651167"
+  ],
+  [
+   "2940571757103/865547",
+   "302151317/651167",
+   "174116740540279/822287"
+  ]
+ ],
+ "level": "1074750000/626999",
+ "alpha": "10",
+ "gammas": [
+  "42990/626999"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "F_cut",
+   "bound": "500"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev",
+  "ei"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "1946/6163"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "217919/5263"
+  },
+  {
+   "name": "ei",
+   "row": [
+    "0",
+    "0",
+    "1"
+   ],
+   "state": 2,
+   "bound": "48/8305"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "-67500",
+   "-454",
+   "-3375000"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "5"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "CNCFeedAxis.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "285e9263eb6f336c6c283cc8dc67ac62c535d943119b806784ff52f1c6141121",
+ "frame": {
+  "coords": [
+   "e",
+   "ev",
+   "ei"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "CNCFeedAxis.Cert.tube"
+ }
+}

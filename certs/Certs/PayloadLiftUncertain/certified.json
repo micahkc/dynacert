@@ -1,0 +1,107 @@
+{
+ "model": "PayloadLiftUncertain",
+ "ns": "PayloadLiftUncertain",
+ "method": "lti-polytopic",
+ "states": [
+  "z",
+  "w"
+ ],
+ "P": [
+  [
+   "2065052/188953",
+   "819401/547546"
+  ],
+  [
+   "819401/547546",
+   "425799/347434"
+  ]
+ ],
+ "level": "7525405845/164829016891",
+ "alpha": "2064259/883971",
+ "gammas": [
+  "93645/878339"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1"
+  }
+ ],
+ "coords": [
+  "z",
+  "w"
+ ],
+ "outputs": [
+  {
+   "name": "z",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "399/5633"
+  },
+  {
+   "name": "w",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "1487/7030"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-16",
+   "-17/2"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "PayloadLiftUncertain.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "4d8779653397e00a422d042751b2f77ef8178dc6e248a218772d8c266d05195f",
+ "frame": {
+  "coords": [
+   "z",
+   "w"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "w"
+    }
+   ]
+  ],
+  "theorem": "PayloadLiftUncertain.Cert.tube"
+ }
+}

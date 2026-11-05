@@ -1,0 +1,142 @@
+{
+ "model": "DockingAllAnnotations",
+ "ns": "DockingAllAnnotations",
+ "method": "lti-polytopic",
+ "states": [
+  "e",
+  "ev"
+ ],
+ "P": [
+  [
+   "1380067/631843",
+   "96378/227707"
+  ],
+  [
+   "96378/227707",
+   "469120/407477"
+  ]
+ ],
+ "level": "169737312822046251/5862578352870547700",
+ "alpha": "434429/796648",
+ "gammas": [
+  "15093/66346"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1/5"
+  }
+ ],
+ "coords": [
+  "e",
+  "ev"
+ ],
+ "outputs": [
+  {
+   "name": "e",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "541/4528"
+  },
+  {
+   "name": "ev",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "928/5639"
+  }
+ ],
+ "A": [
+  [
+   "0",
+   "1"
+  ],
+  [
+   "-4",
+   "-22/5"
+  ]
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "theorem": "DockingAllAnnotations.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "483d171703d3f75559d86f630aa09b01ff88fdaa52cc9b9b78eb0f9ce1281562",
+ "frame": {
+  "coords": [
+   "e",
+   "ev"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "x"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "x_ref"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "v"
+    },
+    {
+     "coeff": "-1",
+     "kind": "input",
+     "var": "v_ref"
+    }
+   ]
+  ],
+  "theorem": "DockingAllAnnotations.Cert.tube"
+ },
+ "initial": [
+  {
+   "name": "x",
+   "min": "-1/10",
+   "max": "1/10"
+  },
+  {
+   "name": "v",
+   "min": "-1/20",
+   "max": "1/20"
+  }
+ ],
+ "funnel": {
+  "V0": "169737312822046251/5862578352870547700",
+  "alpha": "434429/796648",
+  "budget": "15093/1658650",
+  "rate": "139811724/8378670475",
+  "level": "169737312822046251/5862578352870547700",
+  "theorem": "DockingAllAnnotations.Cert.funnel",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ }
+}

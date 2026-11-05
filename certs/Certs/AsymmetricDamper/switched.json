@@ -1,0 +1,121 @@
+{
+ "model": "AsymmetricDamper",
+ "ns": "AsymmetricDamper",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0
+   ],
+   "condition": "x.v > 0",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-2"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1
+   ],
+   "condition": "\u00ac(x.v > 0)",
+   "A": [
+    [
+     "0",
+     "1"
+    ],
+    [
+     "-4",
+     "-4/5"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "x.v > 0"
+   ],
+   "equations": [
+    1
+   ]
+  }
+ ],
+ "coords": [
+  "x",
+  "v"
+ ],
+ "B": [
+  [
+   "0"
+  ],
+  [
+   "1"
+  ]
+ ],
+ "P": [
+  [
+   "2187729/551519",
+   "31685/168303"
+  ],
+  [
+   "31685/168303",
+   "983941/972325"
+  ]
+ ],
+ "level": "43748220715/54561501996",
+ "alpha": "221753/604633",
+ "gammas": [
+  "506485/430581"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "f",
+   "bound": "1/2"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "x",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "2993/6627"
+  },
+  {
+   "name": "v",
+   "row": [
+    "0",
+    "1"
+   ],
+   "bound": "3583/4007"
+  }
+ ],
+ "bounds": {
+  "x": "2993/6627",
+  "v": "3583/4007"
+ },
+ "theorem": "AsymmetricDamper.SwitchedCert.certified",
+ "tube": "AsymmetricDamper.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "d278d8d52b8e788f8530393c43298bdffa53fcc4407a3ffd2049710546c2788e",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

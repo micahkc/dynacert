@@ -1,0 +1,123 @@
+{
+ "model": "OvenWarmStartFunnel",
+ "ns": "OvenWarmStartFunnel",
+ "method": "lti-channel",
+ "states": [
+  "T",
+  "xi"
+ ],
+ "P": [
+  [
+   "368231/61445",
+   "641175/594469"
+  ],
+  [
+   "641175/594469",
+   "1197959/971585"
+  ]
+ ],
+ "level": "209519083966258171/7097845760592485",
+ "alpha": "14582/429623",
+ "gammas": [
+  "6295703/110992"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1/10"
+  }
+ ],
+ "coords": [
+  "T",
+  "xi"
+ ],
+ "outputs": [
+  {
+   "name": "T",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "10023/4145"
+  }
+ ],
+ "A": [
+  [
+   "-3/5",
+   "-1/20"
+  ],
+  [
+   "1",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "OvenWarmStartFunnel.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "4de7791fd2e5ddd95e732991c4891e4237dd7e0d3013905df4bbd70c692d8805",
+ "frame": {
+  "coords": [
+   "T",
+   "xi"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "T"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xi"
+    }
+   ]
+  ],
+  "theorem": "OvenWarmStartFunnel.Cert.tube"
+ },
+ "initial": [
+  {
+   "name": "T",
+   "min": "-2",
+   "max": "2"
+  },
+  {
+   "name": "xi",
+   "min": "-1",
+   "max": "1"
+  }
+ ],
+ "funnel": {
+  "V0": "209519083966258171/7097845760592485",
+  "alpha": "14582/429623",
+  "budget": "6295703/11099200",
+  "rate": "2704778809969/161848534400",
+  "level": "209519083966258171/7097845760592485",
+  "theorem": "OvenWarmStartFunnel.Cert.funnel",
+  "axioms": [
+   "Classical.choice",
+   "Quot.sound",
+   "propext"
+  ]
+ }
+}

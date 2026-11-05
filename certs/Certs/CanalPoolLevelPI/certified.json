@@ -1,0 +1,137 @@
+{
+ "model": "CanalPoolLevelPI",
+ "ns": "CanalPoolLevelPI",
+ "method": "lti-channel",
+ "states": [
+  "dy",
+  "xp",
+  "z"
+ ],
+ "P": [
+  [
+   "288123713942/399235",
+   "800039370/291659",
+   "7198435937/960587"
+  ],
+  [
+   "800039370/291659",
+   "2177429/190333",
+   "20508802/727049"
+  ],
+  [
+   "7198435937/960587",
+   "20508802/727049",
+   "67179632/797759"
+  ]
+ ],
+ "level": "718043924430/315996391",
+ "alpha": "10138/444117",
+ "gammas": [
+  "53893/935085"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dqoff",
+   "bound": "30"
+  }
+ ],
+ "coords": [
+  "dy",
+  "xp",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dy",
+   "row": [
+    "1",
+    "0",
+    "0"
+   ],
+   "state": 0,
+   "bound": "2821/9830"
+  },
+  {
+   "name": "dqc",
+   "row": [
+    "-250",
+    "0",
+    "-5/2"
+   ],
+   "state": null,
+   "bound": "173683/3649"
+  }
+ ],
+ "A": [
+  [
+   "1/24",
+   "1/3000",
+   "1/2400"
+  ],
+  [
+   "-125/2",
+   "-1/4",
+   "-5/8"
+  ],
+  [
+   "1",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "-1/6000"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "CanalPoolLevelPI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "17b8ef438855b0946ccd953a0c5af09bda7312e520b071d15f4bcd09c178d02d",
+ "frame": {
+  "coords": [
+   "dy",
+   "xp",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dy"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "xp"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "CanalPoolLevelPI.Cert.tube"
+ }
+}

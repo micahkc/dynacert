@@ -1,0 +1,33 @@
+{
+ "model": "AsymmetricDamper",
+ "certificates": [
+  {
+   "method": "switched",
+   "theorem": "AsymmetricDamper.SwitchedCert.certified",
+   "file": "SwitchedCert.lean",
+   "sidecar": "switched.json",
+   "bounds": {
+    "x": "2993/6627",
+    "v": "3583/4007"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "d278d8d52b8e788f8530393c43298bdffa53fcc4407a3ffd2049710546c2788e",
+   "time": "2026-10-16T17:42:21"
+  }
+ ],
+ "source_hash": "d278d8d52b8e788f8530393c43298bdffa53fcc4407a3ffd2049710546c2788e",
+ "kept": {
+  "x": {
+   "bound": "2993/6627",
+   "method": "switched"
+  },
+  "v": {
+   "bound": "3583/4007",
+   "method": "switched"
+  }
+ }
+}

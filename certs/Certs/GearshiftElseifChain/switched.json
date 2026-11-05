@@ -1,0 +1,152 @@
+{
+ "model": "GearshiftElseifChain",
+ "ns": "GearshiftElseifChain",
+ "method": "switched-lti",
+ "modes": [
+  {
+   "choice": [
+    0
+   ],
+   "condition": "|x.z| < 0.1",
+   "A": [
+    [
+     "-9",
+     "-1"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    1
+   ],
+   "condition": "\u00ac(|x.z| < 0.1) \u2227 |x.z| < 0.2",
+   "A": [
+    [
+     "-7",
+     "-1"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  },
+  {
+   "choice": [
+    2
+   ],
+   "condition": "\u00ac(|x.z| < 0.1) \u2227 \u00ac(|x.z| < 0.2)",
+   "A": [
+    [
+     "-5",
+     "-1"
+    ],
+    [
+     "1",
+     "0"
+    ]
+   ]
+  }
+ ],
+ "switches": [
+  {
+   "conditions": [
+    "|x.z| < 0.1",
+    "|x.z| < 0.2"
+   ],
+   "equations": [
+    0
+   ]
+  }
+ ],
+ "coords": [
+  "w",
+  "z"
+ ],
+ "B": [
+  [
+   "1"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "P": [
+  [
+   "1286294/884649",
+   "144323/954112"
+  ],
+  [
+   "144323/954112",
+   "51252/48793"
+  ]
+ ],
+ "level": "105289414425/359714367184",
+ "alpha": "114173/785525",
+ "gammas": [
+  "134037/787652"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "d",
+   "bound": "1/2"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "w",
+   "row": [
+    "1",
+    "0"
+   ],
+   "bound": "2927/6474"
+  },
+  {
+   "name": "u",
+   "row": [
+    "-8",
+    "-1"
+   ],
+   "bound": "7372/2053",
+   "rows_by_mode": [
+    [
+     "-8",
+     "-1"
+    ],
+    [
+     "-6",
+     "-1"
+    ],
+    [
+     "-4",
+     "-1"
+    ]
+   ]
+  }
+ ],
+ "bounds": {
+  "w": "2927/6474",
+  "u": "7372/2053"
+ },
+ "theorem": "GearshiftElseifChain.SwitchedCert.certified",
+ "tube": "GearshiftElseifChain.SwitchedCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source_hash": "bc99b281731db3a8d2f73e3309c46d4c15a05126a7582c5dc8b9fcf37ce767aa",
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ]
+}

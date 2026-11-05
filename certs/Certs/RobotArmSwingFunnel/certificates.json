@@ -1,0 +1,28 @@
+{
+ "model": "RobotArmSwingFunnel",
+ "certificates": [
+  {
+   "method": "funnel",
+   "theorem": "RobotArmSwingFunnel.Funnel.certified",
+   "file": "FunnelCert.lean",
+   "sidecar": "funnel.json",
+   "bounds": {
+    "e": "25279/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "db1361e9e77726e23e193562d7737a155f3d837958971aaceef4f1a792ef884e",
+   "time": "2026-11-02T12:07:35"
+  }
+ ],
+ "source_hash": "db1361e9e77726e23e193562d7737a155f3d837958971aaceef4f1a792ef884e",
+ "kept": {
+  "e": {
+   "bound": "25279/1000000",
+   "method": "funnel"
+  }
+ }
+}

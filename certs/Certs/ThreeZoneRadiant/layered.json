@@ -1,0 +1,68 @@
+{
+ "model": "ThreeZoneRadiant",
+ "method": "layered-lti",
+ "theorem": "ThreeZoneRadiant.LayeredCert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "layers": [
+  {
+   "component": "z1",
+   "states": [
+    "z1.T"
+   ],
+   "reads": [
+    "z2.T"
+   ],
+   "level": "7326784986965255224159577/11787464482658848664678400"
+  },
+  {
+   "component": "z2",
+   "states": [
+    "z2.T"
+   ],
+   "reads": [
+    "z1.T",
+    "z3.T"
+   ],
+   "level": "37772150405846995157449736554654181/224692951401741305796662815955555840"
+  },
+  {
+   "component": "z3",
+   "states": [
+    "z3.T"
+   ],
+   "reads": [
+    "z2.T"
+   ],
+   "level": "719084876218148879995823899/1270837884983739346644480000"
+  }
+ ],
+ "coupling": {
+  "z1.T": {
+   "assumed": "11667/14360",
+   "guaranteed": "4421/5607"
+  },
+  "z2.T": {
+   "assumed": "30261/71360",
+   "guaranteed": "857/2090"
+  },
+  "z3.T": {
+   "assumed": "18399/23840",
+   "guaranteed": "7456/9911"
+  }
+ },
+ "bounds": {
+  "z1.T": "4421/5607",
+  "z2.T": "857/2090",
+  "z3.T": "7456/9911"
+ },
+ "monolithic_bounds": {
+  "z1.T": "785/706",
+  "z2.T": "3154/3673",
+  "z3.T": "10826/9805"
+ },
+ "source_hash": "dae42f90161af491fa2558183acc3cf47dcf3c90622eece5d4e66e2813820566"
+}

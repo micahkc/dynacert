@@ -1,0 +1,43 @@
+{
+ "model": "GlucoseInsulinPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "GlucoseInsulinPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "G": "1485136/9551",
+    "Xs": "2028157/4063",
+    "I": "103627/802",
+    "xi": "296913/2498"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "62aaecb06a825533eba412c1c558ed6c376be0ee8f854f7cfb89535163fd95c3",
+   "time": "2026-10-14T14:07:26"
+  }
+ ],
+ "source_hash": "62aaecb06a825533eba412c1c558ed6c376be0ee8f854f7cfb89535163fd95c3",
+ "kept": {
+  "G": {
+   "bound": "1485136/9551",
+   "method": "lmi"
+  },
+  "Xs": {
+   "bound": "2028157/4063",
+   "method": "lmi"
+  },
+  "I": {
+   "bound": "103627/802",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "296913/2498",
+   "method": "lmi"
+  }
+ }
+}

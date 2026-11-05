@@ -1,0 +1,33 @@
+{
+ "model": "MotorCommandOutput",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "MotorCommandOutput.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "w": "4419/3808",
+    "u": "4419/1904"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "2b8e3a7e806f371096423f087d39c2c5b4ff24d995274a3fd0d1dbc14e8fc1bc",
+   "time": "2026-11-02T11:55:50"
+  }
+ ],
+ "source_hash": "2b8e3a7e806f371096423f087d39c2c5b4ff24d995274a3fd0d1dbc14e8fc1bc",
+ "kept": {
+  "w": {
+   "bound": "4419/3808",
+   "method": "lmi"
+  },
+  "u": {
+   "bound": "4419/1904",
+   "method": "lmi"
+  }
+ }
+}

@@ -1,0 +1,1692 @@
+{
+ "model": "Quadrotor3D",
+ "ns": "Quadrotor3D",
+ "method": "compose",
+ "theorem": "Quadrotor3D.ComposeCert.certified",
+ "tube_theorem": "Quadrotor3D.ComposeCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "bounds": {
+  "e_x": "3417/62500",
+  "e_y": "54671/1000000",
+  "e_z": "8099/200000",
+  "qx": "24589/1000000",
+  "qy": "2459/100000"
+ },
+ "region": {
+  "qx": "46/1775",
+  "qy": "187/7207",
+  "qz": "89/8310",
+  "s_x": "3003/5930",
+  "s_z": "2554/9989",
+  "s_y": "4387/8666",
+  "p": "1073/3925",
+  "r": "1085/9743",
+  "q": "2342/8567"
+ },
+ "channels": [
+  {
+   "kind": "sector",
+   "expr": "981*qx*qz/50",
+   "enters": {
+    "v_x": "1"
+   },
+   "sector": [
+    "-6479/250000",
+    "6479/250000"
+   ],
+   "q": "981*qz/50"
+  },
+  {
+   "kind": "sector",
+   "expr": "-2*qy*s_z",
+   "enters": {
+    "v_x": "1"
+   },
+   "sector": [
+    "-511363/1000000",
+    "511363/1000000"
+   ],
+   "q": "qy"
+  },
+  {
+   "kind": "sector",
+   "expr": "981*qy*qz/50",
+   "enters": {
+    "v_y": "1"
+   },
+   "sector": [
+    "-25947/1000000",
+    "25947/1000000"
+   ],
+   "q": "981*qz/50"
+  },
+  {
+   "kind": "sector",
+   "expr": "2*qx*s_z",
+   "enters": {
+    "v_y": "1"
+   },
+   "sector": [
+    "-511363/1000000",
+    "511363/1000000"
+   ],
+   "q": "qx"
+  },
+  {
+   "kind": "sector",
+   "expr": "qx*(-981*qx/25 + 2*s_y)",
+   "enters": {
+    "v_z": "1"
+   },
+   "sector": [
+    "-6479/250000",
+    "6479/250000"
+   ],
+   "q": "-981*qx/25 + 2*s_y"
+  },
+  {
+   "kind": "sector",
+   "expr": "qy*(-981*qy/25 - 2*s_x)",
+   "enters": {
+    "v_z": "1"
+   },
+   "sector": [
+    "-25947/1000000",
+    "25947/1000000"
+   ],
+   "q": "-981*qy/25 - 2*s_x"
+  },
+  {
+   "kind": "sector",
+   "expr": "qy*r/2",
+   "enters": {
+    "qx": "1"
+   },
+   "sector": [
+    "-25947/1000000",
+    "25947/1000000"
+   ],
+   "q": "r/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "-q*qz/2",
+   "enters": {
+    "qx": "1"
+   },
+   "sector": [
+    "-1071/100000",
+    "1071/100000"
+   ],
+   "q": "-q/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "p*qz/2",
+   "enters": {
+    "qy": "1"
+   },
+   "sector": [
+    "-1071/100000",
+    "1071/100000"
+   ],
+   "q": "p/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "-qx*r/2",
+   "enters": {
+    "qy": "1"
+   },
+   "sector": [
+    "-6479/250000",
+    "6479/250000"
+   ],
+   "q": "-r/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "q*qx/2",
+   "enters": {
+    "qz": "1"
+   },
+   "sector": [
+    "-6479/250000",
+    "6479/250000"
+   ],
+   "q": "q/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "-p*qy/2",
+   "enters": {
+    "qz": "1"
+   },
+   "sector": [
+    "-25947/1000000",
+    "25947/1000000"
+   ],
+   "q": "-p/2"
+  },
+  {
+   "kind": "sector",
+   "expr": "-200*qy*qz",
+   "enters": {
+    "p": "1"
+   },
+   "sector": [
+    "-25947/1000000",
+    "25947/1000000"
+   ],
+   "q": "-200*qz"
+  },
+  {
+   "kind": "sector",
+   "expr": "-20000*qz*s_x/981",
+   "enters": {
+    "p": "1"
+   },
+   "sector": [
+    "-1071/100000",
+    "1071/100000"
+   ],
+   "q": "-20000*s_x/981"
+  },
+  {
+   "kind": "sector",
+   "expr": "20000*qx*s_z/981",
+   "enters": {
+    "p": "1"
+   },
+   "sector": [
+    "-2606333/500000",
+    "2606333/500000"
+   ],
+   "q": "qx"
+  },
+  {
+   "kind": "sector",
+   "expr": "200*qx*qz",
+   "enters": {
+    "q": "1"
+   },
+   "sector": [
+    "-6479/250000",
+    "6479/250000"
+   ],
+   "q": "200*qz"
+  },
+  {
+   "kind": "sector",
+   "expr": "-20000*qz*s_y/981",
+   "enters": {
+    "q": "1"
+   },
+   "sector": [
+    "-1071/100000",
+    "1071/100000"
+   ],
+   "q": "-20000*s_y/981"
+  },
+  {
+   "kind": "sector",
+   "expr": "20000*qy*s_z/981",
+   "enters": {
+    "q": "1"
+   },
+   "sector": [
+    "-2606333/500000",
+    "2606333/500000"
+   ],
+   "q": "qy"
+  },
+  {
+   "kind": "bounded",
+   "expr": "4*qx**3*qz*s_z - 981*qx**3*qz/25 + 4*qx**2*qy*s_z*(q0 - 1) + 4*qx**2*qy*s_z - 981*qx**2*qy*(q0 - 1)/25 - 981*qx**2*qy/25 - 4*qx**2*qz**2*s_x + 4*qx**2*qz*s_y*(q0 - 1) + 4*qx**2*qz*s_y + 4*qx*qy**2*qz*s_z - 981*qx*qy**2*qz/25 - 4*qx*qy*qz**2*s_y - 8*qx*qy*qz*s_x*(q0 - 1) - 8*qx*qy*qz*s_x + 4*qx*qy*s_y*(q0 - 1)**2 + 8*qx*qy*s_y*(q0 - 1) + 4*qx*qy*s_y - 2*qx*qz*s_z + 4*qy**3*s_z*(q0 - 1) + 4*qy**3*s_z - 981*qy**3*(q0 - 1)/25 - 981*qy**3/25 - 4*qy**2*qz*s_y*(q0 - 1) - 4*qy**2*qz*s_y - 4*qy**2*s_x*(q0 - 1)**2 - 8*qy**2*s_x*(q0 - 1) - 4*qy**2*s_x - 2*qy*s_z*(q0 - 1) + 981*qy*(q0 - 1)/50",
+   "enters": {
+    "v_x": "1"
+   },
+   "bound": "4733/1000000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "-4*qx**3*s_z*(q0 - 1) - 4*qx**3*s_z + 981*qx**3*(q0 - 1)/25 + 981*qx**3/25 + 4*qx**2*qy*qz*s_z - 981*qx**2*qy*qz/25 + 4*qx**2*qz*s_x*(q0 - 1) + 4*qx**2*qz*s_x - 4*qx**2*s_y*(q0 - 1)**2 - 8*qx**2*s_y*(q0 - 1) - 4*qx**2*s_y - 4*qx*qy**2*s_z*(q0 - 1) - 4*qx*qy**2*s_z + 981*qx*qy**2*(q0 - 1)/25 + 981*qx*qy**2/25 - 4*qx*qy*qz**2*s_x + 8*qx*qy*qz*s_y*(q0 - 1) + 8*qx*qy*qz*s_y + 4*qx*qy*s_x*(q0 - 1)**2 + 8*qx*qy*s_x*(q0 - 1) + 4*qx*qy*s_x + 2*qx*s_z*(q0 - 1) - 981*qx*(q0 - 1)/50 + 4*qy**3*qz*s_z - 981*qy**3*qz/25 - 4*qy**2*qz**2*s_y - 4*qy**2*qz*s_x*(q0 - 1) - 4*qy**2*qz*s_x - 2*qy*qz*s_z",
+   "enters": {
+    "v_y": "1"
+   },
+   "bound": "591/125000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "-4*qx**4*s_z + 981*qx**4/25 + 4*qx**3*qz*s_x - 4*qx**3*s_y*(q0 - 1) - 4*qx**3*s_y - 8*qx**2*qy**2*s_z + 1962*qx**2*qy**2/25 + 4*qx**2*qy*qz*s_y + 4*qx**2*qy*s_x*(q0 - 1) + 4*qx**2*qy*s_x + 4*qx**2*s_z + 4*qx*qy**2*qz*s_x - 4*qx*qy**2*s_y*(q0 - 1) - 4*qx*qy**2*s_y - 2*qx*qz*s_x + 2*qx*s_y*(q0 - 1) - 4*qy**4*s_z + 981*qy**4/25 + 4*qy**3*qz*s_y + 4*qy**3*s_x*(q0 - 1) + 4*qy**3*s_x + 4*qy**2*s_z - 2*qy*qz*s_y - 2*qy*s_x*(q0 - 1)",
+   "enters": {
+    "v_z": "1"
+   },
+   "bound": "137/62500"
+  },
+  {
+   "kind": "bounded",
+   "expr": "p*(q0 - 1)/2",
+   "enters": {
+    "qx": "1"
+   },
+   "bound": "1/10000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "q*(q0 - 1)/2",
+   "enters": {
+    "qy": "1"
+   },
+   "bound": "1/10000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "r*(q0 - 1)/2",
+   "enters": {
+    "qz": "1"
+   },
+   "bound": "41/1000000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "-20000*qx**2*s_y/981 + 20000*qx*qy*s_x/981 + 20000*qx*s_z*(q0 - 1)/981 - 200*qx*(q0 - 1) + 20000*qy*qz*s_z/981 - 20000*qz**2*s_y/981 - 20000*qz*s_x*(q0 - 1)/981",
+   "enters": {
+    "p": "1"
+   },
+   "bound": "819/40000"
+  },
+  {
+   "kind": "bounded",
+   "expr": "-20000*qx*qy*s_y/981 - 20000*qx*qz*s_z/981 + 20000*qy**2*s_x/981 + 20000*qy*s_z*(q0 - 1)/981 - 200*qy*(q0 - 1) + 20000*qz**2*s_x/981 - 20000*qz*s_y*(q0 - 1)/981",
+   "enters": {
+    "q": "1"
+   },
+   "bound": "4099/200000"
+  }
+ ],
+ "ellipsoids": [
+  {
+   "objective": "e_x",
+   "alpha": "10853/9663",
+   "level": "49999999/50000000",
+   "outer": "1999999/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "e_y",
+   "alpha": "10853/9663",
+   "level": "99999997/100000000",
+   "outer": "1999999/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "e_z",
+   "alpha": "8125/9954",
+   "level": "99999999/100000000",
+   "outer": "1999999/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "qx",
+   "alpha": "1613/1326",
+   "level": "49999999/50000000",
+   "outer": "554849/500000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "qy",
+   "alpha": "1613/1326",
+   "level": "99999997/100000000",
+   "outer": "556187/500000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "qz",
+   "alpha": "10435/7313",
+   "level": "99999999/100000000",
+   "outer": "3220843/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "s_x",
+   "alpha": "10435/7313",
+   "level": "99999999/100000000",
+   "outer": "1109669/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "s_z",
+   "alpha": "10435/7313",
+   "level": "99999999/100000000",
+   "outer": "1056309/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "s_y",
+   "alpha": "10435/7313",
+   "level": "99999999/100000000",
+   "outer": "1108279/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "p",
+   "alpha": "5457/4142",
+   "level": "99999999/100000000",
+   "outer": "554809/500000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "r",
+   "alpha": "12284/7339",
+   "level": "99999999/100000000",
+   "outer": "1580687/1000000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "objective": "q",
+   "alpha": "5457/4142",
+   "level": "99999999/100000000",
+   "outer": "221913/200000",
+   "blocks": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "e_z",
+     "v_z"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  }
+ ],
+ "states": [
+  "e_x",
+  "e_y",
+  "e_z",
+  "v_x",
+  "v_y",
+  "v_z",
+  "qx",
+  "qy",
+  "qz",
+  "p",
+  "q",
+  "r"
+ ],
+ "disturbances": [
+  {
+   "name": "w_ax",
+   "bound": "1/10"
+  },
+  {
+   "name": "w_ay",
+   "bound": "1/10"
+  },
+  {
+   "name": "w_az",
+   "bound": "1/10"
+  },
+  {
+   "name": "w_p",
+   "bound": "1/2"
+  },
+  {
+   "name": "w_q",
+   "bound": "1/2"
+  },
+  {
+   "name": "w_r",
+   "bound": "1/2"
+  }
+ ],
+ "fixed_point": {
+  "iterations": 2,
+  "history": [
+   {
+    "region": [
+     0.025915492957746478,
+     0.025946995976134313,
+     0.010709987966305656,
+     0.5064080944350758,
+     0.25568124937431175,
+     0.5062312485575814,
+     0.27337579617834395,
+     0.1113620034896849,
+     0.27337457686471345
+    ],
+    "projections": [
+     0.024505002159041448,
+     0.024567282845387478,
+     0.006133475742274562,
+     0.478805471479362,
+     0.24583399328483513,
+     0.47877397389895826,
+     0.25947963339369357,
+     0.10282964566047982,
+     0.25967610082799303
+    ],
+    "supports": {
+     "e_x": 0.05437048147465969,
+     "e_y": 0.05437417389270046,
+     "e_z": 0.040073466338875444,
+     "qx": 0.024506685556919237,
+     "qy": 0.02456839094312602,
+     "qz": 0.0061454685341773025,
+     "s_x": 0.4788057762854743,
+     "s_z": 0.24583402263783577,
+     "s_y": 0.47877531925865435,
+     "p": 0.2594797226583448,
+     "r": 0.1044926932427707,
+     "q": 0.25967653652523676
+    }
+   },
+   {
+    "region": [
+     0.025915492957746478,
+     0.025946995976134313,
+     0.010709987966305656,
+     0.5064080944350758,
+     0.25568124937431175,
+     0.5062312485575814,
+     0.27337579617834395,
+     0.1113620034896849,
+     0.27337457686471345
+    ],
+    "projections": [
+     0.024505002159041448,
+     0.024567282845387478,
+     0.006133475742274562,
+     0.478805471479362,
+     0.24583399328483513,
+     0.47877397389895826,
+     0.25947963339369357,
+     0.10282964566047982,
+     0.25967610082799303
+    ],
+    "supports": {
+     "e_x": 0.05437048147465969,
+     "e_y": 0.05437417389270046,
+     "e_z": 0.040073466338875444,
+     "qx": 0.024506685556919237,
+     "qy": 0.02456839094312602,
+     "qz": 0.0061454685341773025,
+     "s_x": 0.4788057762854743,
+     "s_z": 0.24583402263783577,
+     "s_y": 0.47877531925865435,
+     "p": 0.2594797226583448,
+     "r": 0.1044926932427707,
+     "q": 0.25967653652523676
+    }
+   }
+  ]
+ },
+ "stats": {
+  "search_s": 13.1,
+  "exact_s": 30.5,
+  "lean_s": {
+   "ComposeLink": 2.8,
+   "ComposeM0": 2.6,
+   "ComposeM1": 2.7,
+   "ComposeM2": 2.5,
+   "ComposeM3": 2.8,
+   "ComposeM4": 2.8,
+   "ComposeM5": 2.8,
+   "ComposeM6": 2.6,
+   "ComposeM7": 2.7,
+   "ComposeM8": 2.8,
+   "ComposeM9": 2.8,
+   "ComposeM10": 2.6,
+   "ComposeM11": 2.6,
+   "ComposeCert": 9.9
+  }
+ },
+ "source_hash": "ea4593a2cb660885ca8b880c2fbad59248af0fdbd2409538b52db04db18a5052",
+ "cut": [
+  [
+   "e_x",
+   "v_x",
+   "qy",
+   "q"
+  ],
+  [
+   "e_y",
+   "v_y",
+   "qx",
+   "p"
+  ],
+  [
+   "e_z",
+   "v_z"
+  ],
+  [
+   "qz",
+   "r"
+  ]
+ ],
+ "candidates": [
+  {
+   "cut": "e_x,v_x,qy,q | e_y,v_y,qx,p | e_z,v_z | qz,r",
+   "source": "scc",
+   "strong_cut": 0,
+   "weak_cut": 43,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,qy,p,q | qz,r",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 13,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qy,qz,p,q,r | e_z,v_z",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 15,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qy,p,q | e_z,v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 26,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qy,qz,q,r | e_y,v_y,qx,p",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 29,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,v_x,qy,q | e_y,e_z,v_y,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 29,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,v_x,qy,qz,q,r | e_y,e_z,v_y,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 30,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qy,q | e_y,v_y,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 0,
+   "weak_cut": 30,
+   "proposition2": true
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,qy,qz,p,q | r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 2,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x | e_y,e_z,v_x,v_y,v_z,qx,qy,qz,p,q,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 4,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_y,v_z,qx,qy,qz,p,q,r | e_y",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 4,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,v_z,qx,qy,qz,p,q,r | e_z",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 4,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,qx,qy,qz,p,q,r | v_z",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 11,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,qy,p,q,r | qz",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 11,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_z | e_y,v_x,v_y,qx,qy,qz,p,q,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_y,qx,qy,qz,p,q,r | e_y,e_z,v_z",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,v_z,qx,qy,p,q | e_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_y,v_z,qx,qy,p,q | e_y,qz,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,qz,r | e_y,e_z,v_x,v_y,v_z,qx,qy,p,q",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qy,qz,p,q | e_z,v_z,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,qx,qy,p,q | v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 22,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qy,p,q,r | e_z,v_z,qz",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 24,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_z,qy,qz,q,r | v_y,qx,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_y,v_z,qx,qz,p,r | v_x,qy,q",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_y,v_z,qx,p | v_x,qy,qz,q,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_z,qy,q | v_y,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_y,qx,qy,p,q | e_y,e_z,v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_z,qz,r | e_y,v_x,v_y,qx,qy,p,q",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_y,qx,p | e_z,v_x,v_z,qy,qz,q,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_z,qy,qz,q,r | e_y,e_z,v_y,qx,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qy,q,r | e_y,e_z,v_y,v_z,qx,qz,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,qy,q | e_z,v_y,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,qy,q | e_y,v_y,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qy,qz,q | e_y,v_y,qx,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,qy,qz,q,r | e_y,v_y,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,qy,qz,q,r | e_z,v_y,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qy,q,r | e_y,v_y,qx,qz,p",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_z,qy,q | e_y,e_z,v_y,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_y,qx,qz,p,r | e_z,v_x,v_z,qy,q",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qy,qz,q | e_y,e_z,v_y,v_z,qx,p,r",
+   "source": "bipartition",
+   "strong_cut": 2,
+   "weak_cut": 30,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qy,qz,p,q,r | qx",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 9,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,qz,p,q,r | qy",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 9,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_y,v_z,qx,qy,qz,p,q,r | v_x",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 10,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_z,qx,qy,qz,p,q,r | v_y",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 10,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x | e_y,e_z,v_y,v_z,qx,qy,qz,p,q,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 12,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qx,qy,qz,p,q,r | e_y,v_y",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 12,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,p,q | qy,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 16,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qy,p,q | qx,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 16,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qy,qz,q,r | qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,qz,p,r | qy,q",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 17,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_y,qx,qy,qz,p,q,r | e_z,v_x,v_z",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 19,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z | e_y,v_y,qx,qy,qz,p,q,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 19,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,qx,qy,qz,p,q,r | e_z,v_y,v_z",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 19,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qx,qy,qz,p,q,r | e_y,e_z,v_y,v_z",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 19,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qx,qy,qz,q,r | e_y,v_y,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 20,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qx,p | qy,qz,q,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 20,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,q | e_y,e_z,v_y,v_z,qx,qy,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 20,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_y,v_z,qy,q | qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 20,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_y,v_z,qy,qz,q,r | e_y,qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 21,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,qy,q | e_y,e_z,v_x,v_y,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 21,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_x,v_z,qx,qy,p,q | v_y,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 21,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,e_z,v_y,v_z,qx,qy,p,q | v_x,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 21,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qy,qz,p,q,r | e_z,v_z,qx",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 22,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qz,p,q,r | e_z,v_z,qy",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 22,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qx,qy,qz,q,r | e_y,e_z,v_y,v_z,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 23,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,q | e_y,v_y,qx,qy,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 23,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qx,qy,p,q | e_y,v_y,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 23,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qz,r | e_y,e_z,v_y,v_z,qx,qy,p,q",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 23,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,qy,qz,q,r | e_y,e_z,v_x,v_y,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 24,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_y,v_z,qy,q | e_y,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 24,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qy,qz,q,r | e_z,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 26,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,qz,p,r | e_z,v_z,qy,q",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 26,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,p | e_z,v_z,qy,qz,q,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qz,q,r | e_y,e_z,v_y,v_z,qx,qy,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qy,q | e_z,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qx,qy,q | e_y,v_y,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qx,p,q | e_z,v_z,qy,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,v_y,qy,p,q | e_z,v_z,qx,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 27,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_y,qy,qz,q,r | e_y,e_z,v_z,qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qz,q,r | e_y,v_y,qx,qy,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_z,qy,q | e_y,v_x,v_y,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qx,qy,q | e_y,e_z,v_y,v_z,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,qx,qy,p,q | e_y,e_z,v_y,v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_x,qx,qy,p,q | e_z,v_y,v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_x,v_z,qz,r | e_y,v_y,qx,qy,p,q",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_y,v_y,qx,qy,p,q | e_z,v_x,v_z,qz,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 28,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,e_z,v_z,qy,qz,q,r | e_y,v_x,v_y,qx,p",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 29,
+   "proposition2": false
+  },
+  {
+   "cut": "e_x,v_x,v_y,qy,q | e_y,e_z,v_z,qx,qz,p,r",
+   "source": "bipartition",
+   "strong_cut": 3,
+   "weak_cut": 29,
+   "proposition2": false
+  }
+ ],
+ "interfaces": [
+  {
+   "sender": [
+    "qz",
+    "r"
+   ],
+   "row": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "981/50",
+    "0",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_y",
+    "v_y",
+    "qx",
+    "p"
+   ],
+   "row": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1/2",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "qz",
+    "r"
+   ],
+   "row": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "-1/2"
+   ],
+   "receivers": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ],
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_y",
+    "v_y",
+    "qx",
+    "p"
+   ],
+   "row": [
+    "0",
+    "-80000/981",
+    "0",
+    "0",
+    "-80000/981",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_x",
+     "v_x",
+     "qy",
+     "q"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_x",
+    "v_x",
+    "qy",
+    "q"
+   ],
+   "row": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "-1/2",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ],
+    [
+     "qz",
+     "r"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_x",
+    "v_x",
+    "qy",
+    "q"
+   ],
+   "row": [
+    "-80000/981",
+    "0",
+    "0",
+    "-80000/981",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_y",
+     "v_y",
+     "qx",
+     "p"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_y",
+    "v_y",
+    "qx",
+    "p"
+   ],
+   "row": [
+    "0",
+    "8",
+    "0",
+    "0",
+    "8",
+    "0",
+    "-981/25",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_z",
+     "v_z"
+    ]
+   ]
+  },
+  {
+   "sender": [
+    "e_x",
+    "v_x",
+    "qy",
+    "q"
+   ],
+   "row": [
+    "-8",
+    "0",
+    "0",
+    "-8",
+    "0",
+    "0",
+    "0",
+    "-981/25",
+    "0",
+    "0",
+    "0",
+    "0"
+   ],
+   "receivers": [
+    [
+     "e_z",
+     "v_z"
+    ]
+   ]
+  }
+ ],
+ "admm": null
+}

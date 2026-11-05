@@ -1,0 +1,50 @@
+{
+ "model": "PlanarQuadrotor",
+ "certificates": [
+  {
+   "method": "sector",
+   "theorem": "PlanarQuadrotor.SectorCert.certified",
+   "file": "SectorCert.lean",
+   "sidecar": "sector.json",
+   "bounds": {
+    "e_x": "4011/25000",
+    "theta": "145879/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "43dd807385c6f5aef10a8994aa6da6528f3f83d2779ace095520f7aaac1053e9",
+   "time": "2026-10-22T16:39:01"
+  },
+  {
+   "method": "compose",
+   "theorem": "PlanarQuadrotor.ComposeCert.certified",
+   "file": "ComposeCert.lean",
+   "sidecar": "compose.json",
+   "bounds": {
+    "e_x": "160473/1000000",
+    "theta": "145911/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "43dd807385c6f5aef10a8994aa6da6528f3f83d2779ace095520f7aaac1053e9",
+   "time": "2026-10-22T16:42:41"
+  }
+ ],
+ "source_hash": "43dd807385c6f5aef10a8994aa6da6528f3f83d2779ace095520f7aaac1053e9",
+ "kept": {
+  "e_x": {
+   "bound": "4011/25000",
+   "method": "sector"
+  },
+  "theta": {
+   "bound": "145879/1000000",
+   "method": "sector"
+  }
+ }
+}

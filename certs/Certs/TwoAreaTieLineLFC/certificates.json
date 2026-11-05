@@ -1,0 +1,38 @@
+{
+ "model": "TwoAreaTieLineLFC",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "TwoAreaTieLineLFC.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "df1": "235/9748",
+    "df2": "124/4553",
+    "dPtie": "247/2401"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "df5bccd90c2329f8c3095221449da28ae374ee800e9f7e171db328ea18040313",
+   "time": "2026-10-14T14:02:35"
+  }
+ ],
+ "source_hash": "df5bccd90c2329f8c3095221449da28ae374ee800e9f7e171db328ea18040313",
+ "kept": {
+  "df1": {
+   "bound": "235/9748",
+   "method": "lmi"
+  },
+  "df2": {
+   "bound": "124/4553",
+   "method": "lmi"
+  },
+  "dPtie": {
+   "bound": "247/2401",
+   "method": "lmi"
+  }
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "model": "PlotterXYTracking",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "PlotterXYTracking.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e[1]": "250/3281",
+    "e[2]": "540/9337",
+    "ev[1]": "2018/9235",
+    "ev[2]": "1616/7323"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "b26e7c968f8b6b6b1fd842fae3c44b501849444c5e8e62671ac0b913f3109694",
+   "time": "2026-11-02T11:53:39"
+  }
+ ],
+ "source_hash": "b26e7c968f8b6b6b1fd842fae3c44b501849444c5e8e62671ac0b913f3109694",
+ "kept": {
+  "e[1]": {
+   "bound": "250/3281",
+   "method": "lmi"
+  },
+  "e[2]": {
+   "bound": "540/9337",
+   "method": "lmi"
+  },
+  "ev[1]": {
+   "bound": "2018/9235",
+   "method": "lmi"
+  },
+  "ev[2]": {
+   "bound": "1616/7323",
+   "method": "lmi"
+  }
+ }
+}

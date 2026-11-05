@@ -1,0 +1,50 @@
+{
+ "model": "ClosedLoop",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ClosedLoop.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "5649/6695",
+    "ev": "7281/5089"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "2673a1122874d581e9d7072f3e54518b68065552b019eb7ac9bc0f808ec6665c",
+   "time": "2026-10-14T14:00:38"
+  },
+  {
+   "method": "polyhedral",
+   "theorem": "ClosedLoop.PolyCert.certified",
+   "file": "PolyCert.lean",
+   "sidecar": "polyhedral.json",
+   "bounds": {
+    "e": "828123/1000000",
+    "ev": "1421883/1000000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "2673a1122874d581e9d7072f3e54518b68065552b019eb7ac9bc0f808ec6665c",
+   "time": "2026-10-14T15:36:37"
+  }
+ ],
+ "source_hash": "2673a1122874d581e9d7072f3e54518b68065552b019eb7ac9bc0f808ec6665c",
+ "kept": {
+  "e": {
+   "bound": "828123/1000000",
+   "method": "polyhedral"
+  },
+  "ev": {
+   "bound": "1421883/1000000",
+   "method": "polyhedral"
+  }
+ }
+}

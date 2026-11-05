@@ -1,0 +1,141 @@
+{
+ "model": "TwinPendulumHold",
+ "ns": "TwinPendulumHold",
+ "method": "sector",
+ "theorem": "TwinPendulumHold.SectorCert.certified",
+ "tube_theorem": "TwinPendulumHold.SectorCert.tube",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "tube_axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "bounds": {
+  "th1": "70403/1000000",
+  "th2": "39379/1000000"
+ },
+ "region": {
+  "th1": "43/599",
+  "th2": "328/8169"
+ },
+ "channels": [
+  {
+   "kind": "sector",
+   "expr": "-th1 + sin(th1)",
+   "enters": {
+    "w1": "981/100"
+   },
+   "sector": [
+    "-859/1000000",
+    "0"
+   ],
+   "q": "th1"
+  },
+  {
+   "kind": "sector",
+   "expr": "-th2 + sin(th2)",
+   "enters": {
+    "w2": "981/100"
+   },
+   "sector": [
+    "-269/1000000",
+    "0"
+   ],
+   "q": "th2"
+  }
+ ],
+ "ellipsoids": [
+  {
+   "objective": "th1",
+   "alpha": "8637/4399",
+   "level": "3124959/3125000",
+   "outer": "1038639/1000000",
+   "blocks": [
+    [
+     "th1",
+     "w1",
+     "th2",
+     "w2"
+    ]
+   ]
+  },
+  {
+   "objective": "th2",
+   "alpha": "10799/5957",
+   "level": "99997229/100000000",
+   "outer": "519301/500000",
+   "blocks": [
+    [
+     "th1",
+     "w1",
+     "th2",
+     "w2"
+    ]
+   ]
+  }
+ ],
+ "states": [
+  "th1",
+  "w1",
+  "th2",
+  "w2"
+ ],
+ "disturbances": [
+  {
+   "name": "d1",
+   "bound": "1"
+  },
+  {
+   "name": "d2",
+   "bound": "1/2"
+  }
+ ],
+ "fixed_point": {
+  "iterations": 2,
+  "history": [
+   {
+    "region": [
+     0.01,
+     0.01
+    ],
+    "projections": [
+     0.0703786952899008,
+     0.03936448850516863
+    ],
+    "supports": {
+     "th1": 0.07037869998840161,
+     "th2": 0.03936449128173315
+    }
+   },
+   {
+    "region": [
+     0.07178631051752922,
+     0.040151793365160976
+    ],
+    "projections": [
+     0.0703805412488805,
+     0.039365113714744195
+    ],
+    "supports": {
+     "th1": 0.07038054485074946,
+     "th2": 0.03936512215555819
+    }
+   }
+  ]
+ },
+ "stats": {
+  "search_s": 1.3,
+  "exact_s": 0.4,
+  "lean_s": {
+   "SectorLink": 9.4,
+   "SectorM0": 8.7,
+   "SectorM1": 9.3,
+   "SectorCert": 8.3
+  }
+ },
+ "source_hash": "2e39fffc8f4bb8f848bd563d09ff2e1c5cbebe0ae29b32a7ff9296b7ef1af9c6"
+}

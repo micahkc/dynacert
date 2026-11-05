@@ -1,0 +1,56 @@
+{
+ "model": "ThreeZoneRadiant",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "ThreeZoneRadiant.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "z1.T": "785/706",
+    "z2.T": "3154/3673",
+    "z3.T": "10826/9805"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "dae42f90161af491fa2558183acc3cf47dcf3c90622eece5d4e66e2813820566",
+   "time": "2026-11-02T11:58:52"
+  },
+  {
+   "method": "layered",
+   "theorem": "ThreeZoneRadiant.LayeredCert.certified",
+   "file": "LayeredCert.lean",
+   "sidecar": "layered.json",
+   "bounds": {
+    "z1.T": "4421/5607",
+    "z2.T": "857/2090",
+    "z3.T": "7456/9911"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "dae42f90161af491fa2558183acc3cf47dcf3c90622eece5d4e66e2813820566",
+   "time": "2026-11-02T11:59:13"
+  }
+ ],
+ "source_hash": "dae42f90161af491fa2558183acc3cf47dcf3c90622eece5d4e66e2813820566",
+ "kept": {
+  "z1.T": {
+   "bound": "4421/5607",
+   "method": "layered"
+  },
+  "z2.T": {
+   "bound": "857/2090",
+   "method": "layered"
+  },
+  "z3.T": {
+   "bound": "7456/9911",
+   "method": "layered"
+  }
+ }
+}

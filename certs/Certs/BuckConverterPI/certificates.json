@@ -1,0 +1,38 @@
+{
+ "model": "BuckConverterPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "BuckConverterPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "z": "695/5299",
+    "e": "4773/6272",
+    "ei": "25398/4711"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "4d3f42d683a78dd17d49b1cf44cf4f0fc68994a8f9579fa0423834b0462a64b8",
+   "time": "2026-10-14T14:44:19"
+  }
+ ],
+ "source_hash": "4d3f42d683a78dd17d49b1cf44cf4f0fc68994a8f9579fa0423834b0462a64b8",
+ "kept": {
+  "z": {
+   "bound": "695/5299",
+   "method": "lmi"
+  },
+  "e": {
+   "bound": "4773/6272",
+   "method": "lmi"
+  },
+  "ei": {
+   "bound": "25398/4711",
+   "method": "lmi"
+  }
+ }
+}

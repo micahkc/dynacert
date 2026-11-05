@@ -1,0 +1,33 @@
+{
+ "model": "WindTurbinePitchPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "WindTurbinePitchPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dw": "256/3363",
+    "dtheta": "26137/6757"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "02df0fcac5dac6ee7bd6c0ccce1c7f73251139e1c86589f05217de4493424565",
+   "time": "2026-10-14T14:06:58"
+  }
+ ],
+ "source_hash": "02df0fcac5dac6ee7bd6c0ccce1c7f73251139e1c86589f05217de4493424565",
+ "kept": {
+  "dw": {
+   "bound": "256/3363",
+   "method": "lmi"
+  },
+  "dtheta": {
+   "bound": "26137/6757",
+   "method": "lmi"
+  }
+ }
+}

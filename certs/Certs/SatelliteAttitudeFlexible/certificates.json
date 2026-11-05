@@ -1,0 +1,38 @@
+{
+ "model": "SatelliteAttitudeFlexible",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "SatelliteAttitudeFlexible.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "th_hub": "17/5891",
+    "w_hub": "9/4424",
+    "twist": "18/9599"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "46ba99fb93338f87933317e9a82accfab0aca434558fa0a4c89dfc74b2e40d7f",
+   "time": "2026-10-14T14:30:22"
+  }
+ ],
+ "source_hash": "46ba99fb93338f87933317e9a82accfab0aca434558fa0a4c89dfc74b2e40d7f",
+ "kept": {
+  "th_hub": {
+   "bound": "17/5891",
+   "method": "lmi"
+  },
+  "w_hub": {
+   "bound": "9/4424",
+   "method": "lmi"
+  },
+  "twist": {
+   "bound": "18/9599",
+   "method": "lmi"
+  }
+ }
+}

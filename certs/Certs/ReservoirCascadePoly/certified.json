@@ -1,0 +1,114 @@
+{
+ "model": "ReservoirCascadePoly",
+ "ns": "ReservoirCascadePoly",
+ "method": "lti-channel",
+ "states": [
+  "h1",
+  "h2"
+ ],
+ "P": [
+  [
+   "1811691/298729",
+   "-1066044/904825"
+  ],
+  [
+   "-1066044/904825",
+   "114505/89873"
+  ]
+ ],
+ "level": "178338378291854913/16569535356178193",
+ "alpha": "87617/209308",
+ "gammas": [
+  "1858136/590033",
+  "1738759/320513"
+ ],
+ "x0": [
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "q1",
+   "bound": "1"
+  },
+  {
+   "name": "q2",
+   "bound": "1/2"
+  }
+ ],
+ "coords": [
+  "h1",
+  "h2"
+ ],
+ "outputs": [
+  {
+   "name": "h1",
+   "row": [
+    "1",
+    "0"
+   ],
+   "state": 0,
+   "bound": "8389/5703"
+  },
+  {
+   "name": "h2",
+   "row": [
+    "0",
+    "1"
+   ],
+   "state": 1,
+   "bound": "5167/1610"
+  }
+ ],
+ "A": [
+  [
+   "-1",
+   "0"
+  ],
+  [
+   "1",
+   "-1/2"
+  ]
+ ],
+ "B": [
+  [
+   "1",
+   "0"
+  ],
+  [
+   "0",
+   "1"
+  ]
+ ],
+ "theorem": "ReservoirCascadePoly.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "a230d72e10d668d7d026306cba98fd1e1d8996d39387ea21a28aaf22b992d900",
+ "frame": {
+  "coords": [
+   "h1",
+   "h2"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "h1"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "h2"
+    }
+   ]
+  ],
+  "theorem": "ReservoirCascadePoly.Cert.tube"
+ }
+}

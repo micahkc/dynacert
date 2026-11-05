@@ -1,0 +1,38 @@
+{
+ "model": "AdaptiveCruiseGap",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "AdaptiveCruiseGap.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "e": "8651/2701",
+    "dv": "32452/9453",
+    "a_ego": "5441/1844"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "e2af9e6a760e67b9e6249cf223c22f1592c774babd18e44d7a77c5d86e44e957",
+   "time": "2026-10-14T14:39:43"
+  }
+ ],
+ "source_hash": "e2af9e6a760e67b9e6249cf223c22f1592c774babd18e44d7a77c5d86e44e957",
+ "kept": {
+  "e": {
+   "bound": "8651/2701",
+   "method": "lmi"
+  },
+  "dv": {
+   "bound": "32452/9453",
+   "method": "lmi"
+  },
+  "a_ego": {
+   "bound": "5441/1844",
+   "method": "lmi"
+  }
+ }
+}

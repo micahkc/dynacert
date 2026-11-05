@@ -1,0 +1,33 @@
+{
+ "model": "HeatExchangerOutletPI",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "HeatExchangerOutletPI.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "dT": "35663/8635",
+    "dTh": "41238/7195"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "edfdf71025cea3d90281109e5a5546f6f195d7bacedbbb88d30773083f51a443",
+   "time": "2026-10-14T14:28:41"
+  }
+ ],
+ "source_hash": "edfdf71025cea3d90281109e5a5546f6f195d7bacedbbb88d30773083f51a443",
+ "kept": {
+  "dT": {
+   "bound": "35663/8635",
+   "method": "lmi"
+  },
+  "dTh": {
+   "bound": "41238/7195",
+   "method": "lmi"
+  }
+ }
+}

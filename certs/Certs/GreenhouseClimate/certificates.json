@@ -1,0 +1,38 @@
+{
+ "model": "GreenhouseClimate",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "GreenhouseClimate.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "Ta": "85538/5061",
+    "Ts": "30251/8553",
+    "xi": "20535/8938"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "9864e8be7d1d1cb7d2ff61cb91ebc8b200f916c53c8f1d94e17d11d6a31900ee",
+   "time": "2026-10-14T14:12:04"
+  }
+ ],
+ "source_hash": "9864e8be7d1d1cb7d2ff61cb91ebc8b200f916c53c8f1d94e17d11d6a31900ee",
+ "kept": {
+  "Ta": {
+   "bound": "85538/5061",
+   "method": "lmi"
+  },
+  "Ts": {
+   "bound": "30251/8553",
+   "method": "lmi"
+  },
+  "xi": {
+   "bound": "20535/8938",
+   "method": "lmi"
+  }
+ }
+}

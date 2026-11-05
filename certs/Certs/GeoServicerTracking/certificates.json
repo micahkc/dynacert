@@ -1,0 +1,38 @@
+{
+ "model": "GeoServicerTracking",
+ "certificates": [
+  {
+   "method": "lie",
+   "theorem": "GeoServicerTracking.LieCert.certified",
+   "file": "LieCert.lean",
+   "sidecar": "lie.json",
+   "bounds": {
+    "pos_err": "331/200000",
+    "vel_err": "331/200000",
+    "att_err": "331/200000"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "8b28e7bc596f155a2d6568c6c0c10e00e39bbb3abd998bcab90a0e630f759d4c",
+   "time": "2026-11-02T12:05:18"
+  }
+ ],
+ "source_hash": "8b28e7bc596f155a2d6568c6c0c10e00e39bbb3abd998bcab90a0e630f759d4c",
+ "kept": {
+  "pos_err": {
+   "bound": "331/200000",
+   "method": "lie"
+  },
+  "vel_err": {
+   "bound": "331/200000",
+   "method": "lie"
+  },
+  "att_err": {
+   "bound": "331/200000",
+   "method": "lie"
+  }
+ }
+}

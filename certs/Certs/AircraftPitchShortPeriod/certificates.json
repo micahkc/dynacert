@@ -1,0 +1,43 @@
+{
+ "model": "AircraftPitchShortPeriod",
+ "certificates": [
+  {
+   "method": "lmi",
+   "theorem": "AircraftPitchShortPeriod.Cert.certified",
+   "file": "Cert.lean",
+   "sidecar": "certified.json",
+   "bounds": {
+    "alpha": "335/9834",
+    "q": "194/4685",
+    "theta": "122/9361",
+    "de": "143/3961"
+   },
+   "axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "source_hash": "4803f5d65516f35388ac1eec06c08484ad405c452ca5d15882e9ce2e2e610de0",
+   "time": "2026-10-14T14:11:02"
+  }
+ ],
+ "source_hash": "4803f5d65516f35388ac1eec06c08484ad405c452ca5d15882e9ce2e2e610de0",
+ "kept": {
+  "alpha": {
+   "bound": "335/9834",
+   "method": "lmi"
+  },
+  "q": {
+   "bound": "194/4685",
+   "method": "lmi"
+  },
+  "theta": {
+   "bound": "122/9361",
+   "method": "lmi"
+  },
+  "de": {
+   "bound": "143/3961",
+   "method": "lmi"
+  }
+ }
+}

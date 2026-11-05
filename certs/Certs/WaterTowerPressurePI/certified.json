@@ -1,0 +1,137 @@
+{
+ "model": "WaterTowerPressurePI",
+ "ns": "WaterTowerPressurePI",
+ "method": "lti-channel",
+ "states": [
+  "dh",
+  "dn",
+  "z"
+ ],
+ "P": [
+  [
+   "87181216339/986177",
+   "2030620475/766794",
+   "199584974/349857"
+  ],
+  [
+   "2030620475/766794",
+   "107586662/784615",
+   "17727208/642961"
+  ],
+  [
+   "199584974/349857",
+   "17727208/642961",
+   "5829365/881092"
+  ]
+ ],
+ "level": "30353188750/981307",
+ "alpha": "1/50",
+ "gammas": [
+  "24282551/981307"
+ ],
+ "x0": [
+  "0",
+  "0",
+  "0"
+ ],
+ "disturbances": [
+  {
+   "name": "dqdem",
+   "bound": "5"
+  }
+ ],
+ "coords": [
+  "dh",
+  "dn",
+  "z"
+ ],
+ "outputs": [
+  {
+   "name": "dn",
+   "row": [
+    "0",
+    "1",
+    "0"
+   ],
+   "state": 1,
+   "bound": "42147/1081"
+  },
+  {
+   "name": "dp",
+   "row": [
+    "981/100",
+    "0",
+    "0"
+   ],
+   "state": null,
+   "bound": "58246/6397"
+  }
+ ],
+ "A": [
+  [
+   "-1/100",
+   "3/2000",
+   "0"
+  ],
+  [
+   "-981/10",
+   "-5",
+   "-1"
+  ],
+  [
+   "981/100",
+   "0",
+   "0"
+  ]
+ ],
+ "B": [
+  [
+   "-1/200"
+  ],
+  [
+   "0"
+  ],
+  [
+   "0"
+  ]
+ ],
+ "theorem": "WaterTowerPressurePI.Cert.certified",
+ "axioms": [
+  "Classical.choice",
+  "Quot.sound",
+  "propext"
+ ],
+ "source": "source.mo",
+ "source_hash": "2c4d5a6f392e27fb091068e7595cd1fee2217b8861899fc4987cac6d46e899d3",
+ "frame": {
+  "coords": [
+   "dh",
+   "dn",
+   "z"
+  ],
+  "terms": [
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dh"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "dn"
+    }
+   ],
+   [
+    {
+     "coeff": "1",
+     "kind": "state",
+     "var": "z"
+    }
+   ]
+  ],
+  "theorem": "WaterTowerPressurePI.Cert.tube"
+ }
+}
